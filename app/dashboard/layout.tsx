@@ -1,10 +1,10 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "@/utils/AuthContext";
 import { BiLogOut } from "react-icons/bi";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter  } from "next/navigation";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -13,16 +13,23 @@ type DashboardLayoutProps = {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { logout } = useAuth();
   const pathName = usePathname();
+  const router = useRouter();
+
 
   const handleLogout = () => {
     logout("/");
   };
 
+
+
+
   return (
-    <div className="flex items-start min-h-screen gap-6 m-4 text-gray-900 text-right">
+    <div className="container mx-auto px-2">
+    <div className="flex lg:flex-row flex-col  items-start min-h-screen gap-6 m-4 text-gray-900 text-right">
       {/* Sidebar */}
-      <nav className="w-56 bg-[#f4f4f4] p-4 rounded-lg shadow-sm">
-        <div className="mb-6 ml-auto">
+          <nav className="lg:w-56 w-full bg-[#f4f4f4] p-4 rounded-lg shadow-sm">
+        <div className="mb-6 ml-auto lg:block hidden">
+
           <h2 className="text-xl font-bold text-[var(--main-color)]">لوحة التحكم</h2>
         </div>
 
@@ -63,7 +70,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
       </nav>
 
       {/* المحتوى الرئيسي */}
-      <main className="flex-1 bg-[#fafafa] p-6 rounded-lg shadow-sm">{children}</main>
+      <main className="lg:flex-1 w-full bg-[#fafafa] p-6 rounded-lg shadow-sm">
+        {children}
+        </main>
+      </div>
     </div>
   );
 };

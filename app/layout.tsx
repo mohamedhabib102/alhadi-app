@@ -8,7 +8,7 @@ import {
   Footer
 } from "@/components/layout"
 import { AuthProvider } from "@/utils/AuthContext";
-import GlobalLoading from "@/components/layout/GlobalLoading";
+// import GlobalLoading from "@/components/layout/GlobalLoading";
 
 
 const notoSansArabic = Noto_Sans_Arabic({
@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${notoSansArabic.variable} antialiased`}
       >
         <AuthProvider>
-          <GlobalLoading />
+          {/* <GlobalLoading /> */}
            <Header />
             {children}
            <Footer/>

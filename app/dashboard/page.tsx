@@ -9,24 +9,26 @@ const Dashboard: React.FC = () => {
   const pathName = usePathname();
   const { user } = useAuth();
 
-  useEffect(() => {
-    if (!user.token || user.role !== "admin") {
-      router.replace("/");
-      return;
-    }
+  // useEffect(() => {
+  //   if (!user.token || user.role !== "admin") {
+  //     router.replace("/");
+  //     return;
+  //   }
 
+  //   if (pathName === "/dashboard") {
+  //     router.replace("/dashboard/sections");
+  //   }
+  // }, [user, pathName, router]);
+
+  // if (!user.token || user.role !== "admin") return null;
+
+      useEffect(() => {
     if (pathName === "/dashboard") {
       router.replace("/dashboard/sections");
     }
-  }, [user, pathName, router]);
+  }, [pathName, router]);
 
-  if (!user.token || user.role !== "admin") return null;
-
-  return (
-    <div className="flex justify-center items-center h-screen text-xl font-semibold">
-      جاري التحويل إلى لوحة الأقسام...
-    </div>
-  );
+  return null
 };
 
 export default Dashboard;
