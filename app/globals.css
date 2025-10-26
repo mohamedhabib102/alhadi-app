@@ -40,6 +40,13 @@ body {
 
 
 
+.custom_hover:hover img{
+  filter: grayscale(0) brightness(110%);
+  transform: scale(105%);
+}
+
+
+
 
 
 

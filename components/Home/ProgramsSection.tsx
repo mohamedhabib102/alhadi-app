@@ -4,7 +4,6 @@ import { Navigation } from "swiper/modules";
 import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/navigation";
-import "@/app/swiperOverrides.css"
 import Image from "next/image";
 
 type Program = {
