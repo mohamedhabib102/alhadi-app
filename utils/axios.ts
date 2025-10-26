@@ -34,12 +34,10 @@ instance.interceptors.response.use(
   (error: AxiosError) => {
 
     if (error.response?.status === 401) {
-      // 🧹 مسح الكوكيز
       Cookies.remove("token");
       Cookies.remove("id");
       Cookies.remove("role");
 
-  
       if (typeof window !== "undefined") {
         window.location.href = "/login";
       }

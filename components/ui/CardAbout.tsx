@@ -17,7 +17,7 @@ const CardAbout: React.FC<CardList> = ({ data }) => {
       {data.map((ele) => (
         <motion.div
           key={ele.id}
-          className="relative overflow-hidden rounded-2xl bg-white shadow-md group cursor-pointer transition-all duration-500 hover:shadow-2xl"
+          className="relative overflow-hidden rounded-2xl shadow-md cursor-pointer transition-all duration-500 hover:shadow-2xl"
            initial={{ y: 60, opacity: 0 }}
            whileInView={{ y: 0, opacity: 1 }}
            viewport={{ once: true, amount: 0.3 }}
@@ -29,11 +29,9 @@ const CardAbout: React.FC<CardList> = ({ data }) => {
               alt="image"
               width={600}
               height={400}
-              className="w-full h-auto object-cover transition-all duration-700 ease-in-out filter grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-110 group-hover:scale-105"
+              className="w-full h-auto object-cover transition-all duration-700 ease-in-out filter grayscale brightness-90 hover:grayscale-0 hover:brightness-110 hover:scale-105"
             />
           </div>
-
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
         </motion.div>
       ))}
     </>
