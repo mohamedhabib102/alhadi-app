@@ -1,6 +1,7 @@
 'use client'
 
 import Logo from "@/components/ui/Logo";
+import { useAuth } from "@/utils/AuthContext";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +14,7 @@ export default function Header() {
   const [storeOpen, setStoreOpen] = useState<boolean>(false);
   const [governanceOpen, setGovernanceOpen] = useState<boolean>(false);
   const headerRef = useRef<HTMLDivElement>(null);
+  const {user, logout} = useAuth();
 
   const handelToggle = () => {
     setToggle(!toggle);
@@ -44,7 +46,7 @@ export default function Header() {
   
 
   return (
-    <header ref={headerRef} className="border-b border-b-[#EEE] bg-white relative z-50">
+    <header ref={headerRef} className="border-b border-b-[#EEE] bg-white relative z-40">
       <div className="container mx-auto px-3.5">
         <nav className="flex items-center justify-between py-3 relative">
           <Logo color="header" size="lg" />
@@ -133,7 +135,18 @@ export default function Header() {
                     </Link>
                   </li>
                   <li>
-                    <Link 
+                    {user.id ? (
+                    <button 
+                    onClick={()  => logout("/")}
+                    className={
+                      ` transition block w-full text-right px-4 py-2 hover:bg-gray-200
+                      hover:text-[var(--main-color)]
+                      `
+                    }>
+                      تسجيل الخروج
+                    </button>
+                    ) : (
+                        <Link 
                     onClick={()  => setStoreOpen(false)}
                     href="/store/login" 
                     className={
@@ -143,6 +156,7 @@ export default function Header() {
                     }>
                       تسجيل الدخول
                     </Link>
+                    )}
                   </li>
                 </ul>
               )}
@@ -374,21 +388,28 @@ export default function Header() {
                   </Link>
                 </li>
                 <li>
-                  <Link
-                    href="/store/login"
+                    {user.id ? (
+                    <button 
+                    onClick={()  => logout("/")}
                     className={
+                      ` transition block w-full text-right px-4 py-2 hover:bg-gray-200
+                      hover:text-[var(--main-color)]
                       `
-                      block px-4 py-2 text-base hover:bg-gray-100
+                    }>
+                      تسجيل الخروج
+                    </button>
+                    ) : (
+                        <Link 
+                    onClick={()  => setStoreOpen(false)}
+                    href="/store/login" 
+                    className={
+                      ` transition block px-4 py-2 hover:bg-gray-200
                       ${pathName === "/store/login" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
                       `
-                    }
-                    onClick={() => {
-                      setToggle(false)
-                      setStoreOpen(false)
-                    }}
-                  >
-                    تسجيل الدخول
-                  </Link>
+                    }>
+                      تسجيل الدخول
+                    </Link>
+                    )}
                 </li>
               </ul>
             )}

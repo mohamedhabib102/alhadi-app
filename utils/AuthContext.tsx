@@ -1,0 +1,81 @@
+"use client";
+
+import { 
+  createContext, 
+  useContext, 
+  useState, 
+  useEffect, 
+  ReactNode
+} from "react";
+import Cookies from "js-cookie";
+
+type AuthData = {
+  id: string | null;
+  role: string | null;
+  token: string | null;
+};
+
+type AuthContextType = {
+  user: AuthData;
+  setUser: (data: AuthData) => void;
+  logout: (redirectTo?: string) => void;
+};
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUserState] = useState<AuthData>({
+    id: null,
+    role: null,
+    token: null,
+  });
+
+
+  const cookieOptions: {
+    sameSite: "strict";
+    secure: boolean;
+    path: string;
+  } = {
+    sameSite: "strict",
+    secure: true,
+    path: "/",
+  };
+
+  useEffect(() => {
+    const id = Cookies.get("id") || null;
+    const role = Cookies.get("role") || null;
+    const token = Cookies.get("token") || null;
+
+    setUserState({ id, role, token });
+  }, []);
+
+  const setUser = (data: AuthData) => {
+    if (data.id) Cookies.set("id", data.id, cookieOptions);
+    if (data.role) Cookies.set("role", data.role, cookieOptions);
+    if (data.token) Cookies.set("token", data.token, cookieOptions);
+
+    setUserState(data);
+  };
+
+  const logout = (redirectTo?: string) => {
+    Cookies.remove("id", cookieOptions);
+    Cookies.remove("role", cookieOptions);
+    Cookies.remove("token", cookieOptions);
+
+    setUserState({ id: null, role: null, token: null });
+
+    if (redirectTo) window.location.href = redirectTo;
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, setUser, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  return context;
+};

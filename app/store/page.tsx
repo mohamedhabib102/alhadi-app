@@ -2,6 +2,10 @@ import ProductCard from "@/components/Store/ProductCard";
 import CustomHeader from "@/components/ui/CustomHeader";
 import { productsData } from "@/data/ProductsData";
 
+export const metadata = {
+  title: " جمعية الهدى | المتجر ",
+  description: " إدارة المتجر ",
+};
 
 const data = {
     title: "متجرنا",
