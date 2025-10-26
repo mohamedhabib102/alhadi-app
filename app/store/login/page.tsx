@@ -1,11 +1,14 @@
 "use client"
-import Link from "next/link";
 import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import instance from "@/utils/axios";
 import { useAuth } from "@/utils/AuthContext";
 import { useRouter } from "next/navigation";
 import { motion, Variants, Transition } from "framer-motion";
+import { AxiosRequestConfig } from "axios";
 
+interface CustomAxiosConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
+}
 
 
 
@@ -67,7 +70,7 @@ const Login: React.FC = () => {
     try {
       console.log(data);
       const res= await instance.post<LoginResponse>("/api/Donations/Login", data,
-        {skipAuth: true} as any)
+        {skipAuth: true} as CustomAxiosConfig)
         console.log(res);
 
         const { personID, role } = res.data;
@@ -157,7 +160,7 @@ const Login: React.FC = () => {
               disabled={loading} // يمنع الضغط أثناء التحميل
               className={`bg-[var(--main-color)] transition text-white py-2.5 px-6 
                           w-full min-w-[150px] font-semibold rounded-[var(--border-rounded)]
-                          ${loading ? "cursor-not-allowed opacity-70" : "hover:bg-blue-500 cursor-pointer"}`}
+              ${loading ? "cursor-not-allowed opacity-70" : "hover:bg-blue-500 cursor-pointer"}`}
             >
               {text}
             </button>
