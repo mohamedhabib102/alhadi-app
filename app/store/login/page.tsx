@@ -29,7 +29,7 @@ const Login: React.FC = () => {
     e_Mail: "",
     phoneNumber: ""
   })
-  const {setUser, user, logout} = useAuth();
+  const {setUser, user} = useAuth();
   const [loading, setLoading] =  useState<boolean>(false);
 
 ;
@@ -92,6 +92,7 @@ const Login: React.FC = () => {
     delay: 0,    
     ease: [0.16, 1, 0.3, 1],
   };
+  const text = loading ? "جاري التحميل..." : "تسجيل الدخول";
     return (
       <div 
         className="flex flex-col items-center justify-center min-h-screen lg:min-h-[80vh] py-12"
@@ -158,7 +159,7 @@ const Login: React.FC = () => {
                           w-full min-w-[150px] font-semibold rounded-[var(--border-rounded)]
                           ${loading ? "cursor-not-allowed opacity-70" : "hover:bg-blue-500 cursor-pointer"}`}
             >
-              {loading ? "جاري التسجيل..." : "تسجيل الدخول"}
+              {text}
             </button>
 
 

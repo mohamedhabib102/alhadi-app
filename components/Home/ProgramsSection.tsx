@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/navigation";
 import "@/app/swiperOverrides.css"
+import Image from "next/image";
 
 type Program = {
   title: string;
@@ -95,10 +96,12 @@ export default function ProgramsSection() {
                 <div
                   className="bg-white rounded-2xl select-none shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
-                  <img
+                  <Image
                     src={program.image}
                     alt={program.title}
                     className="w-full h-56 object-cover"
+                    width={300}
+                    height={200}
                   />
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-gray-800 mb-3">

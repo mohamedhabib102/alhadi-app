@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { ActivityItem } from '@/data/activitiesData'; 
+import Image from 'next/image';
 
 
 
@@ -10,10 +11,12 @@ const ActivityCard: React.FC<ActivityItem> = ({ title, description, imageSrc, li
             
 
             <div className="w-full h-48 overflow-hidden">
-                <img 
+                <Image 
                     src={imageSrc} 
                     alt={title} 
                     className="w-full h-full object-cover transition duration-500 hover:opacity-90"
+                    width={300}
+                    height={200}
                 />
             </div>
             

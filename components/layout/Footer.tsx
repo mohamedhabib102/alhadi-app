@@ -5,7 +5,7 @@ import {
     companyLinks, 
     serviceLinks, 
     socialLinks, 
-    FooterLink }
+}
     from '@/data/FooterLinks';
 // استيراد أيقونات (للتواصل الاجتماعي)
 import { FaInstagram, FaTwitter, FaTiktok, FaSnapchat } from 'react-icons/fa';

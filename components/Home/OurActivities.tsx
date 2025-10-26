@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import ActivityCard from '@/components/ui/ActivityCard';
-import { activitiesData } from '../../data/activitiesData';
+import { activitiesData } from '@/data/activitiesData';
 import FadeInOnScroll from '@/components/ui/FadeInOnScroll';
 
 const OurActivities: React.FC = () => {
@@ -31,7 +31,6 @@ const OurActivities: React.FC = () => {
                         <FadeInOnScroll 
                             key={item.id}
                             duration={0.7}
-                            // تأخير متزايد (staggered delay)
                             delay={index * 0.15} 
                             amount={0.2}
                         >

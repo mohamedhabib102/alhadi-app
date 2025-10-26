@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import { FaShoppingCart, FaShareAlt, FaTag } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
 import { ProductItem } from '@/data/ProductsData';
 import { FaMoneyBill } from 'react-icons/fa';
 import FadeInOnScroll from '../ui/FadeInOnScroll';

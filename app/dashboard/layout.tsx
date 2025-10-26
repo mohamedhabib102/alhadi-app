@@ -1,20 +1,18 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode } from "react";
 import Link from "next/link";
 import { useAuth } from "@/utils/AuthContext";
 import { BiLogOut } from "react-icons/bi";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 type DashboardLayoutProps = {
   children: ReactNode;
 };
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   const pathName = usePathname();
-  const router = useRouter();
 
   const handleLogout = () => {
     logout("/");
