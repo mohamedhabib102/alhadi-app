@@ -7,7 +7,7 @@ import StatCard from '../ui/StatCard';
 const StatsSection: React.FC = () => {
     return (
         <section className="py-20 bg-gray-50" dir="rtl">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="container mx-auto px-2.5">
                 <motion.h2 
                     initial={{ opacity: 0, y: -20 }}
                     whileInView={{ opacity: 1, y: 0 }}

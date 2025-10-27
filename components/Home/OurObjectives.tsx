@@ -56,7 +56,7 @@ export type ObjectiveCardProps = Omit<ObjectiveItem, 'id'>;[]
 const OurObjectives: React.FC = () => {
     return (
         <section className="py-20 dark-green-bg  bg-gray-200">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="container mx-auto px-2.5">
         <motion.h3
           initial={{ y: 60, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}

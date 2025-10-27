@@ -41,9 +41,9 @@ const StatCard: React.FC<StatItem> = ({ value, label, IconComponent, prefix, suf
             </div>
 
             <h3 className="text-5xl lg:text-6xl font-extrabold text-[var(--main-color)] mb-2">
-                {prefix}
+                {/* {prefix} */}
                 {isInView ? <AnimatedCount value={value} /> : 0} 
-                {suffix}
+                {/* {suffix} */}
             </h3>
             <p className="text-md font-semibold text-gray-600 mt-2">
                 {label}

@@ -9,26 +9,18 @@ const Dashboard: React.FC = () => {
   const pathName = usePathname();
   const { user } = useAuth();
 
-  // useEffect(() => {
-  //   if (!user.token || user.role !== "admin") {
-  //     router.replace("/");
-  //     return;
-  //   }
+  useEffect(() => {
+    if (!user.token || user.role !== "Admin") {
+      router.replace("/");
+      return;
+    }
 
-  //   if (pathName === "/dashboard") {
-  //     router.replace("/dashboard/sections");
-  //   }
-  // }, [user, pathName, router]);
-
-  // if (!user.token || user.role !== "admin") return null;
-
-      useEffect(() => {
     if (pathName === "/dashboard") {
       router.replace("/dashboard/sections");
     }
-  }, [pathName, router]);
+  }, [user, pathName, router]);
 
-  return null
+  return null;
 };
 
 export default Dashboard;

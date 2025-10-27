@@ -158,6 +158,20 @@ export default function Header() {
                     </Link>
                     )}
                   </li>
+                  {user.role === "Admin" && (
+                  <li>
+                    <Link
+                    onClick={()  => setStoreOpen(false)}
+                    href="/dashboard" 
+                    className={
+                      ` transition block px-4 py-2 hover:bg-gray-200
+                      ${pathName === "/store/cart" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      `
+                    }>
+                      لوحة التحكم
+                    </Link>
+                  </li>
+                  )}
                 </ul>
               )}
             </li>

@@ -43,7 +43,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                   : "hover:bg-[var(--main-color)] hover:text-white bg-blue-100"
               }`}
             >
-              الأقسام
+              المشاريع
             </Link>
           </li>
 
@@ -69,8 +69,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </button>
       </nav>
 
-      {/* المحتوى الرئيسي */}
-      <main className="lg:flex-1 w-full bg-[#fafafa] p-6 rounded-lg shadow-sm">
+      <main className="lg:flex-1 w-full bg-[#fafafa] rounded-lg shadow-sm">
         {children}
         </main>
       </div>

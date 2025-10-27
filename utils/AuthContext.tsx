@@ -11,9 +11,13 @@ import Cookies from "js-cookie";
 
 type AuthData = {
   id: string | null;
-  role: string | null;
+  role: string | null| undefined;
   token: string | null;
 };
+
+
+
+
 
 type AuthContextType = {
   user: AuthData;
@@ -31,14 +35,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   });
 
 
+
+
   const cookieOptions: {
     sameSite: "strict";
     secure: boolean;
     path: string;
+    // expires:  number;
   } = {
     sameSite: "strict",
     secure: true,
     path: "/",
+    // expires: 1 / 24
   };
 
   useEffect(() => {
@@ -53,14 +61,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (data.id) Cookies.set("id", data.id, cookieOptions);
     if (data.role) Cookies.set("role", data.role, cookieOptions);
     if (data.token) Cookies.set("token", data.token, cookieOptions);
-
     setUserState(data);
   };
+
+
+
+
+
+
 
   const logout = (redirectTo?: string) => {
     Cookies.remove("id", cookieOptions);
     Cookies.remove("role", cookieOptions);
     Cookies.remove("token", cookieOptions);
+
 
     setUserState({ id: null, role: null, token: null });
 

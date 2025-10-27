@@ -14,8 +14,10 @@ interface CustomAxiosConfig extends AxiosRequestConfig {
 
 type LoginResponse = {
   personID: string;
-  role: string;
-  token: string;
+  otpRequired: boolean;
+  role?: string;
+  message?: string;
+  token: string
 };
 
 
@@ -32,10 +34,9 @@ const Login: React.FC = () => {
     e_Mail: "",
     phoneNumber: ""
   })
-  const {setUser, user} = useAuth();
+  const {setUser,user} = useAuth();
+  const [messageError, setMessageError] = useState<string>("");
   const [loading, setLoading] =  useState<boolean>(false);
-
-;
   const router = useRouter();
 
   useEffect(() => {
@@ -46,6 +47,22 @@ const Login: React.FC = () => {
   }, [user, router]);
 
 
+
+  /*
+  
+  sfesdf
+  01094544522
+  byaalkhy43@gmail.com
+  
+
+  admin
+
+  Admin5153920
+
+  01027227798
+  mhabib7000880@gmail.com
+
+  */
 
 
   const handelChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,21 +84,54 @@ const Login: React.FC = () => {
     e.preventDefault()
     setLoading(true);
 
+      const rexNum = /\d{11}/;
+       if (!data.phoneNumber || !rexNum.test(data.phoneNumber)){
+        setMessageError(" يجب أن يكون الرقم مكون من 11  ")
+        setLoading(false)
+        return;
+       }
+    
+
     try {
+      setMessageError("")
       console.log(data);
+
+
       const res= await instance.post<LoginResponse>("/api/Donations/Login", data,
         {skipAuth: true} as CustomAxiosConfig)
+
         console.log(res);
 
-        const { personID, role } = res.data;
+        const { personID, otpRequired, role, message, token } = res.data;
 
-        const userData = {
-          id: personID,
-          role,
-          token: "mm",
-        } 
 
-        setUser(userData)
+        if (role === "Admin"){
+          router.push("/dashboard")
+          console.log("Admin");
+          const userData = {
+            id: personID,
+            role,
+            token,
+          }
+          setUser(userData)
+        } else{
+          if (otpRequired){
+          router.push("/store/verifyotp")
+          console.log("new user");
+          
+          localStorage.setItem("userOTP", JSON.stringify(personID))
+        } else{
+          router.push("/store/")
+          console.log("lognied");
+          const userData = {
+            id: personID,
+            role,
+            token,
+          }
+          setUser(userData)
+        }
+        }
+
       } catch (error) {
         console.log(error);
       } finally{
@@ -147,6 +197,7 @@ const Login: React.FC = () => {
             <input 
               type="text" 
               placeholder=" رقم الهاتف "
+              maxLength={11}
               name="phoneNumber"
               value={data.phoneNumber}
               onChange={handelChange}
@@ -165,7 +216,9 @@ const Login: React.FC = () => {
               {text}
             </button>
 
-
+             {messageError && (
+              <p className='text-red-500 font-medium mt-2.5'>{messageError}</p>
+             )}
                 
           </form>
         </motion.div>

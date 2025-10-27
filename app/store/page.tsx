@@ -1,6 +1,6 @@
 import ProductCard from "@/components/Store/ProductCard";
+import ProductsPage from "@/components/Store/ProductsPage";
 import CustomHeader from "@/components/ui/CustomHeader";
-import { productsData } from "@/data/ProductsData";
 
 export const metadata = {
   title: " جمعية الهدى | المتجر ",
@@ -19,13 +19,7 @@ const Store: React.FC = () => {
              <CustomHeader content={data}/>
 
              <div className="text-right">
-                    {/* <h2 className="text-3xl font-bold text-[var(--main-color)] mb-6">كل المنتجات</h2> */}
-                    
-                    <div className="grid lg:grid-cols-3 grid-cols-1 gap-8">
-                        {productsData.map((product) => (
-                            <ProductCard key={product.id} product={product} />
-                        ))}
-                    </div>
+                    <ProductsPage />
                 </div>
            </div>
        </section>

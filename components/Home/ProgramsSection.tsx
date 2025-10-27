@@ -77,7 +77,7 @@ export default function ProgramsSection() {
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative max-w-6xl mx-auto overflow-visible">
+          className="relative max-w-6xl ml-auto overflow-visible">
           <Swiper
             modules={[Navigation]}
             navigation

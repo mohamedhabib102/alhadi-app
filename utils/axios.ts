@@ -29,22 +29,22 @@ instance.interceptors.request.use((config) => {
 });
 
 
-instance.interceptors.response.use(
-  (response) => response,
-  (error: AxiosError) => {
+// instance.interceptors.response.use(
+  // (response) => response,
+  // (error: AxiosError) => {
 
-    if (error.response?.status === 401) {
-      Cookies.remove("token");
-      Cookies.remove("id");
-      Cookies.remove("role");
+  //   if (error.response?.status === 401) {
+  //     Cookies.remove("token");
+  //     Cookies.remove("id");
+  //     Cookies.remove("role");
 
-      if (typeof window !== "undefined") {
-        window.location.href = "/login";
-      }
-    }
+  //     if (typeof window !== "undefined") {
+  //       window.location.href = "/login";
+  //     }
+  //   }
 
-    return Promise.reject(error);
-  }
-);
+  //   return Promise.reject(error);
+  // }
+//);
 
 export default instance;

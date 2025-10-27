@@ -9,7 +9,7 @@ const OurActivities: React.FC = () => {
  
     return (
         <section className="py-20 bg-gray-50" dir="rtl">
-            <div className="max-w-7xl mx-auto px-6">
+            <div className="container mx-auto px-2.5">
                 
                 {/* العنوان الرئيسي */}
                 <FadeInOnScroll duration={0.8}>
@@ -25,7 +25,6 @@ const OurActivities: React.FC = () => {
                     </p>
                 </FadeInOnScroll>
                 
-                {/* شبكة البطاقات المتجاوبة مع الحركة المتتالية */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {activitiesData.map((item, index) => (
                         <FadeInOnScroll 
