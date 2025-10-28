@@ -81,16 +81,16 @@ export default function Header() {
             text-[19px] cursor-pointer transition py-2 px-2
             ${pathName === "/contact" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             `}>تواصل معنا</Link></li>
-            <li><Link href="/media" 
+            <li><Link href="/posts" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/media" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-            `}>المركز الإعلامي</Link></li>
-            <li><Link href="/volunteers" 
+            ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            `}> المقالات </Link></li>
+            <li><Link href="/general-assembly" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/volunteers" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-            `}>بوابة المتطوعين</Link></li>
+            ${pathName === "/general-assembly" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            `}> الجمعية العمومية </Link></li>
 
             {/* Dropdown Store */}
             <li className="relative">
@@ -119,7 +119,7 @@ export default function Header() {
                       ${pathName === "/store" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
                       `
                     }>
-                      المنتجات
+                      التبرعات
                     </Link>
                   </li>
                   <li>
@@ -165,7 +165,7 @@ export default function Header() {
                     href="/dashboard" 
                     className={
                       ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/store/cart" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      ${pathName === "/dashboard" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
                       `
                     }>
                       لوحة التحكم
@@ -210,7 +210,7 @@ export default function Header() {
 
 
             {/* Dropdown (من نحن) */}
-            <li className="relative">
+            {/* <li className="relative">
               <button
                 onClick={() => {
                   setAboutOpen(!aboutOpen);
@@ -238,18 +238,26 @@ export default function Header() {
                       عن الجمعية
                     </Link>
                   </li>
-                  <li>
-                    <Link
-                    onClick={() => setAboutOpen(false)} 
-                    href="/about/vision" className={
-                      `${pathName === "/about/vision" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block px-4 py-2 hover:bg-gray-200`
-                    }>
-                      الرؤية والرسالة
-                    </Link>
-                  </li>
                 </ul>
               )}
-            </li>
+            </li> */}
+
+            <li>
+            <Link
+              href="/about"
+              className={
+                `${pathName === "/about" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block text-lg`
+              }
+              onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+            >
+              من نحن
+            </Link>
+          </li>
 
             <li><Link href="/" 
              onClick={() => {
@@ -264,6 +272,9 @@ export default function Header() {
           </ul>
         </nav>
       </div>
+
+
+
 
       { /*   Mobile show  */ }
       <div
@@ -289,8 +300,25 @@ export default function Header() {
             </Link>
           </li>
 
-          { /* About  */}
           <li>
+            <Link
+              href="/about"
+              className={
+                `${pathName === "/about" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block text-lg`
+              }
+              onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+            >
+              من نحن
+            </Link>
+          </li>
+
+          { /* About  */}
+          {/* <li>
             <button
               onClick={() => {
                 setAboutOpen(!aboutOpen);
@@ -326,26 +354,9 @@ export default function Header() {
                     عن الجمعية
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/about/vision"
-                    className={
-                      `
-                      block px-4 py-2 text-base hover:bg-gray-100
-                      ${pathName === "/about/vision" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-                      `
-                    }
-                    onClick={() => {
-                      setToggle(false)
-                      setAboutOpen(false)
-                    }}
-                  >
-                    الرؤية والرسالة
-                  </Link>
-                </li>
               </ul>
             )}
-          </li>
+          </li> */}
           
           {/* Store  */}
           <li>
@@ -425,6 +436,20 @@ export default function Header() {
                     </Link>
                     )}
                 </li>
+                {user.role === "Admin" && (
+                  <li>
+                    <Link
+                    onClick={()  => setStoreOpen(false)}
+                    href="/dashboard" 
+                    className={
+                      ` transition block px-4 py-2 hover:bg-gray-200
+                      ${pathName === "/dashboard" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      `
+                    }>
+                      لوحة التحكم
+                    </Link>
+                  </li>
+                  )}
               </ul>
             )}
           </li>
@@ -488,20 +513,19 @@ export default function Header() {
             )}
           </li>
           
-          <li><Link href="/volunteers" 
+           <li><Link href="/general-assembly" 
+            className={`
+            text-[19px] cursor-pointer transition py-2 px-2
+            ${pathName === "/general-assembly" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            `}> الجمعية العمومية </Link></li>
+          <li><Link href="/posts" 
           className={
             `
-            ${pathName === "/volunteers" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-            transition block text-lg`
-          } 
-          onClick={() => setToggle(false)}>بوابة المتطوعين</Link></li>
-          <li><Link href="/media" 
-          className={
-            `
-            ${pathName === "/media" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             transition block text-lg`
           }
-           onClick={() => setToggle(false)}>المركز الإعلامي</Link></li>
+           onClick={() => setToggle(false)}> المقالات </Link></li>
+           
           <li><Link href="/contact" 
            className={
             `

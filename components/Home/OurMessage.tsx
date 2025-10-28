@@ -12,7 +12,8 @@ interface MessageItem {
 }
 
 // Data for the 'Our Message' section
-const messageData: MessageItem[] = [
+const messageData: MessageItem[] =
+ [
     {
         id: 1,
         text: 'لفت انتباه أفراد المجتمع إلى حالات الحيوانات البائسة والدعوة إلى مساعدتها.',
@@ -51,7 +52,7 @@ const messageData: MessageItem[] = [
 const OurMessage: React.FC = () => {
     return (
         <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-2.5">
+        <div className="container mx-auto px-3.5">
         <motion.h3
           initial={{ y: 60, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}

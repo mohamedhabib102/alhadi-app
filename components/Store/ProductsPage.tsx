@@ -8,6 +8,8 @@ import Cookies from "js-cookie";
 import Image from "next/image";
 import { FaMoneyBill, FaShoppingCart } from "react-icons/fa";
 import { useAuth } from "@/utils/AuthContext";
+import FadeInOnScroll from "../ui/FadeInOnScroll";
+import Link from "next/link";
 
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
@@ -134,7 +136,8 @@ const addToCart = async (sectionID: number) => {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 mb-8 lg:grid-cols-3 gap-6 mt-6">
           {sections.map((ele) => (
-            <div
+            <FadeInOnScroll key={ele.sectionID}>
+             <div
               key={ele.sectionID}
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
@@ -234,17 +237,18 @@ const addToCart = async (sectionID: number) => {
                               <FaShoppingCart className="text-lg" />
                           </button>
       
-                          <button 
-                           onClick={() => addToCart(ele.sectionID)}
+                          <Link 
+                             href="/store/cart"
                               className={`p-3 rounded-lg w-44 transition cursor-pointer duration-300 bg-[var(--main-color)]
                                    hover:bg-blue-500 text-white `}
                               aria-label="Add to cart"
                           >
                               تبرع الأن
-                          </button>
+                          </Link>
                       </div>
               </div>
             </div>
+            </FadeInOnScroll>
           ))}
         </div>
       )}

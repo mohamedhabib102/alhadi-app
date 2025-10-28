@@ -47,7 +47,7 @@ const programs: Program[] = [
 export default function ProgramsSection() {
   return (
     <section className="bg-gray-200 py-16 px-4 text-center">
-      <div className="container mx-auto px-2.5">
+      <div className="container mx-auto px-3.5">
 
 
         <motion.h3

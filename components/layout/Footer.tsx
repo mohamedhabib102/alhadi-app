@@ -5,12 +5,10 @@ import {
     companyLinks, 
     serviceLinks, 
     socialLinks, 
-}
-    from '@/data/FooterLinks';
-// استيراد أيقونات (للتواصل الاجتماعي)
+} from '@/data/FooterLinks';
+
 import { FaInstagram, FaTwitter, FaTiktok, FaSnapchat } from 'react-icons/fa';
 
-// دالة مساعدة لتحديد الأيقونة
 const getSocialIcon = (iconName: string): React.ElementType => {
     switch (iconName) {
         case 'FaInstagram': return FaInstagram;
@@ -21,23 +19,18 @@ const getSocialIcon = (iconName: string): React.ElementType => {
     }
 };
 
-
 const Footer: React.FC = () => {
-    // لون الخلفية الداكن (قريب من الأسود)
-    const darkBg = '#1c1e26'; // لون بنفسجي داكن/رمادي غامق أنيق
-
     return (
-
-        <footer className="pt-16 pb-12 text-white" style={{ backgroundColor: darkBg }} dir="rtl">
-            <div className="max-w-7xl mx-auto px-6">
+        <footer className="pt-16 pb-12 text-white bg-[#272f51]" dir='rtl'>
+            <div className="container mx-auto px-3.5">
                 
-                {/* 1. شبكة الأقسام الرئيسية (Logo, Company Links, Services) */}
+                {/* شبكة الأقسام الرئيسية (Logo, Company Links, Services) */}
                 <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-12 border-b border-gray-700 pb-12">
                     
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-right">
                         <Logo color='footer' size='md'/>
                         <p className="mt-4 text-sm text-gray-400 max-w-xs">
-                            نكرس جهودنا للرفق بالحيوان وغرس ثقافة التعايش السلمي في مجتمعنا.
+                            نكرس جهودنا لنشر العلم الشرعي وتعزيز منهج السنة النبوية في المجتمع.
                         </p>
                     </div>
 
@@ -55,7 +48,6 @@ const Footer: React.FC = () => {
                             ))}
                         </ul>
                     </div>
-
 
                     <div className="text-center lg:text-right">
                         <h4 className="text-xl font-bold mb-4 text-[var(--main-color)] lg:border-r-2 lg:border-r-[var(--main-color)] pr-2">
@@ -95,8 +87,10 @@ const Footer: React.FC = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* الحقوق */}
                 <div className="mt-4 text-center text-lg text-gray-500">
-                    <p>&copy; {new Date().getFullYear()} جمعية الهدى للرفق بالحيوان. جميع الحقوق محفوظة.</p>
+                    <p>جمعية الهدى النبوي للسنة وعلومها – جميع الحقوق محفوظة &copy; {new Date().getFullYear()}</p>
                 </div>
             </div>
         </footer>

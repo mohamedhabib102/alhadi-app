@@ -11,18 +11,15 @@ import Cookies from "js-cookie";
 
 type AuthData = {
   id: string | null;
-  role: string | null| undefined;
+  role: string | null | undefined;
   token: string | null;
 };
-
-
-
-
 
 type AuthContextType = {
   user: AuthData;
   setUser: (data: AuthData) => void;
   logout: (redirectTo?: string) => void;
+  loading: boolean; // ✅ نضيف دي
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -33,20 +30,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     role: null,
     token: null,
   });
-
-
-
+  const [loading, setLoading] = useState(true); // ✅ نضيف دي
 
   const cookieOptions: {
     sameSite: "strict";
     secure: boolean;
     path: string;
-    // expires:  number;
+    expires: number;
   } = {
     sameSite: "strict",
     secure: true,
     path: "/",
-    // expires: 1 / 24
+    expires: 1 / 24, // ساعة
   };
 
   useEffect(() => {
@@ -55,6 +50,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const token = Cookies.get("token") || null;
 
     setUserState({ id, role, token });
+    setLoading(false); // ✅ نوقف التحميل بعد قراءة الكوكيز
   }, []);
 
   const setUser = (data: AuthData) => {
@@ -64,17 +60,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUserState(data);
   };
 
-
-
-
-
-
-
   const logout = (redirectTo?: string) => {
     Cookies.remove("id", cookieOptions);
     Cookies.remove("role", cookieOptions);
     Cookies.remove("token", cookieOptions);
-
 
     setUserState({ id: null, role: null, token: null });
 
@@ -82,7 +71,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider value={{ user, setUser, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

@@ -7,6 +7,8 @@ import CustomHeader from "@/components/ui/CustomHeader";
 import axios, { AxiosRequestConfig } from "axios";
 import { IoIosAddCircle } from "react-icons/io";
 import AddSection from "@/components/dashboard/AddSection";
+import { usePathname, useRouter} from "next/navigation";
+import { useAuth } from "@/utils/AuthContext";
 
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
@@ -23,6 +25,8 @@ interface ResponseData {
 }
 
 const SectionsClient: React.FC = () => {
+  const router = useRouter();
+  const { user , loading} = useAuth();
   const [sections, setSections] = useState<ResponseData[]>([]);
   const [message, setMessage] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false)
@@ -30,6 +34,19 @@ const SectionsClient: React.FC = () => {
   useEffect(() => {
     getAllSections();
   }, []);
+
+
+  
+    useEffect(() => {
+        if (loading) return; 
+
+      if (!user.token || user.role !== "Admin") {
+        router.replace("/");
+        return;
+      }
+
+    }, [user, router]);
+
 
   const getAllSections = async () => {
     try {
@@ -64,6 +81,7 @@ const SectionsClient: React.FC = () => {
 
         console.log(res);
         // console.log(id);
+        getAllSections()
         
         
      } catch (error) {

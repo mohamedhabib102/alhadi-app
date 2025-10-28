@@ -15,7 +15,7 @@ const data = {
 const Store: React.FC = () => {
     return (
        <section className="py-16">
-           <div className="container mx-auto px-2.5"> 
+           <div className="container mx-auto px-3.5"> 
              <CustomHeader content={data}/>
 
              <div className="text-right">

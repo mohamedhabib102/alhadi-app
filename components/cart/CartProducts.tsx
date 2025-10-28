@@ -2,38 +2,56 @@
 
 import { useAuth } from "@/utils/AuthContext";
 import instance from "@/utils/axios";
+import { motion, AnimatePresence  } from "framer-motion";
 import { AxiosRequestConfig } from "axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { FaCcVisa, FaCcMastercard, FaUniversity } from "react-icons/fa";
 import { MdCreditCard } from "react-icons/md";
+import CustomPopup from "../ui/CustomPopup";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
+}
+
+type CartResponse = {
+  personID: number;
+  sectionID: number;
+  amount: number;
+  totalAmount: number
+  sectionName: string;
+  sectionImage: string;
 }
 
 const CartProducts = () => {
   const [method, setMethod] = useState<string>("mada");
   const [notes, setNotes] = useState<string>("");
   const {user} = useAuth()
+  const [cart, setCart] =  useState<CartResponse[]>([])
+  const [visibleCount, setVisibleCount] = useState(3);
+  const [toggle, setToggle] = useState<boolean>(false)
+  const [paymentRef, setPaymentRef] = useState<string>("")
 
-
-  const total = 10.0;
-  const product = {
-    name: "تبرع لبناء ملجأ للمسنين وذوي الاحتياجات الخاصة",
-    amount: 10.0,
-    image: "/images/activties.jpeg",
+  const handleShowMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 5, cart.length));
   };
+
 
   useEffect(() => {
     if (user?.id) {
       getAllProjects()
     }
+
   }, [user?.id])
-
-
-
   
+  useEffect(() => {
+     console.log(totalAmount())
+
+   }, [cart])
+
+
+
+   
 
 
   const getAllProjects = async() => {
@@ -41,7 +59,7 @@ const CartProducts = () => {
     try {
         const res = await instance.get(`/api/Donations/GetAllDonationCarts?personID=${id}`, 
           {skipAuth: true} as CustomAxiosRequestConfig)
-
+          setCart(res.data)
           console.log(res);
           
     } catch (error) {
@@ -49,10 +67,99 @@ const CartProducts = () => {
     }
   }
 
+
+  const totalAmount = () => {
+    if (cart.length > 0) {
+      return cart[0].totalAmount
+    }
+    return 0;
+  }
+
+
+const createPayment = async (e: FormEvent) => {
+      e.preventDefault();
+    
+      if (!user?.id) return console.warn("⚠️ المستخدم غير موجود");
+      if (!cart.length) return console.warn("⚠️ السلة فارغة");
+    
+      const selectedProduct = cart[0];
+    
+      const body = {
+        personID: Number(user.id),
+        amount: Number(selectedProduct.amount),
+        paymentMethod: method,
+      };
+    
+      try {
+        const res = await instance.post(
+          "/api/Donations/CreatePaymentSession",
+          body,
+          {
+            skipAuth: true,
+          } as CustomAxiosRequestConfig
+        );
+         setPaymentRef(res.data.transactionReference)
+        console.log(res);
+        setToggle(true);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+
+const confirmDonation = async () => {
+
+      if (!user?.id) return console.warn("⚠️ المستخدم غير موجود");
+      const body = {
+        personID: Number(user.id),
+      };
+    
+      try {
+        const res = await instance.post(
+          "/api/Donations/ConfirmDonation",
+          body,
+          {
+            skipAuth: true,
+          } as CustomAxiosRequestConfig
+        );
+        console.log(res);
+        setToggle(false);
+        console.log(body);
+        
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+
+   const updatePayment = async() => {
+    const state = "success"
+     try {
+      const res = await instance.post(
+        `/api/Donations/UpdatePaymentStatus?transactionRef=${paymentRef}&status=${state}`
+      )
+      console.log(res);
+      console.log(paymentRef, state);
+      
+     } catch (error) {
+       console.log(error);
+     }
+   }
+
   return (
     <div className="container mx-auto px-2">
       <>
-            {user.id ? (        
+      <CustomPopup
+        toggle={toggle}
+        setToggle={setToggle}
+        title="هل أنت متأكد من تنفيذ عملية الدفع؟"
+        message="سيتم خصم المبلغ من وسيلة الدفع الخاصة بك لإتمام التبرع. هل ترغب في المتابعة؟"
+        confirmDonation={confirmDonation}
+        updatePayment={updatePayment}
+      />
+
+
+        {user.id ? (        
               <div className="grid md:grid-cols-2 gap-8">
         <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-semibold mb-4 text-gray-700 text-right">
@@ -60,11 +167,13 @@ const CartProducts = () => {
           </h2>
           <div className="border border-gray-200 rounded-lg p-4 flex justify-between flex-row-reverse items-center">
             <span className="text-gray-600">المجموع</span>
-            <span className="font-bold text-gray-800">SAR {total.toFixed(2)}</span>
+            <span className="font-bold text-gray-800">SAR {
+              totalAmount()
+              }</span>
           </div>
         </div>
-
-        <div className="bg-white rounded-xl shadow p-6">
+        <form>
+                  <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-semibold mb-4 text-gray-700 text-right">
             طريقة الدفع
           </h2>
@@ -72,7 +181,7 @@ const CartProducts = () => {
           <div className="space-y-3">
             {/* mada */}
             <label
-              className={`flex items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
+              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
                 method === "mada"
                   ? "border-blue-400 bg-indigo-50"
                   : "border-gray-200 hover:bg-gray-50"
@@ -85,7 +194,7 @@ const CartProducts = () => {
 
             {/* visa/mastercard */}
             <label
-              className={`flex items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
+              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
                 method === "visa"
                   ? "border-blue-400 bg-indigo-50"
                   : "border-gray-200 hover:bg-gray-50"
@@ -99,7 +208,7 @@ const CartProducts = () => {
 
             {/* STC Pay */}
             <label
-              className={`flex items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
+              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
                 method === "stc"
                   ? "border-blue-400 bg-indigo-50"
                   : "border-gray-200 hover:bg-gray-50"
@@ -120,7 +229,7 @@ const CartProducts = () => {
 
             {/* Bank transfer */}
             <label
-              className={`flex items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
+              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
                 method === "bank"
                   ? "border-blue-400 bg-indigo-50"
                   : "border-gray-200 hover:bg-gray-50"
@@ -189,19 +298,45 @@ const CartProducts = () => {
 
           <div className="mt-4 pt-4 text-right">
             <h3 className="text-md font-semibold mb-3 text-gray-700"> سلة التبرعات  </h3>
-            <div className="flex items-center gap-3">
-              <Image
-                src={product.image}
-                alt={product.name}
-                className="w-16 h-16 object-cover rounded-lg border"
-                width={300}
-                height={200}
-              />
-              <div>
-                <p className="text-gray-800 font-medium">{product.name}</p>
-                <p className="text-gray-600 text-sm">ريال {product.amount.toFixed(2)}</p>
-              </div>
-            </div>
+      <div className="space-y-4">
+            <AnimatePresence>
+              {cart.length !== 0 ? (cart.slice(0, visibleCount).map((ele, index) => (
+                <motion.div
+                  key={index}
+                  className="flex justify-between mb-4 border-b-2 border-b-[#EEE]"
+                  initial={{ opacity: 0, y: 20 }}      // بداية الظهور
+                  animate={{ opacity: 1, y: 0 }}       // الشكل النهائي
+                  exit={{ opacity: 0, y: -10 }}        // عند الإزالة (اختياري)
+                  transition={{ duration: 0.4 }}       // سرعة الأنيميشن
+                >
+                  <Image
+                    src={ele.sectionImage}
+                    alt={ele.sectionName}
+                    className="w-16 h-16 object-cover rounded-lg border"
+                    width={300}
+                    height={200}
+                  />
+                  <div>
+                    <p className="text-gray-800 font-medium">{ele.sectionName}</p>
+                    <p className="text-gray-600 text-sm">
+                      ريال {ele.amount.toFixed(2)}
+                    </p>
+                  </div>
+                </motion.div>
+              ))) : (<p> لا يوجد تبرعات روح اتبرع يعمم </p>)}
+            </AnimatePresence>
+    
+          {visibleCount < cart.length && (
+            <motion.button
+              onClick={handleShowMore}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-blue-600 text-white cursor-pointer py-2 px-4 rounded-md hover:bg-blue-700 transition"
+            >
+              عرض المزيد
+            </motion.button>
+          )}
+    </div>
           </div>
 
           <div className="mt-6 text-right">
@@ -216,11 +351,21 @@ const CartProducts = () => {
 
      
           <div className="mt-6">
-            <button className="w-full bg-blue-400 hover:bg-blue-500 cursor-pointer text-white py-3 rounded-lg transition">
+            <button
+            type="submit"
+            disabled={!cart.length}
+            onClick={createPayment}
+            className={
+              `w-full bg-blue-400  cursor-pointer text-white py-3 rounded-lg transition
+                ${cart.length === 0 
+                ? "bg-gray-400 cursor-not-allowed" 
+                : "bg-[var(--main-color)] hover:bg-blue-500"}`
+                      }>
               إدخال بيانات الدفع
             </button>
           </div>
         </div>
+        </form>
       </div>) : (
         <p className="text-black font-medium text-center"> لا يوجد مشاريع هنا يجب عليك التسجيل وإضافة مشروع في السلة </p>
       )}

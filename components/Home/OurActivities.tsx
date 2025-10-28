@@ -9,7 +9,7 @@ const OurActivities: React.FC = () => {
  
     return (
         <section className="py-20 bg-gray-50" dir="rtl">
-            <div className="container mx-auto px-2.5">
+            <div className="container mx-auto px-3.5">
                 
                 {/* العنوان الرئيسي */}
                 <FadeInOnScroll duration={0.8}>

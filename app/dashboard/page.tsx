@@ -7,9 +7,10 @@ import { useAuth } from "@/utils/AuthContext";
 const Dashboard: React.FC = () => {
   const router = useRouter();
   const pathName = usePathname();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
+    if (loading) return;
     if (!user.token || user.role !== "Admin") {
       router.replace("/");
       return;
