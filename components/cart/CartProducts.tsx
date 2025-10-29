@@ -38,11 +38,11 @@ const CartProducts = () => {
 
 
   useEffect(() => {
-    if (user?.id) {
+    if (user.id) {
       getAllProjects()
     }
 
-  }, [user?.id])
+  }, [user.id])
   
   useEffect(() => {
      console.log(totalAmount())

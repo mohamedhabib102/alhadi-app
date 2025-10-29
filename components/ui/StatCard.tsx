@@ -28,7 +28,7 @@ const AnimatedCount: React.FC<{ value: number }> = ({ value }) => {
 
 
 
-const StatCard: React.FC<StatItem> = ({ value, label, IconComponent, prefix, suffix }) => {
+const StatCard: React.FC<StatItem> = ({ value, label, IconComponent }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: true, amount: 0.8 }); 
 
@@ -41,9 +41,7 @@ const StatCard: React.FC<StatItem> = ({ value, label, IconComponent, prefix, suf
             </div>
 
             <h3 className="text-5xl lg:text-6xl font-extrabold text-[var(--main-color)] mb-2">
-                {/* {prefix} */}
                 {isInView ? <AnimatedCount value={value} /> : 0} 
-                {/* {suffix} */}
             </h3>
             <p className="text-md font-semibold text-gray-600 mt-2">
                 {label}

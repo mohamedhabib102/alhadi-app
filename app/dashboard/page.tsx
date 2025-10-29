@@ -19,7 +19,7 @@ const Dashboard: React.FC = () => {
     if (pathName === "/dashboard") {
       router.replace("/dashboard/sections");
     }
-  }, [user, pathName, router]);
+  }, [user, pathName, router, loading]);
 
   return null;
 };

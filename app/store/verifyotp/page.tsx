@@ -15,12 +15,6 @@ interface CustomAxiosConfig extends AxiosRequestConfig {
   otp: string
  }
 
-type LoginResponse = {
-  personID: number;
-  otp: string
-};
-
-
 
 const Login: React.FC = () => {
   const {setUser, user} = useAuth();
@@ -165,7 +159,7 @@ const Login: React.FC = () => {
             </button>
 
 
-                
+                {messageError? (<p className='text-right text-red-500 mt-2.5 text-lg'>{messageError}</p>) : ""}
           </form>
         </motion.div>
       </div>

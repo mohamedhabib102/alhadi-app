@@ -3,8 +3,6 @@
 import instance from "@/utils/axios";
 import axios, { AxiosRequestConfig } from "axios";
 import { useEffect, useState } from "react";
-// import ProductCard from "./ProductCard";
-import Cookies from "js-cookie";
 import Image from "next/image";
 import { FaMoneyBill, FaShoppingCart } from "react-icons/fa";
 import { useAuth } from "@/utils/AuthContext";

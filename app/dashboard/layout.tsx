@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import Link from "next/link";
 import { useAuth } from "@/utils/AuthContext";
 import { BiLogOut } from "react-icons/bi";
-import { usePathname, useRouter  } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 type DashboardLayoutProps = {
   children: ReactNode;

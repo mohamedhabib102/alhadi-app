@@ -23,10 +23,6 @@ interface ResponseData {
 
 
 
-const donationsData: ResponseData[] = [
-
-];
-
 
 const MyDonationFC: React.FC = () => {
     const {user, loading} = useAuth();
@@ -59,6 +55,7 @@ const MyDonationFC: React.FC = () => {
             {
             skipAuth: true,
           } as CustomAxiosRequestConfig)
+          setDonation(res.data)
 
           console.log(res);
           

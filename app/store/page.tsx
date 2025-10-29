@@ -1,4 +1,3 @@
-import ProductCard from "@/components/Store/ProductCard";
 import ProductsPage from "@/components/Store/ProductsPage";
 import CustomHeader from "@/components/ui/CustomHeader";
 

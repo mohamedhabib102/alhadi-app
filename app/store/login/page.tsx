@@ -102,7 +102,7 @@ const Login: React.FC = () => {
 
         console.log(res);
 
-        const { personID, otpRequired, role, message, token } = res.data;
+        const { personID, otpRequired, role, token } = res.data;
 
 
         if (role === "Admin"){

@@ -10,7 +10,6 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-    const [price, setPrice] = useState<number>(0)
     const isOutOfStock = product.stock === 0;
 
     return (

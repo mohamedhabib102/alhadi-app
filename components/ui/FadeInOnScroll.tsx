@@ -17,7 +17,6 @@ const FadeInOnScroll: React.FC<FadeInOnScrollProps> = ({
     children,
     duration = 0.8,
     delay = 0,
-    amount = 0.3,
 }) => {
     const [isVisible, setIsVisible] = useState(false);
 

@@ -1,7 +1,6 @@
 "use client"
 
 import instance from "@/utils/axios";
-import { AxiosRequestConfig } from "axios";
 import Image from "next/image";
 import { 
     ChangeEvent, 
@@ -12,9 +11,6 @@ import {
     useState 
 } from "react";
 
-interface CustomAxiosConfig extends AxiosRequestConfig {
-  skipAuth?: boolean;
-}
 
 interface Toggles {
     toggle: boolean;

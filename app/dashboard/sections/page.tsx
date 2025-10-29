@@ -45,7 +45,7 @@ const SectionsClient: React.FC = () => {
         return;
       }
 
-    }, [user, router]);
+    }, [user, router, loading]);
 
 
   const getAllSections = async () => {
