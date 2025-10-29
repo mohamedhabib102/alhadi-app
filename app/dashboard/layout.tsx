@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import Link from "next/link";
 import { useAuth } from "@/utils/AuthContext";
 import { BiLogOut } from "react-icons/bi";
@@ -13,7 +13,6 @@ type DashboardLayoutProps = {
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const { logout } = useAuth();
   const pathName = usePathname();
-  const router = useRouter();
 
 
   const handleLogout = () => {
@@ -49,14 +48,14 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
           <li className="mb-3">
             <Link
-              href="/dashboard/posts"
+              href="/dashboard/settings"
               className={`block text-lg py-2 px-3 rounded-lg transition ${
-                pathName === "/dashboard/posts"
+                pathName === "/dashboard/settings"
                   ? "bg-[var(--main-color)] text-white"
                   : "hover:bg-[var(--main-color)] hover:text-white bg-blue-100"
               }`}
             >
-              المقالات
+              الأعدادات
             </Link>
           </li>
         </ul>

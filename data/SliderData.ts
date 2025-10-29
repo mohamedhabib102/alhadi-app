@@ -1,23 +1,25 @@
-import { SliderContent } from "@/types/Slider";
 
 
-export const slides: SliderContent[] = [
+export const slides = [
   {
     id: 1,
     image: "/images/new1.jpg",
-    title: "رحلتنا نحو العطاء",
-    description: "نساهم في بناء مجتمع أفضل من خلال المبادرات الإنسانية والتنموية",
+    title: "على نهج النبوة",
+    description:
+      "نسير على خطى النبي ﷺ في نشر العلم الشرعي والدعوة إلى الله بالحكمة والموعظة الحسنة.",
   },
   {
     id: 2,
-    image: "/images/new1.jpg",
-    title: "تمكين الأفراد",
-    description: "نسعى لتمكين الأفراد عبر التعليم والدعم المجتمعي المستدام",
+    image: "/images/new2.jpg",
+    title: "العمل الصالح وبناء الأمة",
+    description:
+      "نغرس قيم الإخلاص والإحسان في النفوس، ونسهم في بناء مجتمع يحيى بروح التعاون والتكافل.",
   },
   {
     id: 3,
-    image: "/images/new1.jpg",
-    title: "بناء المستقبل",
-    description: "نؤمن بأن الاستثمار في الإنسان هو أساس التنمية المستدامة",
+    image: "/images/new3.jpg",
+    title: "نور العلم والهدى",
+    description:
+      "نعمل على نشر العلم الموثوق من الكتاب والسنة، لتبصير الناس بدينهم وربطهم بالهدي النبوي الصحيح.",
   },
 ];

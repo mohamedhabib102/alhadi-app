@@ -6,13 +6,30 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { SliderContent } from "@/types/Slider";
-import React from "react";
+import  { useEffect, useState } from "react";
+import { getAllSlides } from "@/api/getAllSlides";
 
 interface HeroSliderProps {
   data: SliderContent[];
 }
 
-const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
+
+const HeroSlider: React.FC<HeroSliderProps> = () => {
+    const [slides, setSlides] = useState<SliderContent[]>([])
+
+
+    useEffect(() => {
+      fetchSlides();
+    },[])
+
+     const fetchSlides = async () => {
+     try {
+       const data  = await getAllSlides();
+       if (data) setSlides(data)
+     } catch (error) {
+         console.log(error);
+     }
+   }
   return (
     <div className="w-full relative">
       <Swiper
@@ -23,12 +40,12 @@ const HeroSlider: React.FC<HeroSliderProps> = ({ data }) => {
         pagination={{ clickable: true }}
         className="w-full lg:h-[750px] h-[650px]"
       >
-        {data.map((slide) => (
-          <SwiperSlide key={slide.id}>
+        {slides.map((slide) => (
+          <SwiperSlide key={slide.slideID}>
             <div
               className="relative w-full h-full flex items-center justify-center text-center text-white"
               style={{
-                backgroundImage: `url(${slide.image})`,
+                backgroundImage: `url(${slide.imageUrl})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

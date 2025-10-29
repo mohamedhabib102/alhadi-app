@@ -1,10 +1,10 @@
 
 
 export  interface SliderContent{
-    id: number;
-    image: string;
+    slideID: number;
+    description: string;
     title: string;
-    description: string
+    imageUrl: string
 }
 
 export type SliderList = SliderContent[]
