@@ -124,8 +124,7 @@ const confirmDonation = async () => {
         );
         console.log(res);
         setToggle(false);
-        console.log(body);
-        
+        window.location.reload();
       } catch (error) {
         console.error(error);
       }
@@ -133,7 +132,7 @@ const confirmDonation = async () => {
 
 
    const updatePayment = async() => {
-    const state = "success"
+    const state = "Success"
      try {
       const res = await instance.post(
         `/api/Donations/UpdatePaymentStatus?transactionRef=${paymentRef}&status=${state}`

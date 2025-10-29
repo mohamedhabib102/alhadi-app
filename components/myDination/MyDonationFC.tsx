@@ -1,0 +1,106 @@
+"use client"
+import { useAuth } from "@/utils/AuthContext";
+import instance from "@/utils/axios";
+import { AxiosRequestConfig } from "axios";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import {  useRouter} from "next/navigation";
+import FadeInOnScroll from "../ui/FadeInOnScroll";
+
+
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
+}
+
+
+interface ResponseData {
+    sectionID: number;
+    sectionName: string;
+    sectionImage: string;
+    amount: number;
+    donationDate: string;
+}
+
+
+
+const donationsData: ResponseData[] = [
+
+];
+
+
+const MyDonationFC: React.FC = () => {
+    const {user, loading} = useAuth();
+    const [dontion, setDonation] = useState<ResponseData[]>([])
+    const router = useRouter();
+
+    useEffect(() => {
+        if (loading) return; 
+
+      if (!user.id) {
+        router.replace("/");
+        return;
+      }
+
+    }, [user, router]);
+
+    useEffect(() => {
+
+        if (user.id) {
+            myDontion()
+        }
+    },[user.id])
+     
+
+    const myDontion = async () => {
+        const id = Number(user.id);
+        try {
+            const res = await instance.get(
+                `/api/Donations/GetMyDonations?personID=${id}`,
+            {
+            skipAuth: true,
+          } as CustomAxiosRequestConfig)
+
+          console.log(res);
+          
+        } catch (error) {
+            console.log(error);
+        }
+    }
+     
+    return (
+      <>
+      {!dontion.length ? 
+      (<p className="text-center m-auto text-lg"> لا يوجد تبرعات حاليا يمكنك التبرع الأن </p>) : (
+
+        <div className="grid md:grid-cols-3 gap-6 p-4">
+            {dontion.map((donation) => (
+        <FadeInOnScroll key={donation.sectionID}>
+        <div
+          key={donation.sectionID}
+          className="bg-white rounded-xl shadow-md hover:shadow-lg transition"
+        >
+          <Image
+            src={donation.sectionImage}
+            alt={donation.sectionName}
+            width={200}
+            height={150}
+            className="rounded-t w-full h-auto max-w-full"
+          />
+          <div className="py-2.5 px-3 text-right">
+              <h3 className="text-lg font-semibold text-gray-800">{donation.sectionName}</h3>
+              <p className="text-gray-600">المبلغ: {donation.amount} ريال</p>
+              <p className="text-gray-500 text-sm">تاريخ التبرع: {donation.donationDate}</p>
+          </div>
+        </div>
+        </FadeInOnScroll>
+      ))}
+        </div>
+
+      
+  )}
+      </>
+
+    );
+}
+
+export default MyDonationFC;

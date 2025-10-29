@@ -7,7 +7,7 @@ import CustomHeader from "@/components/ui/CustomHeader";
 import axios, { AxiosRequestConfig } from "axios";
 import { IoIosAddCircle } from "react-icons/io";
 import AddSection from "@/components/dashboard/AddSection";
-import { usePathname, useRouter} from "next/navigation";
+import { useRouter} from "next/navigation";
 import { useAuth } from "@/utils/AuthContext";
 
 
@@ -68,6 +68,7 @@ const SectionsClient: React.FC = () => {
         if (error.response?.status === 404) {
           // error.response.data
           setMessage(" لا يوجد مشاريع حاليا ");
+          setSections([])
         }
       }
     }
@@ -129,7 +130,8 @@ const SectionsClient: React.FC = () => {
                   <div
                     className="bg-green-500 h-2 rounded-full"
                     style={{
-                      width: `${(ele.collectedAmount / ele.targetAmount) * 100}%`,
+                      width: `${(ele.collectedAmount / ele.targetAmount) * 100 > 100 
+                        ? 100 : (ele.collectedAmount / ele.targetAmount) * 100}%`,
                     }}
                   ></div>
                 </div>

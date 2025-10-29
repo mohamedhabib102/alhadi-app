@@ -31,6 +31,7 @@ interface DataCreate {
 }
 
 const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
+    
       const [loading, setLoading] =  useState<boolean>(false);
       const [project, setProject] = useState<DataCreate>({
          Name: "",
@@ -64,8 +65,20 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
    const createNewProject = async(e:FormEvent) => {
         e.preventDefault()
 
-       const targetAmountNumber  = Number(project.TargetAmount);
+        const targetAmountNumber  = Number(project.TargetAmount);
+        const projectDate =  new Date(project.Durations);
+        const today = new Date();
 
+        projectDate.setHours(0,0,0,0)
+        today.setHours(0,0,0,0)
+
+        if (projectDate < today){
+          alert(" هذا التاريخ قديم الرجاء إضافة تاريخ صحيح ");
+          return;
+        } else{
+          console.log("%cمبروك التاريخ صح", "color: red; font-size: 30px");
+        }
+        
        if (isNaN(targetAmountNumber) || targetAmountNumber <= 0) {
          alert("من فضلك أدخل رقم صحيح في خانة الهدف");
          return;
@@ -110,6 +123,8 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
         setLoading(false)
     }
    }
+
+
 
     
 

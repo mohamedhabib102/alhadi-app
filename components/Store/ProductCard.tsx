@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { ProductItem } from '@/types/ProductsData';
-import { FaMoneyBill } from 'react-icons/fa';
 import FadeInOnScroll from '../ui/FadeInOnScroll';
 import Image from 'next/image';
 

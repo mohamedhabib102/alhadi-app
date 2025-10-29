@@ -75,18 +75,39 @@ export default function Header() {
           </button>
 
           {/* Desktop Show  */}
-          <ul className="hidden lg:flex items-center gap-6 text-right">
-            <li><Link href="/contact" 
+          <ul className="hidden lg:flex items-center gap-4 text-right">
+            <li><Link 
+               onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+            href="/contact" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
             ${pathName === "/contact" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             `}>تواصل معنا</Link></li>
-            <li><Link href="/posts" 
+            <li><Link
+               onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+             href="/posts" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
             ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             `}> المقالات </Link></li>
-            <li><Link href="/general-assembly" 
+            <li><Link
+               onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+             href="/general-assembly" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
             ${pathName === "/general-assembly" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
@@ -134,6 +155,20 @@ export default function Header() {
                       سلة المشتريات
                     </Link>
                   </li>
+                {user.id && (
+                    <li>
+                    <Link
+                    onClick={()  => setStoreOpen(false)}
+                    href="/store/myDonation" 
+                    className={
+                      ` transition block px-4 py-2 hover:bg-gray-200
+                      ${pathName === "/store/myDonation" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      `
+                    }>
+                      تبرعاتي 
+                    </Link>
+                  </li>
+                )}
                   <li>
                     {user.id ? (
                     <button 
@@ -176,71 +211,31 @@ export default function Header() {
               )}
             </li>
 
+            <li><Link 
+               onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+            href="/governance" 
+           className={`
+            text-[19px] cursor-pointer transition py-2 px-2
+            ${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            `}> بيانات الحكومة </Link></li>
 
-            <li className="relative">
-              <button
+            <li><Link 
                 onClick={() => {
-                  setGovernanceOpen(!governanceOpen);
-                  setAboutOpen(false);
-                  setStoreOpen(false);
-                }}
-                className={`${governanceOpen ? "text-[var(--main-color)]" : ""} flex items-center gap-1 text-[19px] cursor-pointer transition hover:text-[var(--main-color)] py-2 px-2`}
-              >
-                الحوكمة{" "}
-                <IoIosArrowDown
-                  size={18}
-                  className={`transition-transform ${governanceOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-              {governanceOpen && (
-                <ul className="absolute right-0 bg-white border border-gray-200 rounded-lg shadow-md mt-2 w-56 text-right">
-                  <li><Link 
-                  onClick={() => setGovernanceOpen(false)}
-                  href="/governance" className={
-                      `${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block px-4 py-2 hover:bg-gray-200`
-                    }>نظرة عامة</Link></li>
-                  <li><Link 
-                  onClick={() => setGovernanceOpen(false)}
-                  href="/governance/policies" className={
-                      `${pathName === "/governance/policies" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block px-4 py-2 hover:bg-gray-200`
-                    }>السياسات واللوائح</Link></li>
-                </ul>
-              )}
-            </li>
-
-
-            {/* Dropdown (من نحن) */}
-            {/* <li className="relative">
-              <button
-                onClick={() => {
-                  setAboutOpen(!aboutOpen);
-                  setStoreOpen(false);
-                  setGovernanceOpen(false)
-                }}
-                className={`${aboutOpen ? "text-[var(--main-color)]" : ""}
-                flex items-center gap-1 text-[19px] cursor-pointer transition hover:text-[var(--main-color)] py-2 px-2`}
-              >
-                من نحن{" "}
-                <IoIosArrowDown
-                  size={18}
-                  className={`transition-transform ${aboutOpen ? "rotate-180" : ""}`}
-                />
-              </button>
-
-              {aboutOpen && (
-                <ul className="absolute right-0 bg-white border border-gray-200 rounded-lg shadow-md mt-2 w-48 text-right">
-                  <li>
-                    <Link
-                    onClick={() => setAboutOpen(false)} 
-                    href="/about" className={
-                      `${pathName === "/about" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block px-4 py-2 hover:bg-gray-200`
-                    }>
-                      عن الجمعية
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li> */}
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+            href="/electronic-services" 
+            className={`
+            text-[19px] cursor-pointer transition py-2 px-2
+            ${pathName === "/electronic-services" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            `}>  الخدمات الالكترونيه </Link></li>
 
             <li>
             <Link
@@ -272,9 +267,6 @@ export default function Header() {
           </ul>
         </nav>
       </div>
-
-
-
 
       { /*   Mobile show  */ }
       <div
@@ -317,48 +309,8 @@ export default function Header() {
             </Link>
           </li>
 
-          { /* About  */}
-          {/* <li>
-            <button
-              onClick={() => {
-                setAboutOpen(!aboutOpen);
-                setStoreOpen(false);
-                setGovernanceOpen(false);
-              }}
-              className={`flex flex-row-reverse cursor-pointer items-center justify-between w-full text-lg transition-colors 
-                ${aboutOpen ? "text-[var(--main-color)]" : "text-black"} 
-                `}
-            >
-              من نحن
-              <IoIosArrowDown
-                size={18}
-                className={`transition-transform ${aboutOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-          
-            {aboutOpen && (
-              <ul className="mt-2 bg-gray-50 rounded-md border border-gray-200">
-                <li>
-                  <Link
-                    href="/about"
-                    className={
-                      `block px-4 py-2 text-base hover:bg-gray-100
-                      ${pathName === "/about" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-                      `
-                    }
-                    onClick={() => {
-                      setToggle(false)
-                      setAboutOpen(false)
-                    }}
-                  >
-                    عن الجمعية
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li> */}
-          
-          {/* Store  */}
+
+         {/* Store */}
           <li>
             <button
               onClick={() => {
@@ -392,7 +344,7 @@ export default function Header() {
                       setStoreOpen(false)
                     }}
                   >
-                    المنتجات
+                    التبرعات
                   </Link>
                 </li>
                 <li>
@@ -412,6 +364,20 @@ export default function Header() {
                     سلة المشتريات
                   </Link>
                 </li>
+                {user.id && (
+                    <li>
+                    <Link
+                    onClick={()  => setStoreOpen(false)}
+                    href="/store/myDonation" 
+                    className={
+                      ` transition block px-4 py-2 hover:bg-gray-200
+                      ${pathName === "/store/myDonation" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      `
+                    }>
+                      تبرعاتي 
+                    </Link>
+                  </li>
+                )}
                 <li>
                     {user.id ? (
                     <button 
@@ -455,76 +421,59 @@ export default function Header() {
           </li>
           
           { /* الحوكمة */}
-          <li>
-            <button
+            <li><Link 
               onClick={() => {
-                setGovernanceOpen(!governanceOpen);
+                setToggle(false);
                 setAboutOpen(false);
                 setStoreOpen(false);
+                setGovernanceOpen(false)
               }}
-              className={`flex flex-row-reverse cursor-pointer items-center justify-between w-full text-lg transition-colors 
-                ${governanceOpen ? "text-[var(--main-color)]" : "text-black"} hover:text-[var(--main-color)]`}
-            >
-              الحوكمة{" "}
-              <IoIosArrowDown
-                size={18}
-                className={`transition-transform ${governanceOpen ? "rotate-180" : ""}`}
-              />
-            </button>
-          
-            {governanceOpen && (
-              <ul className="mt-2 bg-gray-50 rounded-md border border-gray-200">
-                <li>
-                  <Link
-                    href="/governance"
-                    className={
-                      `
-                      block px-4 py-2 text-base hover:bg-gray-100
-                      ${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-                      `
-                    }
-                    onClick={() => {
-                      setToggle(false)
-                      setGovernanceOpen(false)
-                    }}
-                  >
-                    نظرة عامة
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/governance/policies"
-                    className={
-                      `
-                      block px-4 py-2 text-base hover:bg-gray-100
-                      ${pathName === "/governance/policies" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-                      `
-                    }
-                    onClick={() => {
-                      setToggle(false)
-                      setGovernanceOpen(false)
-                    }}
-
-                  >
-                    السياسات واللوائح
-                  </Link>
-                </li>
-              </ul>
-            )}
-          </li>
-          
-           <li><Link href="/general-assembly" 
+            href="/governance" 
             className={`
-            text-[19px] cursor-pointer transition py-2 px-2
+            text-[19px] cursor-pointer transition py-2
+            ${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            `}> بيانات الحكومة </Link></li>
+
+            <li><Link 
+              onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+            href="/electronic-services" 
+            className={`
+            text-[19px] cursor-pointer transition py-2
+            ${pathName === "/electronic-services" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            `}>  الخدمات الالكترونيه </Link></li>
+          
+           <li><Link 
+                onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+           
+           href="/general-assembly" 
+            className={`
+            text-[19px] cursor-pointer transition py-2 
             ${pathName === "/general-assembly" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             `}> الجمعية العمومية </Link></li>
-          <li><Link href="/posts" 
+
+          <li><Link 
+                        onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}
+          href="/posts" 
           className={
             `
             ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             transition block text-lg`
-          }
-           onClick={() => setToggle(false)}> المقالات </Link></li>
+          }> المقالات </Link></li>
            
           <li><Link href="/contact" 
            className={
@@ -532,7 +481,12 @@ export default function Header() {
             ${pathName === "/contact" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             transition block text-lg`
           }
-           onClick={() => setToggle(false)}>تواصل معنا</Link></li>
+              onClick={() => {
+                setToggle(false);
+                setAboutOpen(false);
+                setStoreOpen(false);
+                setGovernanceOpen(false)
+              }}>تواصل معنا</Link></li>
         </ul>
       </div>
     </header>

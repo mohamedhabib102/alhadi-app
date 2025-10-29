@@ -224,7 +224,8 @@ const addToCart = async (sectionID: number) => {
                   <div
                     className="bg-green-500 h-2 rounded-full"
                     style={{
-                      width: `${(ele.collectedAmount / ele.targetAmount) * 100}%`,
+                      width: `${(ele.collectedAmount / ele.targetAmount) * 100 > 100 
+                        ? 100 : (ele.collectedAmount / ele.targetAmount) * 100}%`,
                     }}
                   ></div>
                 </div>
