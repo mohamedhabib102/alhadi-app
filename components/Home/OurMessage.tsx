@@ -1,55 +1,50 @@
 "use client"
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import MessageCard from '@/components/ui/MessageCard';
 import { motion } from "framer-motion";
+import { AxiosRequestConfig } from 'axios';
+import instance from '@/utils/axios';
 
-// Define the structure for each message item
-interface MessageItem {
-    id: number;
-    text: string;
-    imageSrc: string;
-    altText: string;
+
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
 }
 
-// Data for the 'Our Message' section
-const messageData: MessageItem[] =
- [
-    {
-        id: 1,
-        text: 'لفت انتباه أفراد المجتمع إلى حالات الحيوانات البائسة والدعوة إلى مساعدتها.',
-        imageSrc: '/images/our-message.jpg', // Placeholder for the actual image file name
-        altText: 'شخص يعتني بعجل صغير',
-    },
-    {
-        id: 2,
-        text: 'نشر الوعي وتعزيز ثقافة الرفق بالحيوان.',
-        imageSrc: '/images/our-message.jpg', // Placeholder
-        altText: 'يدان تحملان قطة صغيرة',
-    },
-    {
-        id: 3,
-        text: 'التوعية بأهمية رعاية الحيوانات وحمايتها.',
-        imageSrc: '/images/our-message.jpg', // Placeholder
-        altText: 'أطفال يتفاعلون مع حيوانات',
-    },
-    {
-        id: 4,
-        text: 'توفير الرعاية الطبية والخدمات البيطرية اللازمة للحيوانات المحتاجة.',
-        imageSrc: '/images/our-message.jpg', // Placeholder
-        altText: 'حقيبة إسعافات أولية بيطرية',
-    },
-    {
-        id: 5,
-        text: 'توعية الناس بأهمية التبني وتأهيلهم لاستقبال الحيوان في منزلهم ورعايته.',
-        imageSrc: '/images/our-message.jpg', // Placeholder
-        altText: 'أطفال يقفون بجوار كلب',
-    },
-];
+interface Slide4 {
+  slide4ID: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+}
+
+
 
 
 
 // Main Component
 const OurMessage: React.FC = () => {
+      const [slides, setSlides] = useState<Slide4[]>([]);
+
+
+      useEffect(() => {
+        fetchSlides()
+      }, [])
+
+      const fetchSlides = async () => {
+        try {
+          const res = await instance.get("/api/Donations/GetAllSlides4", {
+            skipAuth: true,
+          } as CustomAxiosRequestConfig);
+    
+          if (Array.isArray(res.data)) {
+            setSlides(res.data);
+          } else {
+            setSlides([]);
+          }
+        } catch (error) {
+          console.error("Error fetching slides:", error);
+        }
+      };
     return (
         <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-3.5">
@@ -71,14 +66,18 @@ const OurMessage: React.FC = () => {
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
           className="lg:w-96 font-bold text-3xl mb-12 ml-auto text-right"
         >
-          لأن كل كائن يستحق الحب والرعاية التي تمنحه السعادة والراحة
+          رسالتنا أن نُجسّد معاني الرحمة التي دعا إليها ديننا الحنيف، فكل كائنٍ حيٍّ يستحق الحب والرعاية التي تمنحه الطمأنينة والسعادة
         </motion.p>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
-                    {messageData.map((item) => (
+                    {slides.map((item) => (
                         <MessageCard 
-                            key={item.id}
-                            {...item}
+                          key={item.slide4ID}
+                          title={item.title}
+                          description={item.description}
+                          imageUrl={item.imageUrl}
                         />
+
                     ))}
                 </div>
             </div>

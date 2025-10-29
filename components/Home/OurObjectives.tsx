@@ -1,59 +1,48 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
-
-import { 
-    FaHeart, 
-    FaHandsHelping, 
-    FaCubes, 
-    FaPaw, 
-    FaHandHoldingHeart  
-} from 'react-icons/fa';
 import ObjectiveCard from '../ui/ObjectiveCard';
+import { AxiosRequestConfig } from 'axios';
+import instance from '@/utils/axios';
 
-// Define the structure for each objective item
-interface ObjectiveItem {
-    id: number;
-    text: string;
-    IconComponent: React.ElementType; 
+
+
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
 }
 
-
-const objectivesData: ObjectiveItem[] = [
-    {
-        id: 1,
-        text: 'نشر الثقافة البيئية للكائنات الحية',
-        IconComponent: FaHandHoldingHeart, 
-    },
-    {
-        id: 2,
-        text: 'صناعة جيل واعٍ محب للحيوانات',
-        IconComponent: FaPaw, 
-    },
-    {
-        id: 3,
-        text: 'تقديم برامج توعوية لجميع الفئات العمرية',
-        IconComponent: FaCubes, 
-    },
-    {
-        id: 4,
-        text: 'غرس مبدأ المساعدة والمحافظة على هذا الإزدواج لتحقيق التوازن البيئي',
-        IconComponent: FaHandsHelping, 
-    },
-    {
-        id: 5,
-        text: 'العمل على التعايش والسلام مع هذه المخلوقات',
-        IconComponent: FaHeart, 
-    },
-];
-
-
-export type ObjectiveCardProps = Omit<ObjectiveItem, 'id'>;[] 
+interface Slide5 {
+  slide5ID: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+}
 
 
 
 // Main Component
 const OurObjectives: React.FC = () => {
+      const [slides, setSlides] = useState<Slide5[]>([]);
+
+      useEffect(() => {
+        fetchSlides()
+      }, [])
+
+const fetchSlides = async () => {
+    try {
+      const res = await instance.get("/api/Donations/GetAllSlides5", {
+        skipAuth: true,
+      } as CustomAxiosRequestConfig);
+
+      if (Array.isArray(res.data)) {
+        setSlides(res.data);
+      } else {
+        setSlides([]);
+      }
+    } catch (error) {
+      console.error("Error fetching slides:", error);
+    }
+  };
     return (
         <section className="py-20 dark-green-bg  bg-gray-200">
             <div className="container mx-auto px-3.5">
@@ -78,9 +67,9 @@ const OurObjectives: React.FC = () => {
           تنبع رسالتنا من إيماننا العميق بأن الحياة المشتركة تستوجب منا الرعاية والاحترام
         </motion.p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
-                    {objectivesData.map((item) => (
+                    {slides.map((item) => (
                         <ObjectiveCard 
-                            key={item.id}
+                            key={item.slide5ID}
                             {...item}
                         />
                     ))}

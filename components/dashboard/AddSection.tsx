@@ -111,6 +111,7 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
         if (fileRef.current){
           fileRef.current.value = "";
         }
+        alert( "✅ تمت إضافة المشروع بنجاح!" )
         getAllSections();
         
        } catch (error) {

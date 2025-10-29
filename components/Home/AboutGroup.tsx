@@ -36,7 +36,7 @@ const AboutGroup: React.FC = () => {
                    className="font-bold text-3xl mb-1"> فـ لنكن معكم قلوبًا راحمة </motion.p>
                 </div>
                <div className="grid gap-6 lg:grid-cols-2 grid-cols-1 mt-12">
-                   <CardAbout data={data} />
+                   <CardAbout  />
                </div>
 
             </div>

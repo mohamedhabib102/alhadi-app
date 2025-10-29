@@ -1,18 +1,22 @@
-
 import React from 'react';
-import { ActivityItem } from '@/data/activitiesData'; 
 import Image from 'next/image';
 
 
+interface Slide6 {
+  title: string;
+  description: string;
+  imageUrl: string;
+}
 
-const ActivityCard: React.FC<ActivityItem> = ({ title, description, imageSrc, link }) => {
+
+const ActivityCard: React.FC<Slide6> = ({ title, description, imageUrl }) => {
     return (
         <div className="bg-white rounded-xl shadow-2xl overflow-hidden transform transition duration-500 hover:scale-[1.03] hover:shadow-3xl h-full">
             
 
             <div className="w-full h-48 overflow-hidden">
                 <Image 
-                    src={imageSrc} 
+                    src={imageUrl} 
                     alt={title} 
                     className="w-full h-full object-cover transition duration-500 hover:opacity-90"
                     width={300}
@@ -31,13 +35,6 @@ const ActivityCard: React.FC<ActivityItem> = ({ title, description, imageSrc, li
                 <p className="text-gray-600 text-sm mb-4 flex-grow">
                     {description}
                 </p>
-
-                <a 
-                    href={link} 
-                    className="mt-4 inline-block px-5 py-2 text-sm font-semibold text-white bg-[var(--main-color)] rounded-full transition duration-300 hover:bg-blue-500"
-                >
-                    المزيد
-                </a>
             </div>
         </div>
     );

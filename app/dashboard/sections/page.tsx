@@ -83,7 +83,7 @@ const SectionsClient: React.FC = () => {
         console.log(res);
         // console.log(id);
         getAllSections()
-        
+        alert("🗑️ تم حذف المشروع بنجاح!");
         
      } catch (error) {
         console.log(error);
