@@ -9,12 +9,10 @@ import { SliderContent } from "@/types/Slider";
 import  { useEffect, useState } from "react";
 import { getAllSlides } from "@/api/getAllSlides";
 
-interface HeroSliderProps {
-  data: SliderContent[];
-}
 
 
-const HeroSlider: React.FC<HeroSliderProps> = () => {
+
+const HeroSlider: React.FC = () => {
     const [slides, setSlides] = useState<SliderContent[]>([])
 
 
@@ -76,7 +74,7 @@ const HeroSlider: React.FC<HeroSliderProps> = () => {
                   className="lg:text-5xl lg:leading-[3.5rem] text-4xl leading-[2.5rem]"
                 >
                   {slide.description}
-                </motion.p>
+                </motion.p> 
               </div>
             </div>
           </SwiperSlide>

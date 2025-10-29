@@ -8,13 +8,13 @@ import {
   ProgramsSection,
   StatsSection
 } from "@/components/Home";
-import { slides } from "@/data/SliderData";
+
 
 export default function Home() {
   return (
     <div className="">
       <main className="">
-        <HeroSlider data={slides}/>
+        <HeroSlider />
         <AboutGroup />
         <ProgramsSection />
         <OurMessage />
