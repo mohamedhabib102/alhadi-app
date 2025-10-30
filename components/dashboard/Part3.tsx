@@ -36,12 +36,15 @@ const Part3: React.FC = () => {
         setSlides([]);
       }
     } catch (err: unknown) {
-    const error = err as any;
-    console.error("Error fetching slides:", error);
-    if (error?.response?.status === 404) {
-      setSlides([]);
+       console.error("Error fetching slides:", err);    
+         
+       if (typeof err === "object" && err !== null && "response" in err) {
+         const errorWithResponse = err as { response?: { status?: number } };
+         if (errorWithResponse.response?.status === 404) {
+           setSlides([]);
+         }
+       }
     }
-  }
   };
 
   useEffect(() => {

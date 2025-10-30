@@ -37,37 +37,34 @@ const CartProducts = () => {
   };
 
 
-  useEffect(() => {
-    if (user.id) {
-      getAllProjects()
-    }
+const getAllProjects = async () => {
+  const id = user.id;
+  try {
+    const res = await instance.get(
+      `/api/Donations/GetAllDonationCarts?personID=${id}`,
+      { skipAuth: true } as CustomAxiosRequestConfig
+    );
+    setCart(res.data);
+    console.log(res);
+  } catch (error: unknown) {
+    console.log(error);
 
-  }, [user.id])
-  
-
-   
-
-
-     const getAllProjects = async () => {
-       const id = user.id;
-       try {
-         const res = await instance.get(
-           `/api/Donations/GetAllDonationCarts?personID=${id}`,
-           { skipAuth: true } as CustomAxiosRequestConfig
-         );
-         setCart(res.data);
-         console.log(res);
-       } catch (error: unknown) {
-        console.log(error);
-      
-        if (typeof error === "object" && error !== null && "response" in error) {
-          const errWithResponse = error as { response?: { status?: number } };
-          if (errWithResponse.response?.status === 404) {
-            setCart([]);
-          }
-        }
+    if (typeof error === "object" && error !== null && "response" in error) {
+      const errWithResponse = error as { response?: { status?: number } };
+      if (errWithResponse.response?.status === 404) {
+        setCart([]);
       }
-     };
+    }
+  }
+};
+
+
+useEffect(() => {
+  if (user.id) {
+    getAllProjects();
+  }
+}, [user.id]);
+
      
 
 
