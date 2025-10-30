@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import instance from "@/utils/axios";
 import { AxiosRequestConfig } from "axios";
+import Image from "next/image";
 
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
@@ -149,10 +150,12 @@ const Part4: React.FC = () => {
 
         {imagePreview && (
           <div className="mb-3">
-            <img
+            <Image
               src={imagePreview}
               alt="preview"
               className="w-40 h-40 object-cover rounded-lg border mx-auto"
+              width={300}
+              height={200}
             />
           </div>
         )}

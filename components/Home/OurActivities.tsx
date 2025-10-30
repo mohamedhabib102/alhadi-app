@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import ActivityCard from '@/components/ui/ActivityCard';
-import { activitiesData } from '@/data/activitiesData';
 import FadeInOnScroll from '@/components/ui/FadeInOnScroll';
 import instance from '@/utils/axios';
 import { AxiosRequestConfig } from 'axios';

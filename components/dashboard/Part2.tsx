@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import instance from "@/utils/axios";
 import { AxiosRequestConfig } from "axios";
 import FadeInOnScroll from "../ui/FadeInOnScroll";
+import Image from "next/image";
 
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
@@ -162,11 +163,13 @@ const Part2: React.FC = () => {
         {imagePreviews.length > 0 && (
           <div className="flex flex-wrap gap-3 mb-3">
             {imagePreviews.map((src, index) => (
-              <img
+              <Image
                 key={index}
                 src={src}
                 alt={`preview-${index}`}
                 className="w-24 h-24 object-cover rounded-lg border"
+                width={300}
+                height={300}
               />
             ))}
           </div>
