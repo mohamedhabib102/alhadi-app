@@ -10,25 +10,19 @@ import { IoIosArrowDown } from "react-icons/io";
 export default function Header() {
   const pathName = usePathname();
   const [toggle, setToggle] = useState<boolean>(false);
-  const [aboutOpen, setAboutOpen] = useState<boolean>(false);
   const [storeOpen, setStoreOpen] = useState<boolean>(false);
-  const [governanceOpen, setGovernanceOpen] = useState<boolean>(false);
   const headerRef = useRef<HTMLDivElement>(null);
   const {user, logout} = useAuth();
 
   const handelToggle = () => {
     setToggle(!toggle);
-    setAboutOpen(false);
     setStoreOpen(false);
-    setGovernanceOpen(false)
   };
 
 
   const restToggles = () => {
     setToggle(false);
-    setAboutOpen(false);
     setStoreOpen(false);
-    setGovernanceOpen(false)
   }
 
 
@@ -77,25 +71,37 @@ export default function Header() {
           </button>
 
           {/* Desktop Show  */}
-          <ul className="hidden lg:flex items-center gap-4 text-right">
+          <ul className="hidden lg:flex items-center gap-2 text-right">
             <li><Link 
                onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             href="/contact" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
             ${pathName === "/contact" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             `}>تواصل معنا</Link></li>
+              {user.role === "Admin" && (
+              <li>
+                <Link
+                onClick={()  => setStoreOpen(false)}
+                href="/dashboard" 
+                className={
+                  ` transition block px-4 py-2 hover:bg-gray-200
+                  ${pathName === "/dashboard" 
+                    || pathName === "/dashboard/sections"
+                    || pathName === "/dashboard/settings" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                  `
+                }>
+                  لوحة التحكم
+                </Link>
+              </li>
+              )}
             <li><Link
                onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
              href="/posts" 
             className={`
@@ -105,9 +111,7 @@ export default function Header() {
             <li><Link
                onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
              href="/general-assembly" 
             className={`
@@ -120,8 +124,6 @@ export default function Header() {
               <button
                 onClick={() => {
                   setStoreOpen(!storeOpen);
-                  setAboutOpen(false);
-                  setGovernanceOpen(false)
                 }}
                 className={`${storeOpen ? "text-[var(--main-color)]" : ""} flex items-center gap-1 text-[19px] cursor-pointer transition hover:text-[var(--main-color)] py-2 px-2`}
               >
@@ -195,20 +197,6 @@ export default function Header() {
                     </Link>
                     )}
                   </li>
-                  {user.role === "Admin" && (
-                  <li>
-                    <Link
-                    onClick={()  => setStoreOpen(false)}
-                    href="/dashboard" 
-                    className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/dashboard" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-                      `
-                    }>
-                      لوحة التحكم
-                    </Link>
-                  </li>
-                  )}
                 </ul>
               )}
             </li>
@@ -216,9 +204,7 @@ export default function Header() {
             <li><Link 
                onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             href="/governance" 
            className={`
@@ -229,9 +215,7 @@ export default function Header() {
             <li><Link 
                 onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             href="/electronic-services" 
             className={`
@@ -247,9 +231,7 @@ export default function Header() {
               }
               onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             >
               من نحن
@@ -258,9 +240,7 @@ export default function Header() {
 
             <li><Link href="/" 
              onClick={() => {
-                  setAboutOpen(false);
                   setStoreOpen(false);
-                  setGovernanceOpen(false)
              }}
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
@@ -285,9 +265,7 @@ export default function Header() {
               }
               onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             >
               الرئيسية
@@ -302,9 +280,7 @@ export default function Header() {
               }
               onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             >
               من نحن
@@ -317,8 +293,6 @@ export default function Header() {
             <button
               onClick={() => {
                 setStoreOpen(!storeOpen);
-                setAboutOpen(false);
-                setGovernanceOpen(false);
               }}
               className={`flex flex-row-reverse cursor-pointer items-center justify-between w-full text-lg transition-colors 
                 ${storeOpen ? "text-[var(--main-color)]" : "text-black"} hover:text-[var(--main-color)]`}
@@ -404,20 +378,6 @@ export default function Header() {
                     </Link>
                     )}
                 </li>
-                {user.role === "Admin" && (
-                  <li>
-                    <Link
-                    onClick={()  => setStoreOpen(false)}
-                    href="/dashboard" 
-                    className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/dashboard" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-                      `
-                    }>
-                      لوحة التحكم
-                    </Link>
-                  </li>
-                  )}
               </ul>
             )}
           </li>
@@ -426,9 +386,7 @@ export default function Header() {
             <li><Link 
               onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             href="/governance" 
             className={`
@@ -439,9 +397,7 @@ export default function Header() {
             <li><Link 
               onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
             href="/electronic-services" 
             className={`
@@ -452,9 +408,7 @@ export default function Header() {
            <li><Link 
                 onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
            
            href="/general-assembly" 
@@ -464,11 +418,9 @@ export default function Header() {
             `}> الجمعية العمومية </Link></li>
 
           <li><Link 
-                        onClick={() => {
+                onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}
           href="/posts" 
           className={
@@ -476,6 +428,24 @@ export default function Header() {
             ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             transition block text-lg`
           }> المقالات </Link></li>
+
+            {user.role === "Admin" && (
+              <li>
+                <Link
+                onClick={()  => setStoreOpen(false)}
+                href="/dashboard" 
+                className={
+            `
+           ${
+                    pathName === "/dashboard"
+                    || pathName === "/dashboard/sections"
+                    || pathName === "/dashboard/settings" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            transition block text-lg`
+          }>
+                  لوحة التحكم
+                </Link>
+              </li>
+              )}
            
           <li><Link href="/contact" 
            className={
@@ -485,9 +455,7 @@ export default function Header() {
           }
               onClick={() => {
                 setToggle(false);
-                setAboutOpen(false);
                 setStoreOpen(false);
-                setGovernanceOpen(false)
               }}>تواصل معنا</Link></li>
         </ul>
       </div>
