@@ -146,7 +146,7 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
           <form
           onSubmit={createNewProject}
           className="w-full flex flex-col gap-2.5">
-            <h3 className="text-[23px] font-bold text-right">تسجيل الدخول إلى المتجر</h3>
+            <h3 className="text-[23px] font-bold text-right">  إضافة مشروع جديد </h3>
             <p className="mb-4 text-gray-600 text-lg text-right">أدخل بيانات المشروع</p>
              
              <div>
