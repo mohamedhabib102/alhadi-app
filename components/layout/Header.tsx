@@ -88,7 +88,7 @@ export default function Header() {
                 onClick={()  => setStoreOpen(false)}
                 href="/dashboard" 
                 className={
-                  ` transition block px-4 py-2 hover:bg-gray-200
+                  ` transition block px-4 py-2
                   ${pathName === "/dashboard" 
                     || pathName === "/dashboard/sections"
                     || pathName === "/dashboard/settings" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
