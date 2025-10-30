@@ -122,7 +122,7 @@ const fetchSlides = async () => {
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-400" dir="rtl">
-        إضافة صندوق جديد عن slides الجمعية  
+        إضافة صندوق جديد في الشريحة الرئيسية
       </h1>
 
       <form
