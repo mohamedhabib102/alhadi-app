@@ -13,7 +13,6 @@ const Dashboard: React.FC = () => {
 
 
   useEffect(() => {
-    document.title = "لوحة التحكم - جمعية الهدى النبوي الخيرية الدعوية";
     if (loading) return;
     if (!user.token || user.role !== "Admin") {
       router.replace("/");

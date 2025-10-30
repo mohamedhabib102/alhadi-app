@@ -1,4 +1,3 @@
-// src/components/Footer/Footer.tsx
 import React from 'react';
 import Logo from '../ui/Logo';
 import { 
@@ -7,6 +6,8 @@ import {
     socialLinks, 
 } from '@/data/FooterLinks';
 
+
+import { BsTwitterX } from "react-icons/bs";
 import { FaInstagram, FaTwitter, FaTiktok, FaSnapchat } from 'react-icons/fa';
 
 const getSocialIcon = (iconName: string): React.ElementType => {
@@ -15,16 +16,18 @@ const getSocialIcon = (iconName: string): React.ElementType => {
         case 'FaTwitter': return FaTwitter;
         case 'FaTiktok': return FaTiktok;
         case 'FaSnapchat': return FaSnapchat;
+        case 'BsTwitterX': return BsTwitterX; 
         default: return () => null; 
     }
 };
+
 
 const Footer: React.FC = () => {
     return (
         <footer className="pt-16 pb-12 text-white bg-[#272f51]" dir='rtl'>
             <div className="container mx-auto px-3.5">
                 
-                {/* شبكة الأقسام الرئيسية (Logo, Company Links, Services) */}
+             
                 <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-12 border-b border-gray-700 pb-12">
                     
                     <div className="flex flex-col items-center lg:items-start text-center lg:text-right">

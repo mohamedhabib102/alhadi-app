@@ -60,14 +60,7 @@ const Assembly: React.FC = () => {
 
             <div className="flex flex-wrap justify-end gap-3">
               <Link
-                href="https://www.instagram.com/yourpage"
-                target="_blank"
-                className="px-5 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition"
-              >
-                عرض على إنستغرام
-              </Link>
-              <Link
-                href="https://twitter.com/yourpage"
+                href="https://x.com/alhadeannabwe"
                 target="_blank"
                 className="px-5 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition"
               >
@@ -77,7 +70,6 @@ const Assembly: React.FC = () => {
           </div>
         </FadeInOnScroll>
 
-        {/* طلب الانضمام للجمعية العمومية */}
         <FadeInOnScroll>
           <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition">
             <h2 className="text-2xl font-bold mb-4 text-blue-400">

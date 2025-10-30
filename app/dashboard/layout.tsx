@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/utils/AuthContext";
 import { BiLogOut } from "react-icons/bi";
 import { usePathname } from "next/navigation";
+import Head from "next/head";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -23,7 +24,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
 
 
   return (
-    <div className="container mx-auto px-2">
+    <>
+          <Head>
+            <title>لوحة التحكم - جمعية الهدى النبوي الخيرية الدعوية</title>
+            <meta name="description" content=" لوحة التحكم " />
+          </Head>
+        <div className="container mx-auto px-2">
     <div className="flex lg:flex-row flex-col  items-start min-h-screen gap-6 m-4 text-gray-900 text-right">
       {/* Sidebar */}
           <nav className="lg:w-56 w-full bg-[#f4f4f4] p-4 rounded-lg shadow-sm">
@@ -73,6 +79,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </main>
       </div>
     </div>
+    </>
   );
 };
 

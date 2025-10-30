@@ -7,26 +7,26 @@ const Contact: React.FC = () => {
   const contactInfo = [
     {
       title: "أرقام التواصل",
-      value: ["+966 123 456 789", "+966 987 654 321"],
+      value: ["+966 xxx xxx xxx"],
       icon: <FaPhoneAlt size={28} className="text-white" />,
       bgColor: "bg-blue-400"
     },
     {
       title: "البريد الإلكتروني",
-      value: ["info@yourassociation.com", "support@yourassociation.com"],
+      value: ["alhadeannabwe@gmail.com"],
       icon: <FaEnvelope size={28} className="text-white" />,
       bgColor: "bg-green-400"
     },
     {
       title: "الموقع الجغرافي",
-      value: ["الرياض، المملكة العربية السعودية"],
+      value: ["سكاكا - حي السلام، المملكة العربية السعودية"],
       icon: <FaMapMarkerAlt size={28} className="text-white" />,
       bgColor: "bg-red-400"
     }
   ];
 
   return (
-    <section className="bg-gray-50 py-10 text-gray-800 text-right">
+    <section className="bg-gray-50 py-16 text-gray-800 text-right">
       <div className="mx-auto px-4 max-w-6xl space-y-10">
         {/* Header */}
         <CustomHeader
@@ -53,7 +53,7 @@ const Contact: React.FC = () => {
    
                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                  {item.value.map((val, idx) => (
-                   <p key={idx} className="text-gray-700 text-sm">
+                   <p key={idx} className="text-gray-700 text-sm" dir="ltr">
                      {val}
                    </p>
                  ))}

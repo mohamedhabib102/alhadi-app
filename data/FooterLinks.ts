@@ -18,10 +18,9 @@ export const serviceLinks: FooterLink[] = [
     { name: ' التبرعات ', href: '/store' },
 ];
 
-
 export const socialLinks: FooterLink[] = [
-    { name: 'Instagram', href: 'https://instagram.com', icon: 'FaInstagram' },
-    { name: 'X / Twitter', href: 'https://x.com', icon: 'FaTwitter' },
-    { name: 'TikTok', href: 'https://tiktok.com', icon: 'FaTiktok' },
-    { name: 'Snapchat', href: 'https://snapchat.com', icon: 'FaSnapchat' },
+  { name: 'X / Twitter', href: 'https://x.com/alhadeannabwe', icon: 'BsTwitterX' },
+  { name: 'TikTok', href: 'https://www.tiktok.com/@alhadeannabwe', icon: 'FaTiktok' },
+  { name: 'Snapchat', href: 'https://www.snapchat.com/add/alhadeannabwe', icon: 'FaSnapchat' },
 ];
+
