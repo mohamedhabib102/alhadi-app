@@ -85,13 +85,18 @@ const Login: React.FC = () => {
     e.preventDefault()
     setLoading(true);
 
-   const phonePattern = /^(?:966\d{9}|20\d{10})$/;
-
-   if (!data.phoneNumber || !phonePattern.test(data.phoneNumber) || !data.e_Mail || !data.name) {
+   if (!data.phoneNumber || !data.e_Mail || !data.name) {
      setMessageError(" الرجاء ادخال البينات صحيحة ");
      setLoading(false);
      return;
    }
+
+   if (data.phoneNumber.length < 7) {
+    setMessageError(" الرجاء كتابة رقم الهاتف صحيح وأن لا يكون أقل من 7 أرقام");
+    setLoading(false);
+    return;
+   }
+
 
     
 
@@ -180,6 +185,7 @@ const Login: React.FC = () => {
               name="name"
               value={data.name}
               onChange={handelChange}
+              required
               className="block px-0 py-2 outline-none bg-transparent border-b-[2px]
               border-b-[var(--border-color)] 
               focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
@@ -191,6 +197,7 @@ const Login: React.FC = () => {
               placeholder="البريد الإلكتروني"
               name="e_Mail"
               value={data.e_Mail}
+              required
               onChange={handelChange}              className="block px-0 py-2 outline-none bg-transparent border-b-[2px]
               border-b-[var(--border-color)] 
               focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
@@ -202,6 +209,7 @@ const Login: React.FC = () => {
               placeholder=" رقم الهاتف "
               name="phoneNumber"
               value={data.phoneNumber}
+              required
               onChange={handelChange}
               className="block px-0 py-2 outline-none bg-transparent border-b-[2px]
               border-b-[var(--border-color)] 
