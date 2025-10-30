@@ -35,13 +35,13 @@ const Part5: React.FC = () => {
       } else {
         setSlides([]);
       }
-    } catch (err) {
-        const error = err as any;
-       console.error("Error fetching slides:", error);
-       if (error?.response?.status === 404) {
-         setSlides([]);
-       }
+    } catch (err: unknown) {
+    const error = err as any;
+    console.error("Error fetching slides:", error);
+    if (error?.response?.status === 404) {
+      setSlides([]);
     }
+  }
   };
 
   useEffect(() => {

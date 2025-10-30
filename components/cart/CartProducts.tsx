@@ -44,12 +44,6 @@ const CartProducts = () => {
 
   }, [user.id])
   
-  useEffect(() => {
-     console.log(totalAmount())
-
-   }, [cart])
-
-
 
    
 
@@ -63,13 +57,16 @@ const CartProducts = () => {
          );
          setCart(res.data);
          console.log(res);
-       } catch (error: any) {
-         console.log(error);
-     
-         if (error.response?.status === 404) {
-           setCart([]);
-         }
-       }
+       } catch (error: unknown) {
+        console.log(error);
+      
+        if (typeof error === "object" && error !== null && "response" in error) {
+          const errWithResponse = error as { response?: { status?: number } };
+          if (errWithResponse.response?.status === 404) {
+            setCart([]);
+          }
+        }
+      }
      };
      
 

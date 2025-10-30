@@ -35,7 +35,7 @@ const fetchSlides = async () => {
     } else {
       setSlides([]);
     }
-  } catch (err) {
+  } catch (err: unknown) {
     const error = err as any;
     console.error("Error fetching slides:", error);
     if (error?.response?.status === 404) {
