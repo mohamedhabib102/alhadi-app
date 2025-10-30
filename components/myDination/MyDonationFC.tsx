@@ -83,7 +83,14 @@ const MyDonationFC: React.FC = () => {
           <div className="py-2.5 px-3 text-right">
               <h3 className="text-lg font-semibold text-gray-800">{donation.sectionName}</h3>
               <p className="text-gray-600">المبلغ: {donation.amount} ريال</p>
-              <p className="text-gray-500 text-sm">تاريخ التبرع: {donation.donationDate}</p>
+              <p className="text-gray-500 text-sm">
+              تاريخ التبرع: {new Date(donation.donationDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+
           </div>
         </div>
         </FadeInOnScroll>

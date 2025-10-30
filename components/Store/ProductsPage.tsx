@@ -140,7 +140,7 @@ const addToCart = async (sectionID: number) => {
               />
               <div className="p-4">
                 <div className="text-sm flex w-full justify-between flex-row-reverse">
-                    <div className='text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full mb-1'>
+                    <div className='text-gray-500 bg-gray-100 px-2 ml-auto py-0.5 rounded-full mb-1'>
                       <span> المبلغ المتبقي </span>
                       <span>{ele.targetAmount} </span>
                       ريال
@@ -208,7 +208,7 @@ const addToCart = async (sectionID: number) => {
                   <span className="font-medium">{ele.collectedAmount} ريال</span>
                 </p>
                 <p className="text-gray-500 text-sm">
-                  المدة: {new Date(ele.durations).toLocaleDateString()}
+                  تاريخ انتهاء المشروع: {new Date(ele.durations).toLocaleDateString()}
                 </p>
                 <div className="w-full bg-gray-200 h-2 rounded-full mt-3">
                   <div
