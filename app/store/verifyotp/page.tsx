@@ -5,6 +5,7 @@ import { useAuth } from "@/utils/AuthContext";
 import { useRouter } from "next/navigation";
 import { motion, Variants, Transition } from "framer-motion";
 import { AxiosRequestConfig } from "axios";
+import Head from 'next/head';
 
 interface CustomAxiosConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
@@ -16,7 +17,7 @@ interface CustomAxiosConfig extends AxiosRequestConfig {
  }
 
 
-const Login: React.FC = () => {
+const Verify: React.FC = () => {
   const {setUser, user} = useAuth();
   const [messageError, setMessageError] = useState<string>("");
   const [OTP, setOTP] = useState<number|null>(0)
@@ -109,7 +110,15 @@ const Login: React.FC = () => {
   };
   const text = loading ? "جاري التحميل..." : " تحقق ";
     return (
-      <div 
+      <>
+        <Head>
+        <title>التحقق من الكود - جمعية الهدى النبوي</title>
+        <meta
+          name="description"
+          content="أدخل رمز التحقق المرسل إليك لإتمام عملية تسجيل الدخول أو استعادة الحساب بأمان في جمعية الهدى النبوي الخيرية الدعوية."
+        />
+      </Head>
+        <div 
         className="flex flex-col items-center justify-center min-h-screen lg:min-h-[80vh] py-12"
       >
         <motion.div 
@@ -161,7 +170,8 @@ const Login: React.FC = () => {
           </form>
         </motion.div>
       </div>
+      </>
     )
 } 
 
-export default Login;
+export default Verify;

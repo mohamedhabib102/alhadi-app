@@ -5,6 +5,7 @@ import { useAuth } from "@/utils/AuthContext";
 import { useRouter } from "next/navigation";
 import { motion, Variants, Transition } from "framer-motion";
 import { AxiosRequestConfig } from "axios";
+import Head from 'next/head';
 
 interface CustomAxiosConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
@@ -139,7 +140,15 @@ const Login: React.FC = () => {
   };
   const text = loading ? "جاري التحميل..." : "تسجيل الدخول";
     return (
-      <div 
+      <>
+      <Head>
+        <title>تسجيل الدخول - جمعية الهدى النبوي الخيرية الدعوية</title>
+        <meta
+          name="description"
+          content="قم بتسجيل الدخول للوصول إلى حسابك في جمعية الهدى النبوي الخيرية الدعوية، ومتابعة تبرعاتك ومشاريعك بكل سهولة وأمان."
+        />
+      </Head>
+            <div 
         className="flex flex-col items-center justify-center min-h-screen lg:min-h-[80vh] py-12"
       >
         <motion.div 
@@ -215,6 +224,7 @@ const Login: React.FC = () => {
           </form>
         </motion.div>
       </div>
+      </>
     )
 } 
 
