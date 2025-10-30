@@ -85,13 +85,13 @@ const Login: React.FC = () => {
     e.preventDefault()
     setLoading(true);
 
-      const phonePattern = /^(?:05[0-9]{8}|01[0-9]{9})$/;
-      
-      if (!data.phoneNumber || !phonePattern.test(data.phoneNumber)) {
-        setMessageError("الرجاء إدخال رقم جوال صحيح");
-        setLoading(false);
-        return;
-      }
+   const phonePattern = /^(?:966\d{9}|20\d{10})$/;
+
+   if (!data.phoneNumber || !phonePattern.test(data.phoneNumber) || !data.e_Mail || !data.name) {
+     setMessageError(" الرجاء ادخال البينات صحيحة ");
+     setLoading(false);
+     return;
+   }
 
     
 
