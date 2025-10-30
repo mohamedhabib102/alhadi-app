@@ -16,7 +16,7 @@ interface Tab {
 }
 
 const tabs: Tab[] = [
-  { id: 1, title: "السلايدات", description: "تحكم في السلايدات", Component: Part1 },
+  { id: 1, title: "الشريحة الرئيسية", description: "تحكم في الشريحة الرئيسية", Component: Part1 },
   { id: 2, title: " عن الجمعية ", description: "تحكم عن وصف الجمعية", Component: Part2 },
   { id: 3, title: "البرامج ", description: "تحكم في البرامج ", Component: Part3 },
   { id: 4, title: "رسالتنا", description: "تحكم في رسالتنا", Component: Part4 },
