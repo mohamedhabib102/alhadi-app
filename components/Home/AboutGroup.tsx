@@ -9,10 +9,10 @@ import "swiper/css/navigation";
 import { useEffect, useState } from "react";
 import { getAllSlides2 } from "@/api/getAllSlides"; 
 import CardAbout from "../ui/CardAbout";
-import { SliderContent } from "@/types/Slider"; 
+import { AboutSlide } from "@/types/AboutSlide"; 
 
 const AboutSlider: React.FC = () => {
-  const [cards, setCards] = useState<SliderContent[]>([]);
+  const [cards, setCards] = useState<AboutSlide[]>([]);
 
   useEffect(() => {
     fetchCards();
