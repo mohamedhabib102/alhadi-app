@@ -7,15 +7,15 @@ export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide4 {
-  slide4ID: number;
+interface Slide3 {
+  slide3ID: number;
   title: string;
   description: string;
   imageUrl: string;
 }
 
-const Slides4Page: React.FC = () => {
-  const [slides, setSlides] = useState<Slide4[]>([]);
+const Part3: React.FC = () => {
+  const [slides, setSlides] = useState<Slide3[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
@@ -23,10 +23,9 @@ const Slides4Page: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-
   const fetchSlides = async () => {
     try {
-      const res = await instance.get("/api/Donations/GetAllSlides4", {
+      const res = await instance.get("/api/Donations/GetAllSlides3", {
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
@@ -55,7 +54,7 @@ const Slides4Page: React.FC = () => {
     }
   };
 
-
+  // إضافة سلايد جديد
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!image) {
@@ -71,7 +70,7 @@ const Slides4Page: React.FC = () => {
     formData.append("image", image);
 
     try {
-      const res = await instance.post("/api/Donations/AddSlides4", formData, {
+      const res = await instance.post("/api/Donations/AddSlides3", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -100,7 +99,7 @@ const Slides4Page: React.FC = () => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
     try {
-      const res = await instance.delete("/api/Donations/DeleteSlide4", {
+      const res = await instance.delete("/api/Donations/DeleteSlide3", {
         params: { slideID: id },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -121,6 +120,10 @@ const Slides4Page: React.FC = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
+        إضافة برنامج جديد أو مبادرة
+      </h1>
+
       <form
         onSubmit={handleAddSlide}
         className="bg-white p-6 rounded-2xl shadow-md max-w-xl mx-auto mb-10"
@@ -140,7 +143,7 @@ const Slides4Page: React.FC = () => {
           onChange={(e) => setDescription(e.target.value)}
           className="w-full text-right mb-3 p-2 border rounded-lg outline-none"
           required
-        ></textarea>
+        />
 
         <input
           ref={fileRef}
@@ -169,11 +172,11 @@ const Slides4Page: React.FC = () => {
         </button>
       </form>
 
-   
+      {/* عرض السلايدات */}
       <div className="grid md:grid-cols-3 gap-6">
         {slides.map((slide) => (
           <div
-            key={slide.slide4ID}
+            key={slide.slide3ID}
             className="bg-white rounded-xl shadow-md overflow-hidden"
           >
             {slide.imageUrl && (
@@ -190,7 +193,7 @@ const Slides4Page: React.FC = () => {
               <p className="text-gray-600 mb-3">{slide.description}</p>
 
               <button
-                onClick={() => handleDelete(slide.slide4ID)}
+                onClick={() => handleDelete(slide.slide3ID)}
                 className="bg-red-400 cursor-pointer text-white px-3 py-1 rounded-lg hover:bg-red-500 transition"
               >
                 حذف
@@ -209,4 +212,4 @@ const Slides4Page: React.FC = () => {
   );
 };
 
-export default Slides4Page;
+export default Part3;

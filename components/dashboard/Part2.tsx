@@ -8,26 +8,25 @@ export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide3 {
-  slide3ID: number;
+interface Slide2 {
+  slide2ID: number;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[];
 }
 
-const Slides3Page: React.FC = () => {
-  const [slides, setSlides] = useState<Slide3[]>([]);
+const Part2: React.FC = () => {
+  const [slides, setSlides] = useState<Slide2[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [images, setImages] = useState<FileList | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
- const fileRef = useRef<HTMLInputElement | null>(null);
-
+  const fileRef = useRef<HTMLInputElement | null>(null);
 
   const fetchSlides = async () => {
     try {
-      const res = await instance.get("/api/Donations/GetAllSlides3", {
+      const res = await instance.get("/api/Donations/GetSlide2", {
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
@@ -45,34 +44,36 @@ const Slides3Page: React.FC = () => {
     fetchSlides();
   }, []);
 
-  // 🔹 عرض الصورة اللي المستخدم بيختارها
+  // 🔹 عرض الصور اللي المستخدم بيختارها
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setImage(file);
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
+    const files = e.target.files;
+    setImages(files);
+    if (files && files.length > 0) {
+      const previews = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setImagePreviews(previews);
     } else {
-      setImagePreview(null);
+      setImagePreviews([]);
     }
   };
 
   // 🔹 إضافة سلايد جديد
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image) {
-      alert("الرجاء اختيار صورة!");
+    if (!images || images.length === 0) {
+      alert("الرجاء اختيار صورة واحدة على الأقل!");
       return;
     }
 
     setLoading(true);
-
     const formData = new FormData();
     formData.append("Title", title);
     formData.append("Description", description);
-    formData.append("image", image);
+    Array.from(images).forEach((img) => formData.append("images", img));
 
     try {
-      const res = await instance.post("/api/Donations/AddSlides3", formData, {
+      const res = await instance.post("/api/Donations/AddSlide2", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -81,12 +82,10 @@ const Slides3Page: React.FC = () => {
         alert("✅ تمت إضافة السلايد بنجاح!");
         setTitle("");
         setDescription("");
-        setImage(null);
-        setImagePreview(null);
+        setImages(null);
+        setImagePreviews([]);
+        if (fileRef.current) fileRef.current.value = "";
         await fetchSlides();
-        if (fileRef.current){
-          fileRef.current.value = ""
-        }
       } else {
         alert("⚠️ حدث خطأ أثناء الإضافة!");
       }
@@ -103,18 +102,14 @@ const Slides3Page: React.FC = () => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
     try {
-      const res = await instance.delete("/api/Donations/DeleteSlide3", {
-        params: { slideID: id },
+      const res = await instance.delete("/api/Donations/DeleteSlide2", {
+        params: { Slide2ID: id },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
       if (res.status === 200) {
         alert("🗑️ تم حذف السلايد بنجاح!");
         await fetchSlides();
-
-        // ✅ يعمل ريست للصورة بعد الحذف
-        setImage(null);
-        setImagePreview(null);
       } else {
         alert("⚠️ فشل الحذف!");
       }
@@ -127,7 +122,7 @@ const Slides3Page: React.FC = () => {
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
-        إضافة برنامج جديد أو مبادرة
+        إضافة سلايد متعدد الصور
       </h1>
 
       <form
@@ -149,22 +144,27 @@ const Slides3Page: React.FC = () => {
           onChange={(e) => setDescription(e.target.value)}
           className="w-full outline-none text-right mb-3 p-2 border rounded-lg"
           required
-        ></textarea>
+        />
 
-        <input 
-        ref={fileRef}
-        type="file" 
-        onChange={handleImageChange} 
-        className="mb-3" />
+        <input
+          ref={fileRef}
+          type="file"
+          multiple
+          onChange={handleImageChange}
+          className="mb-3"
+        />
 
-        {/* 🔸 عرض الصورة المختارة */}
-        {imagePreview && (
-          <div className="mb-3">
-            <img
-              src={imagePreview}
-              alt="preview"
-              className="w-40 h-40 object-cover rounded-lg border"
-            />
+        {/* عرض الصور المختارة */}
+        {imagePreviews.length > 0 && (
+          <div className="flex flex-wrap gap-3 mb-3">
+            {imagePreviews.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`preview-${index}`}
+                className="w-24 h-24 object-cover rounded-lg border"
+              />
+            ))}
           </div>
         )}
 
@@ -179,46 +179,41 @@ const Slides3Page: React.FC = () => {
 
       {/* عرض السلايدات */}
       <div className="grid md:grid-cols-3 gap-6">
+        {slides.map((slide) => (
+          <FadeInOnScroll key={slide.slide2ID}>
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+              {slide.images && slide.images.length > 0 && (
+                <img
+                  src={slide.images[0]}
+                  alt={slide.title}
+                  className="h-48 w-full object-cover"
+                />
+              )}
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {slide.title}
+                </h3>
+                <p className="text-gray-600 mb-3">{slide.description}</p>
 
-          {slides.map((slide) => (
-        <FadeInOnScroll key={slide.slide3ID}>
-            <div
-            key={slide.slide3ID}
-            className="bg-white rounded-xl shadow-md overflow-hidden"
-          >
-            {slide.imageUrl && (
-              <img
-                src={slide.imageUrl}
-                alt={slide.title}
-                className="h-48 w-full object-cover"
-              />
-            )}
-            <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {slide.title}
-              </h3>
-              <p className="text-gray-600 mb-3">{slide.description}</p>
-
-              <button
-                onClick={() => handleDelete(slide.slide3ID)}
-                className="bg-red-400 text-white cursor-pointer px-3 py-1 rounded-lg hover:bg-red-500"
-              >
-                حذف
-              </button>
+                <button
+                  onClick={() => handleDelete(slide.slide2ID)}
+                  className="bg-red-400 text-white cursor-pointer px-3 py-1 rounded-lg hover:bg-red-500"
+                >
+                  حذف
+                </button>
+              </div>
             </div>
-          </div>
-        </FadeInOnScroll>
+          </FadeInOnScroll>
         ))}
-
       </div>
 
       {slides.length === 0 && (
         <p className="text-center text-gray-500 mt-8">
-          لا توجد مبادرات حاليا يمكنك الأضافة
+          لا توجد سلايدات حالياً يمكنك الإضافة
         </p>
       )}
     </div>
   );
 };
 
-export default Slides3Page;
+export default Part2;

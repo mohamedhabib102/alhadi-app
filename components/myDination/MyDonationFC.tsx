@@ -14,7 +14,6 @@ interface CustomAxiosRequestConfig extends AxiosRequestConfig {
 
 
 interface ResponseData {
-    sectionID: number;
     sectionName: string;
     sectionImage: string;
     amount: number;
@@ -70,10 +69,10 @@ const MyDonationFC: React.FC = () => {
       (<p className="text-center m-auto text-lg"> لا يوجد تبرعات حاليا يمكنك التبرع الأن </p>) : (
 
         <div className="grid md:grid-cols-3 gap-6 p-4">
-            {dontion.map((donation) => (
-        <FadeInOnScroll key={donation.sectionID}>
+            {dontion.map((donation, index) => (
+        <FadeInOnScroll key={index}>
         <div
-          key={donation.sectionID}
+          key={index}
           className="bg-white rounded-xl shadow-md hover:shadow-lg transition"
         >
           <Image

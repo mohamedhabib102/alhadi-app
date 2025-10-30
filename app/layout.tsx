@@ -66,7 +66,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="ltr">
+    <html lang="ar" dir="rtl">
       <body
         className={`${notoSansArabic.variable} antialiased`}
       >

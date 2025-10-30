@@ -1,22 +1,21 @@
-"use client";
+"use client"
 import { useState, useEffect, useRef } from "react";
 import instance from "@/utils/axios";
 import { AxiosRequestConfig } from "axios";
-import FadeInOnScroll from "../ui/FadeInOnScroll";
 
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide {
-  slideID: number;
+interface Slide6 {
+  slide6ID: number;
   title: string;
   description: string;
   imageUrl: string;
 }
 
-const Part1: React.FC = () => {
-  const [slides, setSlides] = useState<Slide[]>([]);
+const Part6: React.FC = () => {
+  const [slides, setSlides] = useState<Slide6[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
@@ -24,9 +23,10 @@ const Part1: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
+
   const fetchSlides = async () => {
     try {
-      const res = await instance.get("/api/Donations/GetAllSlides", {
+      const res = await instance.get("/api/Donations/GetAllSlides6", {
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
@@ -44,13 +44,18 @@ const Part1: React.FC = () => {
     fetchSlides();
   }, []);
 
+  // 🔹 عرض الصورة المختارة
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setImage(file);
-    if (file) setImagePreview(URL.createObjectURL(file));
-    else setImagePreview(null);
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    } else {
+      setImagePreview(null);
+    }
   };
 
+  // 🔹 إضافة سلايد جديد
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!image) {
@@ -65,7 +70,7 @@ const Part1: React.FC = () => {
     formData.append("image", image);
 
     try {
-      const res = await instance.post("/api/Donations/AddSlides", formData, {
+      const res = await instance.post("/api/Donations/AddSlides6", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -77,7 +82,7 @@ const Part1: React.FC = () => {
         setImage(null);
         setImagePreview(null);
         if (fileRef.current) fileRef.current.value = "";
-        await fetchSlides();
+        fetchSlides();
       } else {
         alert("⚠️ حدث خطأ أثناء الإضافة!");
       }
@@ -89,11 +94,12 @@ const Part1: React.FC = () => {
     }
   };
 
+  // 🔹 حذف سلايد
   const handleDelete = async (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
     try {
-      const res = await instance.delete("/api/Donations/DeleteSlide", {
+      const res = await instance.delete("/api/Donations/DeleteSlide6", {
         params: { slideID: id },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -101,6 +107,10 @@ const Part1: React.FC = () => {
       if (res.status === 200) {
         alert("🗑️ تم حذف السلايد بنجاح!");
         fetchSlides();
+        // إعادة ضبط الصورة
+        setImage(null);
+        setImagePreview(null);
+        if (fileRef.current) fileRef.current.value = "";
       } else {
         alert("⚠️ فشل الحذف!");
       }
@@ -112,10 +122,6 @@ const Part1: React.FC = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center text-blue-700" dir="rtl">
-        إضافة Slide جديد
-      </h1>
-
       <form
         onSubmit={handleAddSlide}
         className="bg-white p-6 rounded-2xl shadow-md max-w-xl mx-auto mb-10"
@@ -125,7 +131,7 @@ const Part1: React.FC = () => {
           placeholder="العنوان"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full outline-none text-right mb-3 p-2 border rounded-lg"
+          className="w-full text-right mb-3 p-2 border rounded-lg outline-none"
           required
         />
 
@@ -133,7 +139,7 @@ const Part1: React.FC = () => {
           placeholder="الوصف"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full outline-none text-right mb-3 p-2 border rounded-lg"
+          className="w-full text-right mb-3 p-2 border rounded-lg outline-none"
           required
         ></textarea>
 
@@ -142,7 +148,6 @@ const Part1: React.FC = () => {
           type="file"
           onChange={handleImageChange}
           className="mb-3"
-          required
         />
 
         {imagePreview && (
@@ -158,7 +163,7 @@ const Part1: React.FC = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-400 cursor-pointer text-white py-2 rounded-lg hover:bg-blue-500 transition disabled:bg-gray-400"
+          className="w-full bg-blue-400 cursor-pointer hover:bg-blue-500 text-white py-2 rounded-lg transition disabled:bg-gray-400"
         >
           {loading ? "جارٍ الإرسال..." : "إضافة"}
         </button>
@@ -167,38 +172,41 @@ const Part1: React.FC = () => {
       {/* عرض السلايدات */}
       <div className="grid md:grid-cols-3 gap-6">
         {slides.map((slide) => (
-          <FadeInOnScroll key={slide.slideID}>
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              {slide.imageUrl && (
-                <img
-                  src={slide.imageUrl}
-                  alt={slide.title}
-                  className="h-48 w-full object-cover"
-                />
-              )}
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800">{slide.title}</h3>
-                <p className="text-gray-600 mb-3">{slide.description}</p>
+          <div
+            key={slide.slide6ID}
+            className="bg-white rounded-xl shadow-md overflow-hidden"
+          >
+            {slide.imageUrl && (
+              <img
+                src={slide.imageUrl}
+                alt={slide.title}
+                className="h-48 w-full object-cover"
+              />
+            )}
+            <div className="p-4">
+              <h3 className="text-lg font-semibold text-gray-800">
+                {slide.title}
+              </h3>
+              <p className="text-gray-600 mb-3">{slide.description}</p>
 
-                <button
-                  onClick={() => handleDelete(slide.slideID)}
-                  className="bg-red-400 cursor-pointer text-white px-3 py-1 rounded-lg hover:bg-red-500"
-                >
-                  حذف
-                </button>
-              </div>
+              <button
+                onClick={() => handleDelete(slide.slide6ID)}
+                className="bg-red-400 cursor-pointer hover:bg-red-500 text-white px-3 py-1 rounded-lg"
+              >
+                حذف
+              </button>
             </div>
-          </FadeInOnScroll>
+          </div>
         ))}
       </div>
 
       {slides.length === 0 && (
         <p className="text-center text-gray-500 mt-8">
-          لا توجد سلايدات حالياً يمكنك الإضافة
+          لا توجد محتويات حالياً
         </p>
       )}
     </div>
   );
 };
 
-export default Part1;
+export default Part6;

@@ -7,15 +7,15 @@ export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide5 {
-  slide5ID: number;
+interface Slide4 {
+  slide4ID: number;
   title: string;
   description: string;
   imageUrl: string;
 }
 
-const Slides5Page: React.FC = () => {
-  const [slides, setSlides] = useState<Slide5[]>([]);
+const Part4: React.FC = () => {
+  const [slides, setSlides] = useState<Slide4[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
@@ -25,7 +25,7 @@ const Slides5Page: React.FC = () => {
 
   const fetchSlides = async () => {
     try {
-      const res = await instance.get("/api/Donations/GetAllSlides5", {
+      const res = await instance.get("/api/Donations/GetAllSlides4", {
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
@@ -43,14 +43,12 @@ const Slides5Page: React.FC = () => {
     fetchSlides();
   }, []);
 
-  // 🔹 عرض الصورة قبل الرفع
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setImage(file);
     setImagePreview(file ? URL.createObjectURL(file) : null);
   };
 
-  // 🔹 إضافة سلايد جديد
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!image) {
@@ -65,7 +63,7 @@ const Slides5Page: React.FC = () => {
     formData.append("image", image);
 
     try {
-      const res = await instance.post("/api/Donations/AddSlides5", formData, {
+      const res = await instance.post("/api/Donations/AddSlides4", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -89,12 +87,11 @@ const Slides5Page: React.FC = () => {
     }
   };
 
-  // 🔹 حذف سلايد
   const handleDelete = async (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
     try {
-      const res = await instance.delete("/api/Donations/DeleteSlide5", {
+      const res = await instance.delete("/api/Donations/DeleteSlide4", {
         params: { slideID: id },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -102,6 +99,8 @@ const Slides5Page: React.FC = () => {
       if (res.status === 200) {
         alert("🗑️ تم حذف السلايد بنجاح!");
         await fetchSlides();
+        setImage(null);
+        setImagePreview(null);
       } else {
         alert("⚠️ فشل الحذف!");
       }
@@ -132,7 +131,7 @@ const Slides5Page: React.FC = () => {
           onChange={(e) => setDescription(e.target.value)}
           className="w-full text-right mb-3 p-2 border rounded-lg outline-none"
           required
-        ></textarea>
+        />
 
         <input
           ref={fileRef}
@@ -160,11 +159,10 @@ const Slides5Page: React.FC = () => {
         </button>
       </form>
 
-
       <div className="grid md:grid-cols-3 gap-6">
         {slides.map((slide) => (
           <div
-            key={slide.slide5ID}
+            key={slide.slide4ID}
             className="bg-white rounded-xl shadow-md overflow-hidden"
           >
             {slide.imageUrl && (
@@ -181,7 +179,7 @@ const Slides5Page: React.FC = () => {
               <p className="text-gray-600 mb-3">{slide.description}</p>
 
               <button
-                onClick={() => handleDelete(slide.slide5ID)}
+                onClick={() => handleDelete(slide.slide4ID)}
                 className="bg-red-400 cursor-pointer text-white px-3 py-1 rounded-lg hover:bg-red-500 transition"
               >
                 حذف
@@ -200,4 +198,4 @@ const Slides5Page: React.FC = () => {
   );
 };
 
-export default Slides5Page;
+export default Part4;

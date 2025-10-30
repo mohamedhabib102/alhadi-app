@@ -46,7 +46,9 @@ export default function Header() {
   
 
   return (
-    <header ref={headerRef} className="border-b border-b-[#EEE] bg-white relative z-40">
+    <header 
+    dir="ltr"
+    ref={headerRef} className="border-b border-b-[#EEE] bg-white relative z-40">
       <div className="container mx-auto px-3.5">
         <nav className="flex items-center justify-between py-3 relative">
           <Logo color="header" size="lg" />

@@ -5,7 +5,7 @@ interface CustomAxiosConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-// ✅ إحضار جميع السلايدز الأساسية
+
 export const getAllSlides = async () => {
   try {
     const res = await instance.get("/api/Donations/GetAllSlides", {

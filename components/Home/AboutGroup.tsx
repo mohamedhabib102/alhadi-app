@@ -3,18 +3,6 @@ import CardAbout from "../ui/CardAbout";
 import { motion } from "framer-motion";
 
 
-const data = [
-    {
-        id: 1,
-        image: "/images/support-home.jpg"
-    },
-    {
-        id: 2,
-        image: "/images/support-home.jpg"
-    }
-]
-
-
 
 const AboutGroup: React.FC = () => {
     return (

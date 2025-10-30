@@ -24,6 +24,8 @@ const HeroSlider: React.FC = () => {
      try {
        const data  = await getAllSlides();
        if (data) setSlides(data)
+
+        
      } catch (error) {
          console.log(error);
      }

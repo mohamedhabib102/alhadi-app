@@ -64,24 +64,24 @@ const StatsSection: React.FC = () => {
                 </motion.h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {sections.map((item) => (
-                        <motion.div
-                            key={item.sectionID}
-                            initial={{ opacity: 0, scale: 0.9 }} 
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true, amount: 0.8 }}
-                            transition={{ 
-                                duration: 0.5, 
-                                ease: "easeOut",
-                                delay: item.sectionID * 0.15
-                            }}
-                        >
-                            <StatCard 
-                            name={item.name}
-                            donorsCount={item.donorsCount}
-                            />
-                        </motion.div>
-                    ))}
+                   {sections.slice(0, 5).map((item, index) => (
+                     <motion.div
+                       key={item.sectionID}
+                       initial={{ opacity: 0, scale: 0.9 }} 
+                       whileInView={{ opacity: 1, scale: 1 }}
+                       viewport={{ once: true, amount: 0.8 }}
+                       transition={{ 
+                         duration: 0.5, 
+                         ease: "easeOut",
+                         delay: index * 0.15   // استخدم index بدل sectionID للـ delay
+                       }}
+                     >
+                       <StatCard 
+                         name={item.name}
+                         donorsCount={item.donorsCount}
+                       />
+                     </motion.div>
+                   ))}
                 </div>
             </div>
         </section>
