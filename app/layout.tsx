@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "جمعية الهدى النبوي" }],
 
-  // 👇 أضف السطر ده
+
   metadataBase: new URL("http://localhost:3000"), // لما ترفع المشروع غيّرها للدومين الحقيقي
 
   openGraph: {

@@ -85,12 +85,14 @@ const Login: React.FC = () => {
     e.preventDefault()
     setLoading(true);
 
-      const rexNum = /\d{11}/;
-       if (!data.phoneNumber || !rexNum.test(data.phoneNumber)){
-        setMessageError(" يجب أن يكون الرقم مكون من 11  ")
-        setLoading(false)
+      const phonePattern = /^(?:05[0-9]{8}|01[0-9]{9})$/;
+      
+      if (!data.phoneNumber || !phonePattern.test(data.phoneNumber)) {
+        setMessageError("الرجاء إدخال رقم جوال صحيح");
+        setLoading(false);
         return;
-       }
+      }
+
     
 
     try {
@@ -198,7 +200,6 @@ const Login: React.FC = () => {
             <input 
               type="text" 
               placeholder=" رقم الهاتف "
-              maxLength={11}
               name="phoneNumber"
               value={data.phoneNumber}
               onChange={handelChange}
