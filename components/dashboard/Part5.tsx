@@ -35,8 +35,12 @@ const Part5: React.FC = () => {
       } else {
         setSlides([]);
       }
-    } catch (error) {
-      console.error("Error fetching slides:", error);
+    } catch (err) {
+        const error = err as any;
+       console.error("Error fetching slides:", error);
+       if (error?.response?.status === 404) {
+         setSlides([]);
+       }
     }
   };
 
@@ -44,14 +48,14 @@ const Part5: React.FC = () => {
     fetchSlides();
   }, []);
 
-  // عرض الصورة قبل الرفع
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setImage(file);
     setImagePreview(file ? URL.createObjectURL(file) : null);
   };
 
-  // إضافة سلايد جديد
+
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!image) {
@@ -90,7 +94,7 @@ const Part5: React.FC = () => {
     }
   };
 
-  // حذف سلايد
+
   const handleDelete = async (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
@@ -116,8 +120,8 @@ const Part5: React.FC = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
-        إضافة سلايد جديد
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-400">
+        إضافة صندوق جديد عن أهداف الجمعية
       </h1>
 
       <form

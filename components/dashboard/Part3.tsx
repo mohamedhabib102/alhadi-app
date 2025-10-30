@@ -34,8 +34,12 @@ const Part3: React.FC = () => {
       } else {
         setSlides([]);
       }
-    } catch (error) {
-      console.error("Error fetching slides:", error);
+    } catch (err) {
+        const error = err as any;
+       console.error("Error fetching slides:", error);
+       if (error?.response?.status === 404) {
+         setSlides([]);
+       }
     }
   };
 
@@ -43,7 +47,7 @@ const Part3: React.FC = () => {
     fetchSlides();
   }, []);
 
-  // عند اختيار صورة
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setImage(file);
@@ -54,7 +58,7 @@ const Part3: React.FC = () => {
     }
   };
 
-  // إضافة سلايد جديد
+
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!image) {
@@ -94,7 +98,7 @@ const Part3: React.FC = () => {
     }
   };
 
-  // حذف سلايد
+
   const handleDelete = async (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
@@ -120,8 +124,8 @@ const Part3: React.FC = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
-        إضافة برنامج جديد أو مبادرة
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-400">
+        إضافة صندوق جديد عن برامج الجمعية
       </h1>
 
       <form

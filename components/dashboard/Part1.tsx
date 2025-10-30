@@ -24,21 +24,26 @@ const Part1: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-  const fetchSlides = async () => {
-    try {
-      const res = await instance.get("/api/Donations/GetAllSlides", {
-        skipAuth: true,
-      } as CustomAxiosRequestConfig);
+const fetchSlides = async () => {
+  try {
+    const res = await instance.get("/api/Donations/GetAllSlides", {
+      skipAuth: true,
+    } as CustomAxiosRequestConfig);
 
-      if (res.data && Array.isArray(res.data)) {
-        setSlides(res.data);
-      } else {
-        setSlides([]);
-      }
-    } catch (error) {
-      console.error("Error fetching slides:", error);
+    if (res.data && Array.isArray(res.data)) {
+      setSlides(res.data);
+    } else {
+      setSlides([]);
     }
-  };
+  } catch (err) {
+    const error = err as any;
+    console.error("Error fetching slides:", error);
+    if (error?.response?.status === 404) {
+      setSlides([]);
+    }
+  }
+};
+
 
   useEffect(() => {
     fetchSlides();
@@ -112,8 +117,8 @@ const Part1: React.FC = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center text-blue-700" dir="rtl">
-        إضافة Slide جديد
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-400" dir="rtl">
+        إضافة صندوق جديد عن slides الجمعية  
       </h1>
 
       <form

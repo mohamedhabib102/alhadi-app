@@ -34,8 +34,12 @@ const Part4: React.FC = () => {
       } else {
         setSlides([]);
       }
-    } catch (error) {
-      console.error("Error fetching slides:", error);
+    } catch (err) {
+        const error = err as any;
+       console.error("Error fetching slides:", error);
+       if (error?.response?.status === 404) {
+         setSlides([]);
+       }
     }
   };
 
@@ -112,6 +116,9 @@ const Part4: React.FC = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
+        <h1 className="text-3xl font-bold mb-6 text-center text-blue-400">
+        إضافة صندوق جديد عن رسالة الجمعية
+      </h1>
       <form
         onSubmit={handleAddSlide}
         className="bg-white p-6 rounded-2xl shadow-md max-w-xl mx-auto mb-10"

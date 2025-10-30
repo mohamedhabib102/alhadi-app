@@ -55,7 +55,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
                   : "hover:bg-[var(--main-color)] hover:text-white bg-blue-100"
               }`}
             >
-              الأعدادات
+              التحكم في الرئيسية
             </Link>
           </li>
         </ul>

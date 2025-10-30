@@ -35,8 +35,12 @@ const Part2: React.FC = () => {
       } else {
         setSlides([]);
       }
-    } catch (error) {
-      console.error("Error fetching slides:", error);
+    } catch (err) {
+       const error = err as any;
+       console.error("Error fetching slides:", error);
+       if (error?.response?.status === 404) {
+         setSlides([]);
+       }
     }
   };
 
@@ -44,7 +48,7 @@ const Part2: React.FC = () => {
     fetchSlides();
   }, []);
 
-  // 🔹 عرض الصور اللي المستخدم بيختارها
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     setImages(files);
@@ -58,7 +62,7 @@ const Part2: React.FC = () => {
     }
   };
 
-  // 🔹 إضافة سلايد جديد
+
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!images || images.length === 0) {
@@ -97,7 +101,7 @@ const Part2: React.FC = () => {
     }
   };
 
-  // 🔹 حذف سلايد
+
   const handleDelete = async (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
@@ -121,8 +125,8 @@ const Part2: React.FC = () => {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-center text-blue-700">
-        إضافة سلايد متعدد الصور
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-400">
+        إضافة صندوق جديد عن قسم الجمعية
       </h1>
 
       <form

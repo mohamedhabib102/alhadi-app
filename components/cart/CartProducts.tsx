@@ -54,18 +54,24 @@ const CartProducts = () => {
    
 
 
-  const getAllProjects = async() => {
-    const id = user.id
-    try {
-        const res = await instance.get(`/api/Donations/GetAllDonationCarts?personID=${id}`, 
-          {skipAuth: true} as CustomAxiosRequestConfig)
-          setCart(res.data)
-          console.log(res);
-          
-    } catch (error) {
-        
-    }
-  }
+     const getAllProjects = async () => {
+       const id = user.id;
+       try {
+         const res = await instance.get(
+           `/api/Donations/GetAllDonationCarts?personID=${id}`,
+           { skipAuth: true } as CustomAxiosRequestConfig
+         );
+         setCart(res.data);
+         console.log(res);
+       } catch (error: any) {
+         console.log(error);
+     
+         if (error.response?.status === 404) {
+           setCart([]);
+         }
+       }
+     };
+     
 
 
   const totalAmount = () => {
@@ -144,6 +150,30 @@ const confirmDonation = async () => {
        console.log(error);
      }
    }
+
+
+
+
+
+const deleteCart = async (personID: number, sectionID: number) => {
+  try {
+    const res = await instance.delete("/api/Donations/DeletItemOfCart", {
+      data: { personID, sectionID },
+      skipAuth: true, 
+    } as CustomAxiosRequestConfig);
+    console.log(res);
+    await getAllProjects()
+    console.log({
+      personID,
+      sectionID
+    });
+    alert("🗑️ تم حذف المشروع من السلة بنجاح ");
+  } catch (error) {
+    console.log(error);
+    alert("⚠️ فشل الاتصال بالخادم!");
+  }
+};
+
 
   return (
     <div className="container mx-auto px-2">
@@ -301,7 +331,7 @@ const confirmDonation = async () => {
             <AnimatePresence>
               {cart.length !== 0 ? (cart.slice(0, visibleCount).map((ele, index) => (
                 <motion.div
-                  key={index}
+                  key={`${ele.sectionID}-${index}`}
                   className="flex justify-between mb-4 border-b-2 border-b-[#EEE]"
                   initial={{ opacity: 0, y: 20 }}      // بداية الظهور
                   animate={{ opacity: 1, y: 0 }}       // الشكل النهائي
@@ -320,9 +350,14 @@ const confirmDonation = async () => {
                     <p className="text-gray-600 text-sm">
                       ريال {ele.amount.toFixed(2)}
                     </p>
+                    <button
+                    type="button"
+                    onClick={() => deleteCart(ele.personID, ele.sectionID)} 
+                    className="bg-red-400 cursor-pointer text-white py-2 px-3 my-2
+                    rounded-lg hover:bg-red-500 transition"> حذف </button>
                   </div>
                 </motion.div>
-              ))) : (<p> لا يوجد تبرعات روح اتبرع يعمم </p>)}
+              ))) : (<p> لا يوجد تبرعات حاليا</p>)}
             </AnimatePresence>
     
           {visibleCount < cart.length && (
