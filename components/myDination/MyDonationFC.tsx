@@ -55,9 +55,7 @@ const MyDonationFC: React.FC = () => {
             skipAuth: true,
           } as CustomAxiosRequestConfig)
           setDonation(res.data)
-
-          console.log(res);
-          
+    
         } catch (error) {
             console.log(error);
         }

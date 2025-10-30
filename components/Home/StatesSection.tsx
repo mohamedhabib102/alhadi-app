@@ -37,15 +37,10 @@ const StatsSection: React.FC = () => {
       } as CustomAxiosRequestConfig);
 
 
-      console.log(res);
-      
-
       if (res.data && res.data.length > 0) {
         setSections(res.data);
       }
       
-
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -73,7 +68,7 @@ const StatsSection: React.FC = () => {
                        transition={{ 
                          duration: 0.5, 
                          ease: "easeOut",
-                         delay: index * 0.15   // استخدم index بدل sectionID للـ delay
+                         delay: index * 0.15 
                        }}
                      >
                        <StatCard 

@@ -94,20 +94,14 @@ const Login: React.FC = () => {
 
     try {
       setMessageError("")
-      console.log(data);
-
-
       const res= await instance.post<LoginResponse>("/api/Donations/Login", data,
         {skipAuth: true} as CustomAxiosConfig)
-
-        console.log(res);
 
         const { personID, otpRequired, role, token } = res.data;
 
 
         if (role === "Admin"){
           router.push("/dashboard")
-          console.log("Admin");
           const userData = {
             id: personID,
             role,
@@ -116,13 +110,10 @@ const Login: React.FC = () => {
           setUser(userData)
         } else{
           if (otpRequired){
-          router.push("/store/verifyotp")
-          console.log("new user");
-          
+          router.push("/store/verifyotp")     
           localStorage.setItem("userOTP", JSON.stringify(personID))
         } else{
           router.push("/store/")
-          console.log("lognied");
           const userData = {
             id: personID,
             role,
@@ -134,6 +125,7 @@ const Login: React.FC = () => {
 
       } catch (error) {
         console.log(error);
+        alert(" حدث خطأ  في الخادم ")
       } finally{
         
         setLoading(false);

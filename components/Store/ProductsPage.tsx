@@ -51,9 +51,7 @@ const ProductsPage: React.FC = () => {
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
-
-      console.log(res);
-      
+ 
 
       if (res.data && res.data.length > 0) {
        const updatedData = res.data.map((section: ResponseData) => ({
@@ -65,8 +63,6 @@ const ProductsPage: React.FC = () => {
         setMessage("");
       }
       
-
-      console.log(res);
     } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error)) {
@@ -104,10 +100,6 @@ const addToCart = async (sectionID: number) => {
         body, {skipAuth: true} as CustomAxiosConfig
       );
 
-      console.log(res);
-
-    console.log(body);
-    
       alert("تمت إضافة التبرع إلى السلة بنجاح ✅");
     } catch (error) {
       console.log(error);

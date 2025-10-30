@@ -60,8 +60,6 @@ const SectionsClient: React.FC = () => {
         setMessage("");
       }
       
-
-      console.log(res);
     } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error)) {
@@ -80,8 +78,6 @@ const SectionsClient: React.FC = () => {
       const res = await instance.delete(
         `/api/Donations/DeleteSection?sectionID=${id}`)
 
-        console.log(res);
-        // console.log(id);
         getAllSections()
         alert("🗑️ تم حذف المشروع بنجاح!");
         

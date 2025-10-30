@@ -79,10 +79,7 @@ const Login: React.FC = () => {
         personID: Number(OTP),
         otp: data.otp
       },
-
         {skipAuth: true} as CustomAxiosConfig)
-        console.log(res);
-
         const { personID, role, token} = res.data;
 
         const userData = {
@@ -98,6 +95,7 @@ const Login: React.FC = () => {
         }
       } catch (error) {
         console.log(error);
+        alert(" حدث خطأ في الخادم او رقم التحقق غير صحيح ")
       } finally{
         
         setLoading(false);

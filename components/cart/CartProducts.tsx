@@ -45,7 +45,6 @@ const getAllProjects = async () => {
       { skipAuth: true } as CustomAxiosRequestConfig
     );
     setCart(res.data);
-    console.log(res);
   } catch (error: unknown) {
     console.log(error);
 
@@ -99,7 +98,6 @@ const createPayment = async (e: FormEvent) => {
           } as CustomAxiosRequestConfig
         );
          setPaymentRef(res.data.transactionReference)
-        console.log(res);
         setToggle(true);
       } catch (error) {
         console.error(error);
@@ -122,7 +120,6 @@ const confirmDonation = async () => {
             skipAuth: true,
           } as CustomAxiosRequestConfig
         );
-        console.log(res);
         setToggle(false);
         window.location.reload();
       } catch (error) {
@@ -136,10 +133,7 @@ const confirmDonation = async () => {
      try {
       const res = await instance.post(
         `/api/Donations/UpdatePaymentStatus?transactionRef=${paymentRef}&status=${state}`
-      )
-      console.log(res);
-      console.log(paymentRef, state);
-      
+      )   
      } catch (error) {
        console.log(error);
      }
@@ -155,12 +149,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
       data: { personID, sectionID },
       skipAuth: true, 
     } as CustomAxiosRequestConfig);
-    console.log(res);
     await getAllProjects()
-    console.log({
-      personID,
-      sectionID
-    });
     alert("🗑️ تم حذف المشروع من السلة بنجاح ");
   } catch (error) {
     console.log(error);
