@@ -157,6 +157,7 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
               name="Name"
               onChange={handelChange}
               value={project.Name}
+              required
               className="block py-2 px-2 outline-none bg-transparent border-b-[2px]
               border-b-[var(--border-color)] 
               focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
@@ -168,6 +169,7 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
               name="TargetAmount"
               onChange={handelChange}
               value={project.TargetAmount}
+              required
               className="block py-2 px-2 outline-none bg-transparent border-b-[2px]
               border-b-[var(--border-color)] 
               focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
@@ -179,6 +181,7 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
               name="Durations"
               onChange={handelChange}
               value={project.Durations}
+              required
               className="block py-2 px-2 outline-none bg-transparent border-b-[2px]
               border-b-[var(--border-color)] 
               focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
@@ -189,8 +192,9 @@ const AddSection: React.FC<Toggles> = ({toggle, setToggle, getAllSections})=> {
               type="file" 
               placeholder=" صورة المشروع "
               name="image"
+              required
               onChange={handleFileChange}
-            className="block py-2 px-2 outline-none bg-transparent border-b-[2px]
+              className="block py-2 px-2 outline-none bg-transparent border-b-[2px]
               border-b-[var(--border-color)] 
               focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
             />

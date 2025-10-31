@@ -28,9 +28,9 @@ const CardAbout: React.FC<CardAboutProps> = ({ title, description, images }) => 
         />
       )}
 
-      <div className="absolute inset-0 flex flex-col justify-end p-4 bg-black/30 text-white">
-        <h3 className="text-lg font-bold">{title}</h3>
-        <p className="text-sm">{description}</p>
+      <div className="absolute inset-0 z-40 flex flex-col justify-end p-4 bg-black/45 text-white">
+        <h3 className="text-[22px] font-bold">{title}</h3>
+        <p className="text-[17px] font-medium">{description}</p>
       </div>
     </motion.div>
   );
