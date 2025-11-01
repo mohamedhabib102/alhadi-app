@@ -13,7 +13,7 @@ export const companyLinks: FooterLink[] = [
 
 
 export const serviceLinks: FooterLink[] = [
-    { name: 'تسجيل الدخول', href: '/login' },
+    { name: 'تسجيل الدخول', href: '/store/login' },
     { name: 'سلة التبرعات', href: '/store/cart' },
     { name: ' التبرعات ', href: '/store' },
 ];
