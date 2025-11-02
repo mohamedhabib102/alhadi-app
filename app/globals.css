@@ -45,6 +45,10 @@ body {
   transform: scale(105%);
 }
 
+header ul li a{
+  @apply w-full block
+}
+
 
 
 
