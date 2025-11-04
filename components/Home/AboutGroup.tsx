@@ -38,7 +38,7 @@ const AboutSlider: React.FC = () => {
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
             className="text-[var(--main-color)] font-bold mb-1"
           >
-            عن الجمعية
+            التعريف بالجمعية
           </motion.h3>
           <motion.p
             initial={{ y: 60, opacity: 0 }}

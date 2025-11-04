@@ -19,7 +19,7 @@ export default function Home() {
         <ProgramsSection />
         <OurMessage />
         <OurObjectives />
-        <OurActivities />
+        {/* <OurActivities /> */}
         <StatsSection />
       </main>
     </div>

@@ -15,15 +15,15 @@ interface CustomAxiosRequestConfig extends AxiosRequestConfig {
 interface ResponseData {
   sectionID: number;
   name: string;
-  imageUrl: string;
-  targetAmount: number;
-  durations: string;
-  collectedAmount: number;
   donorsCount: number;
 }
 
+type Nums = {
+  donorsCount: number
+}
+
 const StatsSection: React.FC = () => {
-    const [sections, setSections] = useState<ResponseData[]>([])
+  const [sections, setSections] = useState<ResponseData[]>([])
 
 
     useEffect(() => {
@@ -36,11 +36,56 @@ const StatsSection: React.FC = () => {
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
-
-      if (res.data && res.data.length > 0) {
-        setSections(res.data);
-      }
       
+      
+      
+      if (res.data && res.data.length > 0) {
+        const nums =  res.data.filter((ele: Nums) =>  ele.donorsCount).map((ele: Nums) => 
+        ele.donorsCount)
+        const countProjects = res.data.length;
+
+        const num =  nums.reduce((acc:number,curr:number) => {
+          return acc + curr
+        })
+
+        console.log(num);
+        
+        
+
+        setSections([
+          {
+            sectionID: 1,
+            name: " المستفيدون  ",
+            donorsCount: 15
+          },
+          {
+            sectionID: 2,
+            name: " المحاضرات ",
+            donorsCount: 30
+          },
+          {
+            sectionID: 3,
+            name: " إجمالي التبرعات ",
+            donorsCount: num
+          },
+          {
+            sectionID: 4,
+            name: " الدروس العلمية ",
+            donorsCount: 20
+          },
+          {
+            sectionID: 5,
+            name: " المتطوعين  ",
+            donorsCount: 25
+          },
+          {
+            sectionID: 6,
+            name: " عدد المشاريع ",
+            donorsCount: countProjects
+          }
+        ])
+      }
+ 
     } catch (error) {
       console.log(error);
     }
@@ -55,11 +100,11 @@ const StatsSection: React.FC = () => {
                     viewport={{ once: true, amount: 0.5 }}
                     className="text-3xl lg:text-4xl font-extrabold text-center text-gray-800 mb-10"
                 >
-                    أرقامنا تترجم إلى أمل وكل إحصائية قصة حياة نغيرها للأفضل
+                   أرقامنا تشير لسعينا إلى نشر السنّة النبوية
                 </motion.h2>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
-                   {sections.slice(0, 5).map((item, index) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-8">
+                   {sections.map((item, index) => (
                      <motion.div
                        key={item.sectionID}
                        initial={{ opacity: 0, scale: 0.9 }} 
@@ -70,8 +115,8 @@ const StatsSection: React.FC = () => {
                          ease: "easeOut",
                          delay: index * 0.15 
                        }}
-                     >
-                       <StatCard 
+                     > 
+                       <StatCard
                          name={item.name}
                          donorsCount={item.donorsCount}
                        />

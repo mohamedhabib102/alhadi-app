@@ -22,7 +22,7 @@ const tabs: Tab[] = [
   { id: 3, title: "البرامج ", description: "تحكم في البرامج ", Component: Part3 },
   { id: 4, title: "رسالتنا", description: "تحكم في رسالتنا", Component: Part4 },
   { id: 5, title: "أهدافنا", description: "تحكم في أهدافنا", Component: Part5 },
-  { id: 6, title: "الفعاليا", description: "تحكم في الفعاليا", Component: Part6 },
+  // { id: 6, title: "الفعاليا", description: "تحكم في الفعاليا", Component: Part6 },
 ];
 
 const SettingsPage: React.FC = () => {

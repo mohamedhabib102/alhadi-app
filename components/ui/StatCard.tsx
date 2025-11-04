@@ -44,7 +44,7 @@ const StatCard: React.FC<ResponseData> = ({ donorsCount, name }) => {
 
     return (
 
-        <div ref={ref} className="text-center p-6 bg-white rounded-xl shadow-lg h-full flex flex-col items-center justify-center border-b-4 border-[var(--main-color)]">
+        <div ref={ref} className="text-center p-3 bg-white rounded-xl shadow-lg h-full flex flex-col items-center justify-center border-b-4 border-[var(--main-color)]">
             
             <div className="w-16 h-16 rounded-full bg-blue-100 text-[var(--main-color)] flex items-center justify-center mb-4">
                 <FaUsers className="text-3xl" />

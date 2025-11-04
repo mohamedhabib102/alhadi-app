@@ -42,7 +42,7 @@ export default function Header() {
   return (
     <header 
     dir="ltr"
-    ref={headerRef} className="border-b border-b-[#EEE] bg-white relative z-40">
+    ref={headerRef} className="border-b border-b-[#EEE]  bg-gray-100 relative z-40">
       <div className="container mx-auto px-3.5">
         <nav className="flex items-center justify-between py-3 relative">
           <Logo color="header" size="lg" />
@@ -107,7 +107,7 @@ export default function Header() {
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
             ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-            `}> المقالات </Link></li>
+            `}> المنشورات </Link></li>
             <li><Link
                onClick={() => {
                 setToggle(false);
@@ -210,7 +210,7 @@ export default function Header() {
            className={`
             text-[19px] cursor-pointer transition py-2 px-2
             ${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-            `}> بيانات الحكومة </Link></li>
+            `}> بيانات الحوكمة </Link></li>
 
             <li><Link 
                 onClick={() => {
@@ -392,7 +392,7 @@ export default function Header() {
             className={`
             text-[19px] cursor-pointer transition py-2
             ${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
-            `}> بيانات الحكومة </Link></li>
+            `}> بيانات الحوكمة </Link></li>
 
             <li><Link 
               onClick={() => {
@@ -427,7 +427,7 @@ export default function Header() {
             `
             ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
             transition block text-lg`
-          }> المقالات </Link></li>
+          }> المنشورات </Link></li>
 
             {user.role === "Admin" && (
               <li>

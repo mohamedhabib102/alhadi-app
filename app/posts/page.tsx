@@ -51,9 +51,9 @@ const Posts: React.FC = () => {
       <div className="container mx-auto px-3.5">
         <CustomHeader
           content={{
-            title: "المقالات",
+            title: "المنشورات",
             description:
-              "تابع آخر المقالات والنصائح لتثقيف المجتمع وزيادة الوعي حول الموضوعات المهمة.",
+              "تابع آخر المنشورات والنصائح لتثقيف المجتمع وزيادة الوعي حول الموضوعات المهمة.",
           }}
         />
         <PostsCard />
