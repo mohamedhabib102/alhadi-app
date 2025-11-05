@@ -9,7 +9,7 @@ const AboutPage: React.FC = () => {
       <FadeInOnScroll>
         <CustomHeader
           content={{
-            title: "عن الجمعية",
+            title: "التعريف بالجمعية",
             description:
               "جمعية خيرية دعوية تُعنى بنشر العلم الشرعي الصحيح المبني على الكتاب والسنة، وتعزيز الوعي الديني في المجتمع.",
           }}
