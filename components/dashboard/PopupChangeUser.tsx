@@ -26,12 +26,7 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
 
 
 
-
-
-     
-
-
-   const createNewProject = async(e:FormEvent) => {
+   const changeUser = async(e:FormEvent) => {
           if (!userId) return;
           const id =  Number(userId)
           const curRole = role.charAt(0).toUpperCase()+role.slice(1);
@@ -80,7 +75,7 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
           `}
         >
           <form
-          onSubmit={createNewProject}
+          onSubmit={changeUser}
           className="w-full flex flex-col gap-2.5">
             <h3 className="text-[23px] font-bold text-right"> تغير دور المستخدم </h3>     
              <div>
@@ -97,15 +92,9 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
               focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
             />
 
-
-
-
-
-
-
            <button
               type="submit"
-              disabled={loading} // يمنع الضغط أثناء التحميل
+              disabled={loading} 
               className={`bg-[var(--main-color)] transition text-white py-2.5 px-6 
                           w-full min-w-[150px] font-semibold rounded-[var(--border-rounded)] mb-4
               ${loading ? "cursor-not-allowed opacity-70" : "hover:bg-blue-500 cursor-pointer"}`}
