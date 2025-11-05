@@ -51,7 +51,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               المشاريع
             </Link>
           </li>
-
           <li className="mb-3">
             <Link
               href="/dashboard/settings"
@@ -62,6 +61,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               }`}
             >
               التحكم في الرئيسية
+            </Link>
+          </li>
+
+          
+            <li className="mb-3">
+            <Link
+              href="/dashboard/users"
+              className={`block text-lg py-2 px-3 rounded-lg transition ${
+                pathName === "/dashboard/users"
+                  ? "bg-[var(--main-color)] text-white"
+                  : "hover:bg-[var(--main-color)] hover:text-white bg-blue-100"
+              }`}
+            >
+              المستخدمين
             </Link>
           </li>
         </ul>
