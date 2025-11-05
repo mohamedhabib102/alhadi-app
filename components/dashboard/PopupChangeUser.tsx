@@ -34,8 +34,7 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
    const createNewProject = async(e:FormEvent) => {
           if (!userId) return;
           const id =  Number(userId)
-          let letter =  role.charAt(0).toUpperCase()
-          const curRole = letter+role.slice(1);
+          const curRole = role.charAt(0).toUpperCase()+role.slice(1);
         e.preventDefault()
 
 
