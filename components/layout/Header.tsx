@@ -85,7 +85,10 @@ export default function Header() {
               {user.role === "Admin" && (
               <li>
                 <Link
-                onClick={()  => setStoreOpen(false)}
+                onClick={()  => {
+                setToggle(false);
+                setStoreOpen(false);
+                }}
                 href="/dashboard" 
                 className={
                   ` transition block px-4 py-2
@@ -432,7 +435,10 @@ export default function Header() {
             {user.role === "Admin" && (
               <li>
                 <Link
-                onClick={()  => setStoreOpen(false)}
+                onClick={()  => {
+                setToggle(false);
+                setStoreOpen(false);
+                }}
                 href="/dashboard" 
                 className={
             `

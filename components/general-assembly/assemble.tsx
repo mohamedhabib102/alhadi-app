@@ -3,8 +3,38 @@ import CustomHeader from "@/components/ui/CustomHeader";
 import Image from "next/image";
 import Link from "next/link";
 import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
+import { AxiosRequestConfig } from "axios";
+import { useEffect, useState } from "react";
+import instance from "@/utils/axios";
+
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
+}
+
+interface ResponseData {
+    serviceID: number;
+    imageUrl: string
+}
 
 const Assembly: React.FC = () => {
+    const [service, setServices] = useState<ResponseData[]>([])
+
+
+
+      const getAllSercices = async () => {
+        try {
+          const res =  await instance.get("/api/Donations/GetAllServices", {
+            skipAuth: true
+          } as CustomAxiosRequestConfig)
+          setServices(res.data)  
+        } catch (error) { 
+           console.log(error);
+        }
+      }
+
+      useEffect(() => {
+        getAllSercices()
+      }, [])
   return (
     <section className="bg-gray-50 py-10 text-gray-800 text-right">
       <div className="mx-auto px-4 max-w-6xl space-y-12">
@@ -17,28 +47,24 @@ const Assembly: React.FC = () => {
           }}
         />
 
-        {/* أعضاء الجمعية العمومية */}
+
         <FadeInOnScroll>
           <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition">
             <h2 className="text-2xl font-bold mb-4 text-blue-400">
               أعضاء الجمعية العمومية
             </h2>
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <p className="flex-1 leading-loose">
-                تضم الجمعية العمومية نخبة من الأعضاء الفاعلين الذين يمثلون جميع
-                فئات المجتمع المهتمة بالعمل الدعوي والخيري، حيث يشاركون في
-                صياغة القرارات، واعتماد الخطط الاستراتيجية، والإشراف على أداء
-                الجمعية لضمان تحقيق أهدافها وفق منهجية واضحة ومبنية على الشفافية
-                والمساءلة.
-              </p>
-              <div className="w-full md:w-1/3">
-                <Image
-                  src="/images/post.jpg"
+            <div className="">
+              <div className="w-full">
+                {service.slice(3,4).map((ele) => (
+                  <Image
+                  key={ele.serviceID}
+                  src={ele.imageUrl || "/images/"}
                   alt="أعضاء الجمعية العمومية"
                   width={400}
                   height={300}
-                  className="rounded-xl h-82 shadow-md border border-gray-200"
+                  className="rounded-xl h-96 w-full object-cover shadow-md border border-gray-200"
                 />
+                ))}
               </div>
             </div>
           </div>
