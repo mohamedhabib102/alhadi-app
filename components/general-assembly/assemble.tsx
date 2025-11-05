@@ -54,7 +54,7 @@ const Assembly: React.FC = () => {
               أعضاء الجمعية العمومية
             </h2>
             <div className="">
-              <div className="w-full">
+              <div className="w-full overflow-hidden rounded-xl">
                 {service.slice(3,4).map((ele) => (
                   <Image
                   key={ele.serviceID}
@@ -62,7 +62,8 @@ const Assembly: React.FC = () => {
                   alt="أعضاء الجمعية العمومية"
                   width={400}
                   height={300}
-                  className="rounded-xl h-96 w-full object-cover shadow-md border border-gray-200"
+                  className="h-[450px] w-full object-cover object-center shadow-md border border-gray-200
+                  transition-transform duration-300 hover:scale-105"
                 />
                 ))}
               </div>

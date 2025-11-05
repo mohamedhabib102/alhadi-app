@@ -26,7 +26,7 @@ export default function Logo({ color, size }: Color) {
                  
             >
                 <Image
-                    src="/images/logo.png"
+                    src="/icon.png"
                     alt="شعار الجمعية"
                     fill
                     className="object-contain transition-transform duration-300 hover:scale-105"

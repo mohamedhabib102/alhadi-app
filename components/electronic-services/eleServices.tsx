@@ -118,7 +118,9 @@ const EleServices: React.FC = () => {
                 >
                   {service.slice(0, 3).map((ele, ser) => (
                     index === ser && (
-                        <div key={ele.serviceID}>
+                        <div key={ele.serviceID}
+                        className="w-full h-[600px] overflow-hidden rounded-2xl"
+                        >
                         <Image
                         src={ele.imageUrl||"/images/"}
                         alt="image"
@@ -126,7 +128,7 @@ const EleServices: React.FC = () => {
                         width={200}
                         height={100}
                         loading="lazy"
-                        className="w-full h-50 object-cover"
+                        className="w-full object-center transition-transform duration-300 hover:scale-105"
                         />
                     </div>
                     )

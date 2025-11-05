@@ -33,13 +33,13 @@ export const metadata: Metadata = {
   authors: [{ name: "جمعية الهدى النبوي" }],
 
 
-  metadataBase: new URL("http://localhost:3000"), // لما ترفع المشروع غيّرها للدومين الحقيقي
+  metadataBase: new URL("http://localhost:3000"), 
 
   openGraph: {
     title: "الهدى النبوي - جمعية خيرية دعوية",
     description:
       "جمعية الهدى النبوي الخيرية الدعوية تهدف إلى نشر العلم الشرعي الصحيح وتعزيز القيم الإسلامية، مع تقديم خدمات دعوية وخيرية بكفاءة وشفافية.",
-    url: "http://localhost:3000", // ← غيّرها برضو لما ترفع الموقع
+    url: "http://localhost:3000",
     siteName: "الهدى النبوي",
     images: [
       {
