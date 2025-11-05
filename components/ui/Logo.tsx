@@ -19,14 +19,14 @@ export default function Logo({ color, size }: Color) {
         >
             <div
                 className={`
-                    relative h-14
-                    ${size === "md" ? "w-28 md:w-32 lg:w-38" : "w-32 md:w-36 lg:w-40"} 
-                    ${color === "footer" ? "brightness-200 h-20" : ""}
+                    relative lg:h-16 h-14
+                    ${size === "md" ? "w-28 md:w-32 lg:w-38" : "w-28 md:w-36 lg:w-40"} 
+                    ${color === "footer" ? "brightness-150" : "brightness-150"}
                 `}
                  
             >
                 <Image
-                    src="/logo.svg"
+                    src="/images/logo.png"
                     alt="شعار الجمعية"
                     fill
                     className="object-contain transition-transform duration-300 hover:scale-105"

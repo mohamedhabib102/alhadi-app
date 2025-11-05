@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 
 
 
+
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
@@ -25,7 +26,7 @@ interface Slide3 {
 
 export default function ProgramsSection() {
     const [slides, setSlides] = useState<Slide3[]>([]);
-
+ 
 
     useEffect(() => {
       fetchSlides();

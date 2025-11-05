@@ -13,6 +13,7 @@
   --border-rounded: 6px;
   --border-color: #716f6f;
   --color-subtitle: #716f6f;
+  /* --main-color: #6b7e86; */
   --main-color: #51a2ff;
   --sub-color: #f3f4f6;
   --custom-width: 75%;
@@ -45,9 +46,16 @@ body {
   transform: scale(105%);
 }
 
-header ul li a{
-  @apply w-full block
+
+header ul li button{
+  @apply text-white
 }
+header ul li a{
+  @apply w-full block text-white
+}
+
+
+
 
 
 

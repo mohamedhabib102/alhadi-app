@@ -19,7 +19,7 @@ type AuthContextType = {
   user: AuthData;
   setUser: (data: AuthData) => void;
   logout: (redirectTo?: string) => void;
-  loading: boolean; // ✅ نضيف دي
+  loading: boolean; 
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

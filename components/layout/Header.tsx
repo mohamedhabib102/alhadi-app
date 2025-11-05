@@ -42,7 +42,7 @@ export default function Header() {
   return (
     <header 
     dir="ltr"
-    ref={headerRef} className="border-b border-b-[#EEE]  bg-gray-100 relative z-40">
+    ref={headerRef} className="bg-[#272f51] relative z-50">
       <div className="container mx-auto px-3.5">
         <nav className="flex items-center justify-between py-3 relative">
           <Logo color="header" size="lg" />
@@ -54,17 +54,17 @@ export default function Header() {
             aria-label="Toggle menu"
           >
             <span
-              className={`absolute bg-black w-full h-1 left-0 transition-all ${
+              className={`absolute bg-[var(--main-color)] w-full h-1 left-0 transition-all ${
                 toggle ? "rotate-45 top-2" : "rotate-0 top-0"
               }`}
             ></span>
             <span
-              className={`absolute bg-black w-full h-1 left-0 top-2 transition-all ${
+              className={`absolute bg-[var(--main-color)] w-full h-1 left-0 top-2 transition-all ${
                 toggle ? "opacity-0" : "opacity-100"
               }`}
             ></span>
             <span
-              className={`absolute bg-black w-full h-1 left-0 transition-all ${
+              className={`absolute bg-[var(--main-color)] w-full h-1 left-0 transition-all ${
                 toggle ? "-rotate-45 top-2" : "rotate-0 top-4"
               }`}
             ></span>
@@ -80,7 +80,7 @@ export default function Header() {
             href="/contact" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/contact" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/contact" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}>تواصل معنا</Link></li>
               {user.role === "Admin" && (
               <li>
@@ -91,7 +91,7 @@ export default function Header() {
                   ` transition block px-4 py-2
                   ${pathName === "/dashboard" 
                     || pathName === "/dashboard/sections"
-                    || pathName === "/dashboard/settings" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                    || pathName === "/dashboard/settings" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                   `
                 }>
                   لوحة التحكم
@@ -106,7 +106,7 @@ export default function Header() {
              href="/posts" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/posts" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}> المنشورات </Link></li>
             <li><Link
                onClick={() => {
@@ -116,7 +116,7 @@ export default function Header() {
              href="/general-assembly" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/general-assembly" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/general-assembly" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}> الجمعية العمومية </Link></li>
 
             {/* Dropdown Store */}
@@ -125,7 +125,7 @@ export default function Header() {
                 onClick={() => {
                   setStoreOpen(!storeOpen);
                 }}
-                className={`${storeOpen ? "text-[var(--main-color)]" : ""} flex items-center gap-1 text-[19px] cursor-pointer transition hover:text-[var(--main-color)] py-2 px-2`}
+                className={`${storeOpen ? "!text-[var(--main-color)]" : ""} flex items-center gap-1 text-[19px] cursor-pointer transition hover:!text-[var(--main-color)] py-2 px-2`}
               >
                 المتجر الإلكتروني
                 <IoIosArrowDown
@@ -134,14 +134,14 @@ export default function Header() {
                 />
               </button>
               {storeOpen && (
-                <ul className="absolute right-0 bg-white border border-gray-200 rounded-lg shadow-md mt-2 w-48 text-right">
+                <ul className="absolute right-0 overflow-hidden bg-[#272f51] border border-gray-200 rounded-lg shadow-md mt-2 w-48 text-right">
                   <li>
                     <Link 
                     onClick={()  => setStoreOpen(false)}
                     href="/store" 
                     className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/store" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      ` transition block px-4 py-2 hover:bg-[#2b3664]
+                      ${pathName === "/store" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }>
                       التبرعات
@@ -152,8 +152,8 @@ export default function Header() {
                     onClick={()  => setStoreOpen(false)}
                     href="/store/cart" 
                     className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/store/cart" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      ` transition block px-4 py-2 hover:bg-[#2b3664]
+                      ${pathName === "/store/cart" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }>
                       سلة المشتريات
@@ -165,8 +165,8 @@ export default function Header() {
                     onClick={()  => setStoreOpen(false)}
                     href="/store/myDonation" 
                     className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/store/myDonation" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      ` transition block px-4 py-2 hover:bg-[#2b3664]
+                      ${pathName === "/store/myDonation" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }>
                       تبرعاتي 
@@ -178,8 +178,8 @@ export default function Header() {
                     <button 
                     onClick={()  => logout("/")}
                     className={
-                      ` transition block w-full text-right px-4 py-2 hover:bg-gray-200
-                      hover:text-[var(--main-color)]
+                      ` transition block w-full text-right px-4 py-2 hover:bg-[#2b3664]
+                      hover:!text-[var(--main-color)]
                       `
                     }>
                       تسجيل الخروج
@@ -189,8 +189,8 @@ export default function Header() {
                     onClick={()  => setStoreOpen(false)}
                     href="/store/login" 
                     className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/store/login" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      ` transition block px-4 py-2 hover:bg-[#2b3664]
+                      ${pathName === "/store/login" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }>
                       تسجيل الدخول
@@ -209,7 +209,7 @@ export default function Header() {
             href="/governance" 
            className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/governance" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}> بيانات الحوكمة </Link></li>
 
             <li><Link 
@@ -220,14 +220,14 @@ export default function Header() {
             href="/electronic-services" 
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/electronic-services" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/electronic-services" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}>  الخدمات الالكترونيه </Link></li>
 
             <li>
             <Link
               href="/about"
               className={
-                `${pathName === "/about" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block text-lg`
+                `${pathName === "/about" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"} transition block text-lg`
               }
               onClick={() => {
                 setToggle(false);
@@ -244,7 +244,7 @@ export default function Header() {
              }}
             className={`
             text-[19px] cursor-pointer transition py-2 px-2
-            ${pathName === "/" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}>الرئيسية</Link></li>
           </ul>
         </nav>
@@ -252,16 +252,16 @@ export default function Header() {
 
       { /*   Mobile show  */ }
       <div
-        className={`lg:hidden absolute left-0 w-full bg-white border-t border-gray-200 shadow-md transition-all duration-300 ${
+        className={`lg:hidden absolute left-0 w-full bg-[#272f51] border-t border-gray-200 shadow-md transition-all duration-300 ${
           toggle ? "top-full opacity-100 visible" : "top-0 opacity-0 invisible"
         }`}
       >
-        <ul className="flex flex-col text-right p-4 space-y-3 bg-[var(--sub-color)]">
+        <ul className="flex flex-col text-right p-4 space-y-3">
           <li>
             <Link
               href="/"
               className={
-                `${pathName === "/" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block text-lg`
+                `${pathName === "/" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"} transition block text-lg`
               }
               onClick={() => {
                 setToggle(false);
@@ -276,7 +276,7 @@ export default function Header() {
             <Link
               href="/about"
               className={
-                `${pathName === "/about" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"} transition block text-lg`
+                `${pathName === "/about" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"} transition block text-lg`
               }
               onClick={() => {
                 setToggle(false);
@@ -295,7 +295,7 @@ export default function Header() {
                 setStoreOpen(!storeOpen);
               }}
               className={`flex flex-row-reverse cursor-pointer items-center justify-between w-full text-lg transition-colors 
-                ${storeOpen ? "text-[var(--main-color)]" : "text-black"} hover:text-[var(--main-color)]`}
+                ${storeOpen ? "!text-[var(--main-color)]" : "text-black"} hover:!text-[var(--main-color)]`}
             >
               المتجر الإلكتروني
               <IoIosArrowDown
@@ -305,14 +305,14 @@ export default function Header() {
             </button>
           
             {storeOpen && (
-              <ul className="mt-2 bg-gray-50 rounded-md border border-gray-200">
+              <ul className="mt-2 bg-[#272f51] rounded-md border border-gray-200 overflow-hidden">
                 <li>
                   <Link
                     href="/store"
                     className={
                       `
-                      block px-4 py-2 text-base hover:bg-gray-100
-                      ${pathName === "/store" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      block px-4 py-2 text-base hover:bg-[#2b3664]
+                      ${pathName === "/store" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }
                     onClick={() => {
@@ -328,8 +328,8 @@ export default function Header() {
                     href="/store/cart"
                     className={
                       `
-                      block px-4 py-2 text-base hover:bg-gray-100
-                      ${pathName === "/store/cart" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      block px-4 py-2 text-base hover:bg-[#2b3664]
+                      ${pathName === "/store/cart" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }
                     onClick={() => {
@@ -346,8 +346,8 @@ export default function Header() {
                     onClick={()  => setStoreOpen(false)}
                     href="/store/myDonation" 
                     className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/store/myDonation" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      ` transition block px-4 py-2 hover:bg-[#2b3664]
+                      ${pathName === "/store/myDonation" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }>
                       تبرعاتي 
@@ -359,8 +359,8 @@ export default function Header() {
                     <button 
                     onClick={()  => logout("/")}
                     className={
-                      ` transition block w-full text-right px-4 py-2 hover:bg-gray-200
-                      hover:text-[var(--main-color)]
+                      ` transition block w-full text-right px-4 py-2 hover:bg-[#2b3664]
+                      hover:!text-[var(--main-color)]
                       `
                     }>
                       تسجيل الخروج
@@ -370,8 +370,8 @@ export default function Header() {
                     onClick={()  => setStoreOpen(false)}
                     href="/store/login" 
                     className={
-                      ` transition block px-4 py-2 hover:bg-gray-200
-                      ${pathName === "/store/login" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                      ` transition block px-4 py-2 hover:bg-[#2b3664]
+                      ${pathName === "/store/login" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
                       `
                     }>
                       تسجيل الدخول
@@ -391,7 +391,7 @@ export default function Header() {
             href="/governance" 
             className={`
             text-[19px] cursor-pointer transition py-2
-            ${pathName === "/governance" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/governance" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}> بيانات الحوكمة </Link></li>
 
             <li><Link 
@@ -402,7 +402,7 @@ export default function Header() {
             href="/electronic-services" 
             className={`
             text-[19px] cursor-pointer transition py-2
-            ${pathName === "/electronic-services" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/electronic-services" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}>  الخدمات الالكترونيه </Link></li>
           
            <li><Link 
@@ -414,7 +414,7 @@ export default function Header() {
            href="/general-assembly" 
             className={`
             text-[19px] cursor-pointer transition py-2 
-            ${pathName === "/general-assembly" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/general-assembly" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             `}> الجمعية العمومية </Link></li>
 
           <li><Link 
@@ -425,7 +425,7 @@ export default function Header() {
           href="/posts" 
           className={
             `
-            ${pathName === "/posts" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/posts" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             transition block text-lg`
           }> المنشورات </Link></li>
 
@@ -439,7 +439,7 @@ export default function Header() {
            ${
                     pathName === "/dashboard"
                     || pathName === "/dashboard/sections"
-                    || pathName === "/dashboard/settings" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+                    || pathName === "/dashboard/settings" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             transition block text-lg`
           }>
                   لوحة التحكم
@@ -450,7 +450,7 @@ export default function Header() {
           <li><Link href="/contact" 
            className={
             `
-            ${pathName === "/contact" ? "text-[var(--main-color)]" : "hover:text-[var(--main-color)]"}
+            ${pathName === "/contact" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
             transition block text-lg`
           }
               onClick={() => {
