@@ -29,29 +29,25 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
    const changeUser = async(e:FormEvent) => {
           if (!userId) return;
           const id =  Number(userId)
-          const curRole = role.charAt(0).toUpperCase()+role.slice(1);
+          const curRole = role;
         e.preventDefault()
 
 
        try {
          setLoading(true)
-        const res = await instance.patch(`/api/Donations/ChangeRoleByAdmin?PersonID=${id}&Role=${curRole}`, 
-        
-        {
-           headers: { "Content-Type": "multipart/form-data" }
-        })
-        
-
-        setRole("")
-        setToggle(!toggle)
-        alert( "✅ تمت تغير الدور بنجاح!" )
-        getAllUsers();
-        
+          await instance.patch(`/api/Donations/ChangeRoleByAdmin?PersonID=${id}&Role=${curRole}`,
+          {
+             headers: { "Content-Type": "multipart/form-data" }
+          });
+          setRole("")
+          setToggle(!toggle)
+          alert( "✅ تمت تغير الدور بنجاح!" )
+          getAllUsers();
        } catch (error) {
            console.log(error);
        } finally{
         setLoading(false)
-    }
+      }
    }
 
 
@@ -60,7 +56,7 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
     return (
         <>
         <div className={
-            `fixed bg-[#0000004c] backdrop-blur-[3px] top-0 left-0 w-full 
+          `fixed bg-[#0000004c] backdrop-blur-[3px] top-0 left-0 w-full 
         h-full z-50 ${toggle ? "opacity-100 visible" : "opacity-0 invisible"}`
         }></div>
         <div
@@ -78,19 +74,28 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
           onSubmit={changeUser}
           className="w-full flex flex-col gap-2.5">
             <h3 className="text-[23px] font-bold text-right"> تغير دور المستخدم </h3>     
-             <div>
+       
                 
-            <input 
-              type="text" 
-              placeholder=" اكتب الدور المناسب "
-              name="Name"
-              onChange={(e) => setRole(e.target.value)}
-              value={role}
-              required
-              className="block capitalize py-2 px-2 outline-none bg-transparent border-b-[2px]
-              border-b-[var(--border-color)] 
-              focus:border-b-[var(--main-color)] transition mb-6 w-full text-right"
-            />
+              <label
+                htmlFor="role"
+                className="text-gray-700 text-right block font-medium"
+              >
+                اختر الدور الجديد:
+              </label>
+              <select
+                id="role"
+                name="role"
+                onChange={(e) => setRole(e.target.value)}
+                value={role}
+                required
+                className="block w-full border-b-2 border-gray-300 bg-transparent py-2 px-2 text-right
+                  outline-none focus:border-blue-500 transition rounded-md"
+              >
+                <option value="">-- اختر الدور --</option>
+                <option value="Admin">أدمن</option>
+                <option value="User">مستخدم</option>
+              </select>
+
 
            <button
               type="submit"
@@ -102,14 +107,17 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
               {text}
             </button>
              <span 
-             onClick={() => setToggle(!toggle)}
+             onClick={() => {
+              setToggle(!toggle)
+              setRole("")
+             }}
              className={`bg-red-500 transition text-white py-2.5 px-6 
              w-full min-w-[150px] cursor-pointer font-semibold rounded-[var(--border-rounded)] 
             hover:bg-red-400 block text-center`
              }>
                 إلغاء العمليه
              </span>
-             </div>
+  
 
           </form>
         </div>
