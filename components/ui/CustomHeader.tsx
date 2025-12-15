@@ -23,7 +23,7 @@ const CustomHeader: React.FC<Data> = ({content}) => {
                </h2>
            </FadeInOnScroll>
            <FadeInOnScroll duration={0.8} delay={0.2}>
-               <p className="lg:w-[500px] font-bold text-3xl mb-12 ml-auto leading-10 text-right">
+               <p className="lg:w-[700px] font-bold lg:text-2xl text-lg mb-12 ml-auto leading-10 text-right">
                   {content.description}
                </p>
            </FadeInOnScroll>

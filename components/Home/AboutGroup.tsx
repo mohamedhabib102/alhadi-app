@@ -45,7 +45,7 @@ const AboutSlider: React.FC = () => {
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-            className="font-bold text-3xl mb-1"
+            className="font-bold lg:text-2xl text-lg mb-1"
           >
             فـ لنكن معكم قلوبًا راحمة
           </motion.p>

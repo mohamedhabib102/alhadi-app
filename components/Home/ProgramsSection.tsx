@@ -70,7 +70,7 @@ export default function ProgramsSection() {
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:w-96 font-bold text-3xl mb-12 ml-auto text-right"
+          className="lg:w-[700px] font-bold lg:text-2xl text-lg mb-12 ml-auto text-right"
         >
                 تسعى الجمعية من خلال برامجها ومبادراتها إلى ترسيخ قيم الدين الإسلامي الحنيف، 
         ونشر سنة النبي ﷺ قولًا وعملًا، 

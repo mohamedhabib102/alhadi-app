@@ -98,7 +98,7 @@ const StatsSection: React.FC = () => {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                     viewport={{ once: true, amount: 0.5 }}
-                    className="text-3xl lg:text-4xl font-extrabold text-center text-gray-800 mb-10"
+                    className="text-lg lg:text-2xl font-extrabold text-center text-gray-800 mb-10"
                 >
                    أرقامنا تشير لسعينا إلى نشر السنّة النبوية
                 </motion.h2>
