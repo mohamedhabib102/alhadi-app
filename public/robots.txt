@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://alhadi-alnabawy.org.sa/sitemap.xml

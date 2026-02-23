@@ -33,17 +33,17 @@ export const metadata: Metadata = {
   authors: [{ name: "جمعية الهدى النبوي" }],
 
 
-  metadataBase: new URL("http://localhost:3000"), 
+  metadataBase: new URL("https://alhadi-alnabawy.org.sa"), 
 
   openGraph: {
     title: "الهدى النبوي - جمعية خيرية دعوية",
     description:
       "جمعية الهدى النبوي الخيرية الدعوية تهدف إلى نشر العلم الشرعي الصحيح وتعزيز القيم الإسلامية، مع تقديم خدمات دعوية وخيرية بكفاءة وشفافية.",
-    url: "http://localhost:3000",
+    url: "https://alhadi-alnabawy.org.sa",
     siteName: "الهدى النبوي",
     images: [
       {
-        url: "/logo.svg",
+        url: "https://alhadi-alnabawy.org.sa/logo.svg",
         width: 800,
         height: 600,
         alt: "شعار جمعية الهدى النبوي",
@@ -53,9 +53,9 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/logo.svg",
-    shortcut: "/logo.svg",
-    apple: "/logo.svg",
+    icon: "https://alhadi-alnabawy.org.sa/logo.svg",
+    shortcut: "https://alhadi-alnabawy.org.sa/logo.svg",
+    apple: "https://alhadi-alnabawy.org.sa/logo.svg",
   },
 };
 
