@@ -13,14 +13,22 @@ const instance = axios.create({
 });
 
 
-instance.interceptors.request.use((config) => {
-  const customConfig = config as CustomAxiosRequestConfig;
+const getToken = async (): Promise<string | undefined> => {
+  if (typeof window !== "undefined") {
+    return Cookies.get("token");
+  } else {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    return cookieStore.get("token")?.value;
+  }
+};
 
+instance.interceptors.request.use(async (config) => {
+  const customConfig = config as CustomAxiosRequestConfig;
 
   if (customConfig.skipAuth) return config;
 
-
-  const token = Cookies.get("token");
+  const token = await getToken();
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }

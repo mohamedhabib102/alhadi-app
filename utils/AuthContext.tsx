@@ -18,8 +18,9 @@ type AuthData = {
 type AuthContextType = {
   user: AuthData;
   setUser: (data: AuthData) => void;
+  storeToken: (token: string) => void;
   logout: (redirectTo?: string) => void;
-  loading: boolean; 
+  loading: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,7 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     role: null,
     token: null,
   });
-  const [loading, setLoading] = useState(true); // ✅ نضيف دي
+  const [loading, setLoading] = useState(true);
 
   const cookieOptions: {
     sameSite: "strict";
@@ -50,13 +51,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const token = Cookies.get("token") || null;
 
     setUserState({ id, role, token });
-    setLoading(false); // ✅ نوقف التحميل بعد قراءة الكوكيز
+    setLoading(false); 
   }, []);
+
+  // يخزن التوكن في كوكي لوحده
+  const storeToken = (token: string) => {
+    Cookies.set("token", token, cookieOptions);
+  };
 
   const setUser = (data: AuthData) => {
     if (data.id) Cookies.set("id", data.id, cookieOptions);
     if (data.role) Cookies.set("role", data.role, cookieOptions);
-    if (data.token) Cookies.set("token", data.token, cookieOptions);
+    if (data.token) storeToken(data.token);
     setUserState(data);
   };
 
@@ -71,7 +77,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser, storeToken, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

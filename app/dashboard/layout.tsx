@@ -90,6 +90,18 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
               الخدمات
             </Link>
           </li>
+          <li className="mb-3">
+            <Link
+              href="/dashboard/posts"
+              className={`block text-lg py-2 px-3 rounded-lg transition ${
+                pathName === "/dashboard/posts"
+                  ? "bg-[var(--main-color)] text-white"
+                  : "hover:bg-[var(--main-color)] hover:text-white bg-blue-100"
+              }`}
+            >
+              المنشورات
+            </Link>
+          </li>
         </ul>
 
         <button

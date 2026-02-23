@@ -34,11 +34,15 @@ const ChangeUserRole: React.FC<Toggles> = ({toggle, setToggle, getAllUsers,userI
 
 
        try {
-         setLoading(true)
-          await instance.patch(`/api/Donations/ChangeRoleByAdmin?PersonID=${id}&Role=${curRole}`,
-          {
-             headers: { "Content-Type": "multipart/form-data" }
-          });
+         setLoading(true);
+          await instance.patch(
+            `/api/Donations/ChangeRoleByAdmin?PersonID=${id}&Role=${curRole}`,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
           setRole("")
           setToggle(!toggle)
           alert( "✅ تمت تغير الدور بنجاح!" )
