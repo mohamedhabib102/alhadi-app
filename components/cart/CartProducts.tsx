@@ -123,6 +123,7 @@ const confirmDonation = async () => {
         setToggle(false);
         const linkPayment = "https://n4bkqu.zid.store/";
         window.location.href = linkPayment;
+        getAllProjects()
       } catch (error) {
         console.error(error);
       }

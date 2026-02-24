@@ -162,20 +162,6 @@ export default function Header() {
                       سلة المشتريات
                     </Link>
                   </li>
-                {user.id && (
-                    <li>
-                    <Link
-                    onClick={()  => setStoreOpen(false)}
-                    href="/store/myDonation" 
-                    className={
-                      ` transition block px-4 py-2 hover:bg-[#2b3664]
-                      ${pathName === "/store/myDonation" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
-                      `
-                    }>
-                      تبرعاتي 
-                    </Link>
-                  </li>
-                )}
                   <li>
                     {user.id ? (
                     <button 
@@ -342,22 +328,6 @@ export default function Header() {
                   >
                     سلة المشتريات
                   </Link>
-                </li>
-                {user.id && (
-                    <li>
-                    <Link
-                    onClick={()  => setStoreOpen(false)}
-                    href="/store/myDonation" 
-                    className={
-                      ` transition block px-4 py-2 hover:bg-[#2b3664]
-                      ${pathName === "/store/myDonation" ? "!text-[var(--main-color)]" : "hover:!text-[var(--main-color)]"}
-                      `
-                    }>
-                      تبرعاتي 
-                    </Link>
-                  </li>
-                )}
-                <li>
                     {user.id ? (
                     <button 
                     onClick={()  => logout("/")}
