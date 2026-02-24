@@ -121,7 +121,8 @@ const confirmDonation = async () => {
           } as CustomAxiosRequestConfig
         );
         setToggle(false);
-        window.location.reload();
+        const linkPayment = "https://n4bkqu.zid.store/";
+        window.location.href = linkPayment;
       } catch (error) {
         console.error(error);
       }
@@ -165,7 +166,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
         toggle={toggle}
         setToggle={setToggle}
         title="هل أنت متأكد من تنفيذ عملية الدفع؟"
-        message="سيتم خصم المبلغ من وسيلة الدفع الخاصة بك لإتمام التبرع. هل ترغب في المتابعة؟"
+        message="هل ترغب في المتابعة لتأكيد عملية التبرع؟ ستقوم الجمعية بمراجعة طلبك وإتمام الإجراءات."
         confirmDonation={confirmDonation}
         updatePayment={updatePayment}
       />
@@ -186,126 +187,31 @@ const deleteCart = async (personID: number, sectionID: number) => {
         </div>
         <form>
                   <div className="bg-white rounded-xl shadow p-6">
-          <h2 className="text-lg font-semibold mb-4 text-gray-700 text-right">
-            طريقة الدفع
-          </h2>
-
-          <div className="space-y-3">
-            {/* mada */}
-            <label
-              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
-                method === "mada"
-                  ? "border-blue-400 bg-indigo-50"
-                  : "border-gray-200 hover:bg-gray-50"
-              }`}
-              onClick={() => setMethod("mada")}
+          <div className="bg-gradient-to-b from-indigo-50 to-white rounded-xl border border-indigo-100 p-6 mb-6 text-center shadow-sm">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5 }}
             >
-              <MdCreditCard className="text-indigo-600 text-xl" />
-              <span className="font-medium text-gray-700">بطاقة مدى البنكية</span>
-            </label>
-
-            {/* visa/mastercard */}
-            <label
-              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
-                method === "visa"
-                  ? "border-blue-400 bg-indigo-50"
-                  : "border-gray-200 hover:bg-gray-50"
-              }`}
-              onClick={() => setMethod("visa")}
-            >
-              <FaCcVisa className="text-blue-600 text-xl" />
-              <FaCcMastercard className="text-red-500 text-xl" />
-              <span className="font-medium text-gray-700">بطاقة ائتمانية</span>
-            </label>
-
-            {/* STC Pay */}
-            <label
-              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
-                method === "stc"
-                  ? "border-blue-400 bg-indigo-50"
-                  : "border-gray-200 hover:bg-gray-50"
-              }`}
-              onClick={() => setMethod("stc")}
-            >
-             <Image
-              src="/images/stc_pay.webp"
-              title="STC Pay"
-              alt="STC Pay"
-              width={300}
-              height={200}
-              className="w-8"
-             />
-              {/* <SiStcpay className="text-purple-500 text-xl" /> */}
-              <span className="font-medium text-gray-700">STC Pay</span>
-            </label>
-
-            {/* Bank transfer */}
-            <label
-              className={`flex justify-end items-center gap-3 border p-3 rounded-lg cursor-pointer transition ${
-                method === "bank"
-                  ? "border-blue-400 bg-indigo-50"
-                  : "border-gray-200 hover:bg-gray-50"
-              }`}
-              onClick={() => setMethod("bank")}
-            >
-              <FaUniversity className="text-green-600 text-xl" />
-              <span className="font-medium text-gray-700">تحويل بنكي</span>
-            </label>
-          </div>
-
-
-          <div className="mt-6">
-            {method === "mada" || method === "visa" ? (
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  placeholder="الاسم على البطاقة"
-                  className="w-full border rounded-lg text-right p-2 outline-none focus:border-blue-400"
-                />
-                <input
-                  type="text"
-                  placeholder="رقم البطاقة"
-                  className="w-full border rounded-lg text-right p-2 outline-none focus:border-blue-400"
-                />
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="تاريخ الانتهاء"
-                    className="w-1/2 border rounded-lg text-right p-2 outline-none focus:border-blue-400"
-                  />
-                  <input
-                    type="text"
-                    placeholder="CVV"
-                    className="w-1/2 border rounded-lg text-right p-2 outline-none focus:border-blue-400"
-                  />
-                </div>
-                <label className="flex justify-end items-center gap-2 text-sm text-gray-600 mt-1">
-                  <input type="checkbox" defaultChecked={true} className="accent-blue-400 cursor-pointer" />
-                  حفظ البطاقة لتسهيل الدفع لاحقاً
-                </label>
-              </div>
-            ) : method === "stc" ? (
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  placeholder="أدخل رقم STC Pay"
-                  className="w-full border text-right rounded-lg p-2 outline-none focus:border-blue-400"
-                />
-              </div>
-            ) : method === "bank" ? (
-              <div className="space-y-3 text-gray-700">
-                <p className="text-right"> الرجاء تحويل المبلغ إلى الحساب البنكي التالي  </p>
-                <p className="text-right">
-                  <span className="font-semibold">اسم البنك:</span> البنك الأهلي
-                </p>
-                <p className="text-right">
-                  <span className="font-semibold">رقم الحساب:</span> 123456789
-                </p>
-                <p className="text-right" dir="rtl">
-                  <span className="font-semibold">الآيبان: </span> SA000000000000000000
-                </p>
-              </div>
-            ) : null}
+              <Image
+                src="/icon.png"
+                alt="شعار الجمعية"
+                width={100}
+                height={100}
+                className="mx-auto mb-4 drop-shadow-md"
+              />
+            </motion.div>
+            <h2 className="text-xl font-bold mb-3 text-indigo-900">
+              جمعية الهدى النبوي الخيرية الدعوية
+            </h2>
+            <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+              تهدف جمعية الهدى النبوي الخيرية الدعوية إلى نشر العلم الشرعي الصحيح، وتعزيز القيم الإسلامية في المجتمع، وتقديم خدمات دعوية وخيرية بكفاءة وشفافية.
+            </p>
+            <div className="mt-4 flex justify-center gap-2">
+              <span className="w-12 h-1 bg-indigo-200 rounded-full"></span>
+              <span className="w-4 h-1 bg-indigo-400 rounded-full"></span>
+              <span className="w-12 h-1 bg-indigo-200 rounded-full"></span>
+            </div>
           </div>
 
           <div className="mt-4 pt-4 text-right">
@@ -355,17 +261,6 @@ const deleteCart = async (personID: number, sectionID: number) => {
           )}
     </div>
           </div>
-
-          <div className="mt-6 text-right">
-            <label className="block mb-2 text-gray-700 font-medium"> ملاحظاتك </label>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              className="w-full border rounded-lg text-right p-2 h-24 resize-none outline-none focus:border-blue-400"
-              placeholder=" أدخل ملاحظاتك هنا  "
-            ></textarea>
-          </div>
-
      
           <div className="mt-6">
             <button
@@ -378,7 +273,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
                 ? "bg-gray-400 cursor-not-allowed" 
                 : "bg-[var(--main-color)] hover:bg-blue-500"}`
                       }>
-              إدخال بيانات الدفع
+              تأكيد الدفع
             </button>
           </div>
         </div>

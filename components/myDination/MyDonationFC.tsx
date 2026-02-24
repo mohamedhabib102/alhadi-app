@@ -77,8 +77,8 @@ const MyDonationFC: React.FC = () => {
             src={donation.sectionImage}
             alt={donation.sectionName}
             width={200}
-            height={150}
-            className="rounded-t w-full h-auto max-w-full"
+            height={120}
+            className="rounded-t w-full h-96 bg-cover max-w-full"
           />
           <div className="py-2.5 px-3 text-right">
               <h3 className="text-lg font-semibold text-gray-800">{donation.sectionName}</h3>
