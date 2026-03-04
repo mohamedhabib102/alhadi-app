@@ -8,7 +8,7 @@ interface CustomAxiosRequestConfig extends AxiosRequestConfig {
 
 
 const instance = axios.create({
-  baseURL: "https://alhady21.runasp.net/",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: { "Content-Type": "application/json" },
 });
 
