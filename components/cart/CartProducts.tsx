@@ -2,12 +2,11 @@
 import { useAuth } from "@/utils/AuthContext";
 import instance from "@/utils/axios";
 import { motion, AnimatePresence  } from "framer-motion";
-import { AxiosRequestConfig } from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import Image from "next/image";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, FormEventHandler, useEffect, useState } from "react";
 import { FaCcVisa, FaCcMastercard, FaUniversity } from "react-icons/fa";
 import { MdCreditCard } from "react-icons/md";
-import CustomPopup from "../ui/CustomPopup";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
@@ -24,12 +23,7 @@ type CartResponse = {
   sectionName: string;
   sectionImage: string;
 }
-interface VisaData {
-  cardNumber: string;
-  cardHolder: string;
-  expiryDate: string;
-  cvv: string;
-}
+
 
 interface TokenData {
   token: string;
@@ -45,14 +39,7 @@ const CartProducts = () => {
   const {user} = useAuth()
   const [cart, setCart] =  useState<CartResponse[]>([])
   const [visibleCount, setVisibleCount] = useState(3);
-  const [toggle, setToggle] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [paymentData, setPaymentData] = useState<{
-    last_four: string;
-    name: string;
-    expiry: string;
-    token: string;
-  } | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   
 
   const [visaData, setVisaData] = useState({
@@ -114,6 +101,40 @@ useEffect(() => {
   }
 }, [user.id]);
 
+useEffect(() => {
+  const processStoredToken = async () => {
+    const token = sessionStorage.getItem("paymentToken");
+    const amount = sessionStorage.getItem("paymentAmount");
+
+    if (token && user?.id) {
+      try {
+        setLoading(true);
+        const res = await instance.post(
+          `/api/Donations/create-payment?PersonID=${user.id}&amount=${amount}&token=${token}`
+        );
+
+        if (res.data?.transaction_url) {
+          window.location.href = res.data.transaction_url;
+        } else {
+          // If there is no transaction URL or if you want to handle success silently
+          if (res.data?.message) {
+            alert(res.data.message);
+          }
+        }
+      } catch (err) {
+        console.error("Error processing payment:", err);
+        setError("حدث خطأ أثناء معالجة الدفع");
+      } finally {
+        sessionStorage.removeItem("paymentToken");
+        sessionStorage.removeItem("paymentAmount");
+        setLoading(false);
+      }
+    }
+  };
+
+  processStoredToken();
+}, [user.id]);
+
      
   const totalAmount = () => {
     if (cart.length > 0) {
@@ -123,21 +144,28 @@ useEffect(() => {
   }
 
 
+
   /// 4201 3201 1111 1010 || 4111111111111111 || Ahmed Ibrahim || 4201320111111010
   // 12/28
   // 555 || 123
 const createPayment = async (e:FormEvent<HTMLFormElement>) => {
   e.preventDefault();
-  setLoading(true)
+
+  if (!visaData.cardNumber.trim() || !visaData.cardHolder.trim() || !visaData.expiryDate.trim() || !visaData.cvv.trim()) {
+    alert("يرجى إدخال جميع بيانات البطاقة أولاً.");
+    return;
+  }
+
+  console.log("submitted")
+
+  setLoading(true);
+  setError(""); // Clear any previous errors
   try {
     const publicKey = process.env.NEXT_PUBLIC_MYOASAR_PUBLIC_KEY?.trim();
     if (!publicKey) {
       alert("Public Key مش موجود");
       return;
     }
-
-
-    console.log(publicKey)
     const [monthStr, yearStr] = visaData.expiryDate.split("/");
     const month = parseInt(monthStr, 10);
     const year = parseInt("20" + yearStr, 10);
@@ -148,32 +176,30 @@ const createPayment = async (e:FormEvent<HTMLFormElement>) => {
       cvc: visaData.cvv,
       month,
       year,
-      callback_url: "https://alhadi-app.vercel.app/store/cart",
+      callback_url: `https://alhadi-app.vercel.app/store/cart`,
     };
-
-    const response = await fetch("https://api.moyasar.com/v1/tokens", {
-      method: "POST",
+    const response = await axios.post("https://api.moyasar.com/v1/tokens", requestData, {
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Basic " + btoa(publicKey + ":"),
       },
-      body: JSON.stringify(requestData),
     });
-    const tokenData = await response.json();
+    const tokenData = response.data;
     if (tokenData.id) {
-      setPaymentData({
-        token: tokenData.id,
-        last_four: tokenData.last_four,
-        name: tokenData.name,
-        expiry: `${tokenData.month}/${tokenData.year}`,
-      });
-      setToggle(true);
+      sessionStorage.setItem("paymentToken", tokenData.id);
+      sessionStorage.setItem("paymentAmount", totalAmount().toString());
+      
+      if (tokenData.verification_url) {
+        window.location.href = tokenData.verification_url;
+      } else {
+        // Reload to trigger the useEffect if there is no verification URL
+        window.location.reload();
+      }
     }
   } catch (err) {
     console.error(err);
     setError("حدث خطأ أثناء إنشاء التوكن، يرجى المحاولة مرة أخرى.");
-  } finally {
-    setLoading(false)
+    setLoading(false);
   }
 };
 
@@ -202,11 +228,6 @@ const deleteCart = async (personID: number, sectionID: number) => {
 
   return (
     <div className="container mx-auto px-2">
-      <CustomPopup 
-        toggle={toggle} 
-        setToggle={setToggle} 
-        paymentData={paymentData}
-      />
       <>
         {user.id ? (        
               <div className="grid md:grid-cols-2 gap-8">
@@ -223,7 +244,6 @@ const deleteCart = async (personID: number, sectionID: number) => {
 
           <form 
           className="mt-6"
-          id="payment-form"
           onSubmit={createPayment}
           >
             <h3 className="text-md font-semibold mb-4 text-gray-700 text-right flex items-center gap-2 justify-end">
@@ -259,6 +279,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
                 onChange={handleVisaChange}
                 placeholder="•••• •••• •••• ••••"
                 dir="ltr"
+                required={true}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800
                   focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent
                   transition placeholder:text-gray-400 font-mono tracking-widest text-sm"
@@ -274,6 +295,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
                 onChange={handleVisaChange}
                 placeholder="الاسم كما يظهر على البطاقة"
                 dir="rtl"
+                required={true}
                 className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800
                   focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent
                   transition placeholder:text-gray-400 text-sm"
@@ -293,6 +315,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
                   placeholder="MM/YY"
                   maxLength={5}
                   dir="ltr"
+                  required
                   className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800
                     focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent
                     transition placeholder:text-gray-400 font-mono text-sm"
@@ -323,6 +346,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
                   onBlur={() => setFocusedField(null)}
                   placeholder="•••"
                   maxLength={3}
+                  required
                   className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-gray-800
                     focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent
                     transition placeholder:text-gray-400 font-mono text-sm"
@@ -349,11 +373,8 @@ const deleteCart = async (personID: number, sectionID: number) => {
               بياناتك محمية ومشفرة بالكامل
             </p>
 
-            <motion.button
+            <button
               type="submit"
-              disabled={!cart.length}
-              whileHover={cart.length ? { scale: 1.02 } : {}}
-              whileTap={cart.length ? { scale: 0.97 } : {}}
               className={`w-full py-3 rounded-xl text-white font-semibold text-base transition-all cursor-pointer
                 ${cart.length === 0
                   ? "bg-gray-300 cursor-not-allowed"
@@ -363,7 +384,7 @@ const deleteCart = async (personID: number, sectionID: number) => {
               {loading ? (
                 <AiOutlineLoading3Quarters size={20} className="mx-auto animate-spin" />
               ) : "ادفع الآن — SAR " + totalAmount()}
-            </motion.button>
+            </button>
           </form>
         </div>
           <div className="bg-white rounded-xl shadow p-6">

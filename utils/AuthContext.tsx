@@ -34,12 +34,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   const cookieOptions: {
-    sameSite: "strict";
+    sameSite: "lax" | "strict" | "none";
     secure: boolean;
     path: string;
     expires: number;
   } = {
-    sameSite: "strict",
+    sameSite: "lax",
     secure: true,
     path: "/",
     expires: 1 / 24, // ساعة
