@@ -103,33 +103,24 @@ useEffect(() => {
 
 useEffect(() => {
   const processStoredToken = async () => {
-    const token = sessionStorage.getItem("paymentToken");
-    const amount = sessionStorage.getItem("paymentAmount");
+    const token = localStorage.getItem("paymentToken");
+    const amount = localStorage.getItem("paymentAmount");
 
-    if (token && user?.id) {
+      if (!token || !amount || !user?.id) return;
       try {
         setLoading(true);
         const res = await instance.post(
           `/api/Donations/create-payment?PersonID=${user.id}&amount=${amount}&token=${token}`
         );
-
-        if (res.data?.transaction_url) {
-          window.location.href = res.data.transaction_url;
-        } else {
-          // If there is no transaction URL or if you want to handle success silently
-          if (res.data?.message) {
-            alert(res.data.message);
-          }
-        }
+        localStorage.removeItem("paymentToken");
+        localStorage.removeItem("paymentAmount");
+        window.location.href = res.data.transaction_url;
       } catch (err) {
         console.error("Error processing payment:", err);
         setError("حدث خطأ أثناء معالجة الدفع");
       } finally {
-        sessionStorage.removeItem("paymentToken");
-        sessionStorage.removeItem("paymentAmount");
         setLoading(false);
       }
-    }
   };
 
   processStoredToken();
@@ -149,9 +140,7 @@ useEffect(() => {
   // 12/28
   // 555 || 123
 
- const pp = process.env.NEXT_PUBLIC_MYOASAR_PUBLIC_KEY?.trim();
 
- console.log(pp)
 
 const createPayment = async (e:FormEvent<HTMLFormElement>) => {
   e.preventDefault();
@@ -161,7 +150,6 @@ const createPayment = async (e:FormEvent<HTMLFormElement>) => {
     return;
   }
 
-  console.log("submitted")
 
   setLoading(true);
   setError(""); // Clear any previous errors
@@ -182,6 +170,7 @@ const createPayment = async (e:FormEvent<HTMLFormElement>) => {
       month,
       year,
       callback_url: `https://alhadi-alnabawy.org.sa/store/cart`,
+      // callback_url: `http://localhost:3000/store/cart`,
     };
     const response = await axios.post("https://api.moyasar.com/v1/tokens", requestData, {
       headers: {
@@ -191,8 +180,8 @@ const createPayment = async (e:FormEvent<HTMLFormElement>) => {
     });
     const tokenData = response.data;
     if (tokenData.id) {
-      sessionStorage.setItem("paymentToken", tokenData.id);
-      sessionStorage.setItem("paymentAmount", totalAmount().toString());
+      localStorage.setItem("paymentToken", tokenData.id);
+      localStorage.setItem("paymentAmount", totalAmount().toString());
       
       if (tokenData.verification_url) {
         window.location.href = tokenData.verification_url;
