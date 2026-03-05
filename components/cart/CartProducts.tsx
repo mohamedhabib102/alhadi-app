@@ -148,6 +148,11 @@ useEffect(() => {
   /// 4201 3201 1111 1010 || 4111111111111111 || Ahmed Ibrahim || 4201320111111010
   // 12/28
   // 555 || 123
+
+ const pp = process.env.NEXT_PUBLIC_MYOASAR_PUBLIC_KEY?.trim();
+
+ console.log(pp)
+
 const createPayment = async (e:FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
