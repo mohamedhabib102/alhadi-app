@@ -101,30 +101,45 @@ useEffect(() => {
   }
 }, [user.id]);
 
-useEffect(() => {
-  const processStoredToken = async () => {
-    const token = localStorage.getItem("paymentToken");
-    const amount = localStorage.getItem("paymentAmount");
+  useEffect(() => {
+    const processStoredToken = async () => {
+      const token = localStorage.getItem("paymentToken");
+      const amount = localStorage.getItem("paymentAmount");
 
       if (!token || !amount || !user?.id) return;
+
       try {
         setLoading(true);
+
+        // 1. Remove from localStorage immediately to prevent re-triggered attempts
+        localStorage.removeItem("paymentToken");
+        localStorage.removeItem("paymentAmount");
+
         const res = await instance.post(
           `/api/Donations/create-payment?PersonID=${user.id}&amount=${amount}&token=${token}`
         );
-        localStorage.removeItem("paymentToken");
-        localStorage.removeItem("paymentAmount");
-        window.location.href = res.data.transaction_url;
+        
+        // 2. Redirect to the transaction URL only after ensuring localStorage is clean
+        const isClean = !localStorage.getItem("paymentToken") && !localStorage.getItem("paymentAmount");
+        
+        if (isClean && res.data && res.data.transaction_url) {
+          window.location.href = res.data.transaction_url;
+        } else if (res.data && res.data.transaction_url) {
+          // Fallback: Clear again if something went wrong, then redirect
+          localStorage.removeItem("paymentToken");
+          localStorage.removeItem("paymentAmount");
+          window.location.href = res.data.transaction_url;
+        }
       } catch (err) {
         console.error("Error processing payment:", err);
         setError("حدث خطأ أثناء معالجة الدفع");
       } finally {
         setLoading(false);
       }
-  };
+    };
 
-  processStoredToken();
-}, [user.id]);
+    processStoredToken();
+  }, [user.id]);
 
      
   const totalAmount = () => {
@@ -265,9 +280,12 @@ const deleteCart = async (personID: number, sectionID: number) => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm text-gray-600 mb-1 text-right">رقم البطاقة</label>
+              <label 
+              htmlFor="cardNumber"
+              className="block text-sm text-gray-600 mb-1 text-right">رقم البطاقة</label>
               <input
                 type="text"
+                id="cardNumber"
                 name="cardNumber"
                 value={visaData.cardNumber}
                 onChange={handleVisaChange}
@@ -281,10 +299,13 @@ const deleteCart = async (personID: number, sectionID: number) => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm text-gray-600 mb-1 text-right">اسم حامل البطاقة</label>
+              <label 
+              htmlFor="cardHolder"
+              className="block text-sm text-gray-600 mb-1 text-right">اسم حامل البطاقة</label>
               <input
                 type="text"
                 name="cardHolder"
+                id="cardHolder"
                 value={visaData.cardHolder}
                 onChange={handleVisaChange}
                 placeholder="الاسم كما يظهر على البطاقة"
@@ -298,10 +319,13 @@ const deleteCart = async (personID: number, sectionID: number) => {
 
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-sm text-gray-600 mb-1 text-right">تاريخ الانتهاء</label>
+                <label
+                 htmlFor="expiryDate"
+                className="block text-sm text-gray-600 mb-1 text-right">تاريخ الانتهاء</label>
                 <input
                   type="text"
                   name="expiryDate"
+                  id="expiryDate"
                   value={visaData.expiryDate}
                   onChange={handleVisaChange}
                   onFocus={() => setFocusedField("expiryDate")}
@@ -330,10 +354,13 @@ const deleteCart = async (personID: number, sectionID: number) => {
                 </AnimatePresence>
               </div>
               <div>
-                <label className="block text-sm text-gray-600 mb-1 text-right">CVV</label>
+                <label 
+                htmlFor="cvv"
+                className="block text-sm text-gray-600 mb-1 text-right">CVV</label>
                 <input
                   type="password"
                   name="cvv"
+                  id="cvv"
                   value={visaData.cvv}
                   onChange={handleVisaChange}
                   onFocus={() => setFocusedField("cvv")}
@@ -369,11 +396,13 @@ const deleteCart = async (personID: number, sectionID: number) => {
 
             <button
               type="submit"
+              id="submitBtn"
               className={`w-full py-3 rounded-xl text-white font-semibold text-base transition-all cursor-pointer
                 ${cart.length === 0
                   ? "bg-gray-300 cursor-not-allowed"
                   : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-md hover:shadow-lg"
                 }`}
+              disabled={cart.length === 0}
             >
               {loading ? (
                 <AiOutlineLoading3Quarters size={20} className="mx-auto animate-spin" />
