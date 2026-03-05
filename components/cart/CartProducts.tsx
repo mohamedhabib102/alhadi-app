@@ -115,6 +115,8 @@ useEffect(() => {
         localStorage.removeItem("paymentToken");
         localStorage.removeItem("paymentAmount");
 
+        
+
         const res = await instance.post(
           `/api/Donations/create-payment?PersonID=${user.id}&amount=${amount}&token=${token}`
         );
@@ -128,7 +130,6 @@ useEffect(() => {
           // Fallback: Clear again if something went wrong, then redirect
           localStorage.removeItem("paymentToken");
           localStorage.removeItem("paymentAmount");
-          window.location.href = res.data.transaction_url;
         }
       } catch (err) {
         console.error("Error processing payment:", err);
@@ -184,7 +185,7 @@ const createPayment = async (e:FormEvent<HTMLFormElement>) => {
       cvc: visaData.cvv,
       month,
       year,
-      callback_url: `https://alhadi-alnabawy.org.sa/store/cart`,
+      callback_url: `${window.location.origin}/store/cart`,
       // callback_url: `http://localhost:3000/store/cart`,
     };
     const response = await axios.post("https://api.moyasar.com/v1/tokens", requestData, {

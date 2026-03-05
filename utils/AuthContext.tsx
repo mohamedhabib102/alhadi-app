@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     path: string;
     expires: number;
   } = {
-    sameSite: "lax",
+    sameSite: "none",
     secure: true,
     path: "/",
     expires: 1 / 24, // ساعة
