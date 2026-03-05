@@ -176,7 +176,7 @@ const createPayment = async (e:FormEvent<HTMLFormElement>) => {
       cvc: visaData.cvv,
       month,
       year,
-      callback_url: `https://alhadi-app.vercel.app/store/cart`,
+      callback_url: `https://alhadi-alnabawy.org.sa/store/cart`,
     };
     const response = await axios.post("https://api.moyasar.com/v1/tokens", requestData, {
       headers: {
