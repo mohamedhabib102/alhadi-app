@@ -6,7 +6,7 @@ import Part2 from "@/components/dashboard/Part2";
 import Part3 from "@/components/dashboard/Part3";
 import Part4 from "@/components/dashboard/Part4";
 import Part5 from "@/components/dashboard/Part5";
-import Part6 from "@/components/dashboard/Part6";
+
 
 
 interface Tab {

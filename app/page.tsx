@@ -2,7 +2,6 @@
 import { 
   AboutGroup,
   HeroSlider, 
-  OurActivities, 
   OurMessage, 
   OurObjectives, 
   ProgramsSection,
@@ -19,7 +18,6 @@ export default function Home() {
         <ProgramsSection />
         <OurMessage />
         <OurObjectives />
-        {/* <OurActivities /> */}
         <StatsSection />
       </main>
     </div>
