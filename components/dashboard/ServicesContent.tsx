@@ -9,119 +9,131 @@ import instance from "@/utils/axios";
 import { AxiosRequestConfig } from "axios";
 
 
-interface ResponseData {
-    serviceID: number;
-    imageUrl: string
+interface Slide {
+  slideID: number;
+  slideName: string;
+  title: string;
+  description: string;
+  images: string[];
 }
 
 interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-    
-const images = [
-  { id: 1, image: "https://source.unsplash.com/random/800x600?sig=1" },
-  { id: 2, image: "https://source.unsplash.com/random/800x600?sig=2" },
-  { id: 3, image: "https://source.unsplash.com/random/800x600?sig=3" },
-  { id: 4, image: "https://source.unsplash.com/random/800x600?sig=4" }
-];
+const ServicesContent: React.FC = () => {
+  const [services, setServices] = useState<Slide[]>([])
+  const [toggle, setToggle] = useState<boolean>(false);
+
+  const SLIDE_NAME = "services";
+
+  const getAllServices = async () => {
+    try {
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: SLIDE_NAME },
+        skipAuth: true
+      } as CustomAxiosRequestConfig)
+
+      if (res.data && Array.isArray(res.data)) {
+        setServices(res.data);
+      } else {
+        setServices([]);
+      }
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.status === 404) {
+        setServices([]);
+      }
+    }
+  }
+
+  useEffect(() => {
+    getAllServices()
+  }, [])
 
 
+  const handleToggle = () => {
+    setToggle(!toggle)
+  }
 
 
+  const deleteService = async (id: number) => {
+    if (!confirm("هل أنت متأكد من حذف هذه الخدمة؟")) return;
 
+    try {
+      const res = await instance.post("/api/Donations/DeleteSlidePlus", null, {
+        params: { SlideID: id },
+        skipAuth: true
+      } as CustomAxiosRequestConfig);
 
-const ServicesContent:React.FC = () => {
-        const [service, setServices] = useState<ResponseData[]>([])
-        const [toggle, setToggle] = useState<boolean>(false);
+      if (res.status === 200) {
+        getAllServices();
+        alert("✅ تم حذف الخدمة بنجاح");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("حدث خطأ أثناء حذف الخدمة");
+    }
+  }
 
-        const getAllSercices = async () => {
-          try {
-            const res =  await instance.get("/api/Donations/GetAllServices", {
-              skipAuth: true
-            } as CustomAxiosRequestConfig)
-            setServices(res.data)
-            
-          } catch (error) { 
-             console.log(error);
-          }
-        }
-
-        useEffect(() => {
-          getAllSercices()
-        }, [])
-
-
-        const handelToggle = () => {
-          setToggle(!toggle)
-        }
-
-
-        const deleteService = async(id:number) => {
-          try {
-             instance.put(`/api/Donations/DeleteImage?serviceID=${id}`, {
-              skipAuth: true
-            } as CustomAxiosRequestConfig 
-          ).then(() => {
-            getAllSercices()
-            alert("✅ تم حذف الصورة بنجاح");
-          })
-          } catch (error) {
-              console.log(error);
-              alert("حدث خطأ أثناء  حذف الصورة");
-          }
-        }
-
-    return (
-        <>
-        <CreateServices
+  return (
+    <>
+      <CreateServices
         toggle={toggle}
         setToggle={setToggle}
-        getAllSercices={getAllSercices}
-        />
-        <div className="p-6">
+        getAllSercices={getAllServices}
+      />
+      <div className="p-6">
         <CustomHeader
-         content={{
-           title: "قائمة الخدمات",
-           description: "صفحة تعرض جميع الخدمات مع إمكانية تعديل  وإدارة بياناتهم.",
-         }}
-       />
-         <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 mb-10">
-            {service.map((ele) => (
-              ele.imageUrl && (
-                  <div key={ele.serviceID}
-                className="overflow-hidden rounded-lg shadow">
-                    <Image
-                    src={ele.imageUrl}
-                    alt="image"
-                    title="image cover"
-                    width={200}
-                    height={100}
-                    loading="lazy"
-                    className="w-full h-50 object-cover"
-                    />
-                    <button 
-                    onClick={() => deleteService(ele.serviceID)}
-                    className="block bg-red-400 text-white my-3 mr-3 py-2 px-3
+          content={{
+            title: "قائمة الخدمات",
+            description: "صفحة تعرض جميع الخدمات مع إمكانية تعديل وإدارة بياناتهم.",
+          }}
+        />
+        <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 mb-10">
+          {services.map((ele) => (
+            <div key={ele.slideID}
+              className="overflow-hidden rounded-lg shadow bg-white">
+              {ele.images && ele.images.length > 0 && (
+                <Image
+                  src={ele.images[0]}
+                  alt="image"
+                  title={ele.title}
+                  width={400}
+                  height={250}
+                  loading="lazy"
+                  className="w-full h-48 object-cover"
+                />
+              )}
+              <div className="p-4 text-right">
+                <h3 className="font-bold text-lg mb-1">{ele.title}</h3>
+                <p className="text-gray-600 text-sm mb-3">{ele.description}</p>
+                <button
+                  onClick={() => deleteService(ele.slideID)}
+                  className="block bg-red-400 text-white py-2 px-6
                     rounded-lg cursor-pointer transition hover:bg-red-500"> حذف </button>
-                </div>
-              )
-            ))}
-         </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
-         <button 
-         onClick={handelToggle}
-         className="bg-[var(--main-color)] flex items-center gap-1.5 ml-auto p-2 rounded-lg text-white
+        {services.length === 0 && (
+          <p className="text-center text-gray-500 mb-10">لا توجد خدمات حالياً.</p>
+        )}
+
+        <button
+          onClick={handleToggle}
+          className="bg-[var(--main-color)] flex items-center gap-1.5 ml-auto p-2 rounded-lg text-white
          cursor-pointer transition hover:bg-blue-500">
-           <IoIosAddCircle
-           size={20}
-           />
-           <span > إضافة خدمة جديدة </span>
-         </button>
-        </div>        
-        </>
-    )
+          <IoIosAddCircle
+            size={20}
+          />
+          <span > إضافة خدمة جديدة </span>
+        </button>
+      </div>
+    </>
+  )
 }
 
 
-export default ServicesContent
+export default ServicesContent

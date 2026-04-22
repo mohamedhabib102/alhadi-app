@@ -12,70 +12,51 @@ interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-
-interface ResponseData {
-    serviceID: number;
-    imageUrl: string
+interface Slide {
+  slideID: number;
+  slideName: string;
+  title: string;
+  description: string;
+  images: string[];
 }
 
-
-
-
 const EleServices: React.FC = () => {
-  const [openBoard, setOpenBoard] = useState(false);
-  const [openExecutive, setOpenExecutive] = useState(false);
-  const [openCommittees, setOpenCommittees] = useState(false);
-  const [openServices, setOpenServices] = useState(false);
-  const [service, setServices] = useState<ResponseData[]>([])
+  const [services, setServices] = useState<Slide[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const sections = [
-    {
-      title: "مجلس الإدارة (أعضاء مجلس الإدارة)",
-      open: openBoard,
-      setOpen: setOpenBoard,
-      content: "يضم مجلس الإدارة نخبة من الأعضاء الذين يشرفون على توجيه الجمعية ورسم السياسات العامة، ويعملون على متابعة الأداء الدعوي والخيري وضمان تحقيق أهداف الجمعية بكفاءة وشفافية"
-    },
-    {
-      title: "المسؤول التنفيذي (الموظفين - المتطوعين)",
-      open: openExecutive,
-      setOpen: setOpenExecutive,
-      content: "يشرف المسؤول التنفيذي على إدارة الموظفين والمتطوعين، ويضمن توزيع المهام بفاعلية ومتابعة سير العمل الدعوي والخيري وفق خطط الجمعية والسياسات المعتمدة"
-    },
-    {
-      title: "مجلس الإدارة (اللجان)",
-      open: openCommittees,
-      setOpen: setOpenCommittees,
-      content: "تشمل اللجان المتخصصة لجنة الدعوة، لجنة التوعية، لجنة التعليم، ولجنة الإدارة المالية، بحيث يعمل كل لجنة على متابعة مشروع محدد وتحقيق الأهداف المرسومة بكفاءة عالية"
-    }
-  ];
+  const SLIDE_NAME = "services";
 
-  const lastSection =     {
-      title: "الخدمات الإلكترونية",
-      open: openServices,
-      setOpen: setOpenServices,
-      content: "خدمة المتبرعين تتيح هذه الخدمة للمتبرعين متابعة مشاريع الجمعية والمبادرات المختلفة، والتعرف على التفاصيل والإحصائيات الخاصة بها (لا تتوفر حالياً خدمة الحصول على إيصال إلكتروني للتبرع)\n\nبوابة الوظائف توفر بوابة الوظائف إمكانية التقديم على الوظائف الشاغرة في الجمعية، سواء للموظفين أو المتطوعين، مع متابعة حالة الطلب بشكل مباشر"
-    }
+  const getAllServices = async () => {
+    try {
+      setLoading(true);
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: SLIDE_NAME },
+        skipAuth: true
+      } as CustomAxiosRequestConfig);
 
-
-      const getAllSercices = async () => {
-        try {
-          const res =  await instance.get("/api/Donations/GetAllServices", {
-            skipAuth: true
-          } as CustomAxiosRequestConfig)
-          setServices(res.data)  
-          
-        } catch (error) { 
-           console.log(error);
-        }
+      if (res.data && Array.isArray(res.data)) {
+        setServices(res.data);
+      } else {
+        setServices([]);
       }
+    } catch (error: any) {
+      console.log(error);
+      if (error.response?.status === 404) {
+        setServices([]);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
+    getAllServices();
+  }, []);
 
-      useEffect(() => {
-        getAllSercices()
-      }, [])
-
-
-   
+  const toggleAccordion = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
 
   return (
     <section className="bg-gray-50 py-10 text-gray-800 text-right">
@@ -88,93 +69,67 @@ const EleServices: React.FC = () => {
           }}
         />
 
-        {sections.map((section, index) => (
-            <FadeInOnScroll key={index}>
-        <div
-            key={index}
-            className="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition"
-          >
-            <button
-              className="w-full flex justify-between items-center text-gray-800 font-semibold text-lg py-3 cursor-pointer px-4 rounded-lg hover:bg-gray-100 transition"
-              onClick={() => section.setOpen(!section.open)}
-            >
-              {section.title}
-              <motion.div
-                animate={{ rotate: section.open ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <IoIosArrowDown size={28} />
-              </motion.div>
-            </button>
-
-            <AnimatePresence>
-              {section.open && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-4 space-y-3 px-4 text-gray-700 whitespace-pre-line"
-                >
-                  {service.slice(0, 3).map((ele, ser) => (
-                    index === ser && (
-                        <div key={ele.serviceID}
-                        className="w-full h-[600px] overflow-hidden rounded-2xl"
-                        >
-                        <Image
-                        src={ele.imageUrl||"/images/"}
-                        alt="image"
-                        title="image cover"
-                        width={200}
-                        height={100}
-                        loading="lazy"
-                        className="w-full object-center transition-transform duration-300 hover:scale-105"
-                        />
-                    </div>
-                    )
-                  ))}
-                  
-                </motion.div>
-              )}
-            </AnimatePresence>
+        {loading ? (
+          <div className="flex justify-center py-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--main-color)]"></div>
           </div>
+        ) : services.length > 0 ? (
+          services.map((service, index) => (
+            <FadeInOnScroll key={service.slideID}>
+              <div className="bg-white rounded-3xl shadow-sm p-4 md:p-6 border border-gray-100 hover:shadow-md transition">
+                <button
+                  className="w-full flex justify-between items-center text-gray-800 font-semibold text-lg py-3 cursor-pointer px-4 rounded-lg hover:bg-gray-100 transition text-right"
+                  onClick={() => toggleAccordion(index)}
+                >
+                  <span className="flex-1">{service.title}</span>
+                  <motion.div
+                    animate={{ rotate: openIndex === index ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="mr-4"
+                  >
+                    <IoIosArrowDown size={28} />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence>
+                  {openIndex === index && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-4 space-y-4 px-2 md:px-4 text-gray-700"
+                    >
+                      {service.images && service.images.length > 0 && (
+                        <div className="w-full aspect-[3/4] md:aspect-auto md:h-[600px] overflow-hidden rounded-2xl relative shadow-inner">
+                          <Image
+                            src={service.images[0]}
+                            alt={service.title}
+                            title={service.title}
+                            width={1200}
+                            height={800}
+                            loading="lazy"
+                            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent hidden md:block" />
+                        </div>
+                      )}
+
+                      <div className="bg-gray-50 p-5 rounded-2xl leading-relaxed text-gray-800 border border-gray-100 whitespace-pre-line shadow-sm">
+                        <h4 className="font-bold text-xl mb-3 text-[var(--main-color)]">تفاصيل الخدمة</h4>
+                        {service.description}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </FadeInOnScroll>
-        ))}
-          
-
-        <FadeInOnScroll>
-          <div className="bg-white rounded-3xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition">
-            <button
-              className="w-full flex justify-between items-center text-gray-800 font-semibold text-lg py-3 cursor-pointer px-4 rounded-lg hover:bg-gray-100 transition"
-              onClick={() => lastSection.setOpen(!lastSection.open)}
-            >
-              {lastSection.title}
-              <motion.div
-                animate={{ rotate: lastSection.open ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <IoIosArrowDown size={28} />
-              </motion.div>
-            </button>
-
-            <AnimatePresence>
-              {lastSection.open && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="mt-4 space-y-3 px-4 text-gray-700 whitespace-pre-line"
-                >
-                  <div className="mt-6 bg-gray-50 p-4 rounded-xl leading-relaxed text-gray-800 border border-gray-100">
-                    {lastSection.content}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+          ))
+        ) : (
+          <div className="text-center py-10 bg-white rounded-3xl border border-gray-100 italic text-gray-500 shadow-sm">
+            لا توجد خدمات إلكترونية متاحة حالياً.
           </div>
-        </FadeInOnScroll>
-
+        )}
       </div>
     </section>
   );

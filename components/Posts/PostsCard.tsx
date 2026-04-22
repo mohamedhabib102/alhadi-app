@@ -4,13 +4,18 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import FadeInOnScroll from "../ui/FadeInOnScroll";
 import instance from "@/utils/axios";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 
 interface Post {
-  slide4ID: number;
+  slideID: number;
+  slideName: string;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[];
+}
+
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
 }
 
 const PostsCard: React.FC = () => {
@@ -23,12 +28,19 @@ const PostsCard: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await instance.get("/api/Donations/GetAllSlides7");
-        setPosts(response.data);
+        const response = await instance.get("/api/Donations/GetSlideByName", {
+          params: { SlideName: "posts" },
+          skipAuth: true
+        } as CustomAxiosRequestConfig);
+        
+        if (response.data && Array.isArray(response.data)) {
+           setPosts(response.data);
+        } else {
+           setPosts([]);
+        }
       } catch (err) {
         const axiosError = err as AxiosError;
         if (axiosError.response?.status === 404) {
-          // لا توجد بيانات - مش هيظهر رسالة خطأ
           setPosts([]);
         } else {
           setError("حدث خطأ في السيرفر، يرجى المحاولة لاحقاً.");
@@ -80,17 +92,24 @@ const PostsCard: React.FC = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {posts.map((post) => (
-        <FadeInOnScroll key={post.slide4ID}>
+        <FadeInOnScroll key={post.slideID}>
           <div
             className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
           >
-            <Image
-              src={post.imageUrl || "/icon.png"}
-              alt={post.title}
-              width={400}
-              height={250}
-              className="w-full h-48 object-cover"
-            />
+            {post.images && post.images.length > 0 && (
+              <Image
+                src={post.images[0]}
+                alt={post.title}
+                width={400}
+                height={250}
+                className="w-full h-48 object-cover"
+              />
+            )}
+            {!post.images || post.images.length === 0 && (
+              <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+                <Image src="/logo.svg" alt="placeholder" width={100} height={100} />
+              </div>
+            )}
             <div className="p-4 text-right">
               <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
               <p className="text-gray-600" dir="rtl">{post.description}</p>

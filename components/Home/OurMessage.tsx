@@ -10,20 +10,18 @@ export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide4 {
-  slide4ID: number;
+interface Slide {
+  slideID: number;
+  slideName: string;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[];
 }
-
-
-
 
 
 // Main Component
 const OurMessage: React.FC = () => {
-      const [slides, setSlides] = useState<Slide4[]>([]);
+      const [slides, setSlides] = useState<Slide[]>([]);
 
 
       useEffect(() => {
@@ -32,11 +30,12 @@ const OurMessage: React.FC = () => {
 
       const fetchSlides = async () => {
         try {
-          const res = await instance.get("/api/Donations/GetAllSlides4", {
+          const res = await instance.get("/api/Donations/GetSlideByName", {
+            params: { SlideName: "message" },
             skipAuth: true,
           } as CustomAxiosRequestConfig);
     
-          if (Array.isArray(res.data)) {
+          if (res.data && Array.isArray(res.data)) {
             setSlides(res.data);
           } else {
             setSlides([]);
@@ -72,10 +71,10 @@ const OurMessage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5">
                     {slides.map((item) => (
                         <MessageCard 
-                          key={item.slide4ID}
+                          key={item.slideID}
                           title={item.title}
                           description={item.description}
-                          imageUrl={item.imageUrl}
+                          imageUrl={item.images && item.images.length > 0 ? item.images[0] : ""}
                         />
 
                     ))}
@@ -85,4 +84,4 @@ const OurMessage: React.FC = () => {
     );
 };
 
-export default OurMessage; // Export the component
+export default OurMessage;

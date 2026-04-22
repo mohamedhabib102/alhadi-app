@@ -7,12 +7,24 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { useEffect, useState } from "react";
-import { getAllSlides2 } from "@/api/getAllSlides"; 
+import instance from "@/utils/axios";
+import { AxiosRequestConfig } from "axios";
 import CardAbout from "../ui/CardAbout";
-import { AboutSlide } from "@/types/AboutSlide"; 
+
+interface Slide {
+  slideID: number;
+  slideName: string;
+  title: string;
+  description: string;
+  images: string[];
+}
+
+interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
+}
 
 const AboutSlider: React.FC = () => {
-  const [cards, setCards] = useState<AboutSlide[]>([]);
+  const [cards, setCards] = useState<Slide[]>([]);
 
   useEffect(() => {
     fetchCards();
@@ -20,8 +32,14 @@ const AboutSlider: React.FC = () => {
 
   const fetchCards = async () => {
     try {
-      const data = await getAllSlides2(); 
-      if (data) setCards(data);
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: "about" },
+        skipAuth: true,
+      } as CustomAxiosRequestConfig);
+
+      if (res.data && Array.isArray(res.data)) {
+        setCards(res.data);
+      }
     } catch (error) {
       console.error("Error fetching cards:", error);
     }
@@ -65,15 +83,15 @@ const AboutSlider: React.FC = () => {
               1024: { slidesPerView: 2 },
             }}
           >
-          {cards.map((card) => (
-            <SwiperSlide key={card.slideID}>
-              <CardAbout 
-                title={card.title} 
-                description={card.description} 
-                images={card.images} 
-              />
-            </SwiperSlide>
-          ))}
+            {cards.map((card) => (
+              <SwiperSlide key={card.slideID}>
+                <CardAbout
+                  title={card.title}
+                  description={card.description}
+                  images={card.images}
+                />
+              </SwiperSlide>
+            ))}
 
           </Swiper>
         </div>

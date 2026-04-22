@@ -3,47 +3,52 @@ import { useState, useEffect, useRef } from "react";
 import instance from "@/utils/axios";
 import { AxiosRequestConfig } from "axios";
 import Image from "next/image";
+import FadeInOnScroll from "../ui/FadeInOnScroll";
 
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide3 {
-  slide3ID: number;
+interface Slide {
+  slideID: number;
+  slideName: string;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[];
 }
 
 const Part3: React.FC = () => {
-  const [slides, setSlides] = useState<Slide3[]>([]);
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [images, setImages] = useState<FileList | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
+  const SLIDE_NAME = "programs";
+
   const fetchSlides = async () => {
     try {
-      const res = await instance.get("/api/Donations/GetAllSlides3", {
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: SLIDE_NAME },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
-      if (Array.isArray(res.data)) {
+      if (res.data && Array.isArray(res.data)) {
         setSlides(res.data);
       } else {
         setSlides([]);
       }
     } catch (err: unknown) {
-       console.error("Error fetching slides:", err);    
-         
-       if (typeof err === "object" && err !== null && "response" in err) {
-         const errorWithResponse = err as { response?: { status?: number } };
-         if (errorWithResponse.response?.status === 404) {
-           setSlides([]);
-         }
-       }
+      console.error("Error fetching slides:", err);
+
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const errorWithResponse = err as { response?: { status?: number } };
+        if (errorWithResponse.response?.status === 404) {
+          setSlides([]);
+        }
+      }
     }
   };
 
@@ -51,34 +56,36 @@ const Part3: React.FC = () => {
     fetchSlides();
   }, []);
 
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setImage(file);
-    if (file) {
-      setImagePreview(URL.createObjectURL(file));
+    const files = e.target.files;
+    setImages(files);
+    if (files && files.length > 0) {
+      const previews = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setImagePreviews(previews);
     } else {
-      setImagePreview(null);
+      setImagePreviews([]);
     }
   };
 
-
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image) {
-      alert("الرجاء اختيار صورة!");
+    if (!images || images.length === 0) {
+      alert("الرجاء اختيار صورة واحدة على الأقل!");
       return;
     }
 
     setLoading(true);
 
     const formData = new FormData();
+    formData.append("SlideName", SLIDE_NAME);
     formData.append("Title", title);
     formData.append("Description", description);
-    formData.append("image", image);
+    Array.from(images).forEach((img) => formData.append("images", img));
 
     try {
-      const res = await instance.post("/api/Donations/AddSlides3", formData, {
+      const res = await instance.post("/api/Donations/AddSlidePlus", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -87,8 +94,8 @@ const Part3: React.FC = () => {
         alert("✅ تمت إضافة السلايد بنجاح!");
         setTitle("");
         setDescription("");
-        setImage(null);
-        setImagePreview(null);
+        setImages(null);
+        setImagePreviews([]);
         if (fileRef.current) fileRef.current.value = "";
         await fetchSlides();
       } else {
@@ -102,21 +109,18 @@ const Part3: React.FC = () => {
     }
   };
 
-
   const handleDelete = async (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
     try {
-      const res = await instance.delete("/api/Donations/DeleteSlide3", {
-        params: { slideID: id },
+      const res = await instance.post("/api/Donations/DeleteSlidePlus", null, {
+        params: { SlideID: id },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
       if (res.status === 200) {
         alert("🗑️ تم حذف السلايد بنجاح!");
         await fetchSlides();
-        setImage(null);
-        setImagePreview(null);
       } else {
         alert("⚠️ فشل الحذف!");
       }
@@ -156,20 +160,24 @@ const Part3: React.FC = () => {
         <input
           ref={fileRef}
           type="file"
+          multiple
           onChange={handleImageChange}
           className="mb-3 outline-none"
         />
 
-        {/* عرض الصورة المختارة */}
-        {imagePreview && (
-          <div className="mb-3">
-            <Image
-              src={imagePreview}
-              alt="preview"
-              className="w-40 h-40 object-cover rounded-lg border"
-              width={300}
-              height={200}
-            />
+        {/* عرض الصور المختارة */}
+        {imagePreviews.length > 0 && (
+          <div className="flex flex-wrap gap-3 mb-3">
+            {imagePreviews.map((src, index) => (
+              <Image
+                key={index}
+                src={src}
+                alt={`preview-${index}`}
+                className="w-24 h-24 object-cover rounded-lg border"
+                width={300}
+                height={300}
+              />
+            ))}
           </div>
         )}
 
@@ -185,31 +193,30 @@ const Part3: React.FC = () => {
       {/* عرض السلايدات */}
       <div className="grid md:grid-cols-3 gap-6">
         {slides.map((slide) => (
-          <div
-            key={slide.slide3ID}
-            className="bg-white rounded-xl shadow-md overflow-hidden"
-          >
-            {slide.imageUrl && (
-              <img
-                src={slide.imageUrl}
-                alt={slide.title}
-                className="h-48 w-full object-cover"
-              />
-            )}
-            <div className="p-4 text-right">
-              <h3 className="text-lg font-semibold text-gray-800">
-                {slide.title}
-              </h3>
-              <p className="text-gray-600 mb-3">{slide.description}</p>
+          <FadeInOnScroll key={slide.slideID}>
+            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+              {slide.images && slide.images.length > 0 && (
+                <img
+                  src={slide.images[0]}
+                  alt={slide.title}
+                  className="h-48 w-full object-cover"
+                />
+              )}
+              <div className="p-4 text-right">
+                <h3 className="text-lg font-semibold text-gray-800">
+                  {slide.title}
+                </h3>
+                <p className="text-gray-600 mb-3">{slide.description}</p>
 
-              <button
-                onClick={() => handleDelete(slide.slide3ID)}
-                className="bg-red-400 cursor-pointer text-white px-3 py-1 rounded-lg hover:bg-red-500 transition"
-              >
-                حذف
-              </button>
+                <button
+                  onClick={() => handleDelete(slide.slideID)}
+                  className="bg-red-400 cursor-pointer text-white px-3 py-1 rounded-lg hover:bg-red-500 transition"
+                >
+                  حذف
+                </button>
+              </div>
             </div>
-          </div>
+          </FadeInOnScroll>
         ))}
       </div>
 
@@ -223,3 +230,4 @@ const Part3: React.FC = () => {
 };
 
 export default Part3;
+

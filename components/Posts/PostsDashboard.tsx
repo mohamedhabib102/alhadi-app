@@ -7,19 +7,24 @@ import CustomHeader from "@/components/ui/CustomHeader";
 import { IoIosAddCircle } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/utils/AuthContext";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
+
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
+}
 
 interface Post {
-  slide4ID: number;
+  slideID: number;
+  slideName: string;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[];
 }
 
 interface NewPost {
   title: string;
   description: string;
-  image: File | null;
+  images: FileList | null;
 }
 
 const PostsDashboard: React.FC = () => {
@@ -32,14 +37,16 @@ const PostsDashboard: React.FC = () => {
 
   const [toggle, setToggle] = useState<boolean>(false);
   const [submitLoading, setSubmitLoading] = useState<boolean>(false);
-  const [imagePreview, setImagePreview] = useState<string>("");
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
   const [newPost, setNewPost] = useState<NewPost>({
     title: "",
     description: "",
-    image: null,
+    images: null,
   });
+
+  const SLIDE_NAME = "posts";
 
   // Auth guard
   useEffect(() => {
@@ -57,8 +64,16 @@ const PostsDashboard: React.FC = () => {
     try {
       setFetchLoading(true);
       setFetchError(null);
-      const res = await instance.get("/api/Donations/GetAllSlides7");
-      setPosts(res.data);
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: SLIDE_NAME },
+        skipAuth: true
+      } as CustomAxiosRequestConfig);
+      
+      if (res.data && Array.isArray(res.data)) {
+        setPosts(res.data);
+      } else {
+        setPosts([]);
+      }
     } catch (err) {
       const axiosError = err as AxiosError;
       if (axiosError.response?.status === 404) {
@@ -72,10 +87,17 @@ const PostsDashboard: React.FC = () => {
   };
 
   const deletePost = async (id: number) => {
+    if (!confirm("هل أنت متأكد من حذف هذا المنشور؟")) return;
     try {
-      await instance.delete(`/api/Donations/DeleteSlide7?slideID=${id}`);
-      alert("🗑️ تم حذف المنشور بنجاح!");
-      getAllPosts();
+      const res = await instance.post("/api/Donations/DeleteSlidePlus", null, {
+        params: { SlideID: id },
+        skipAuth: true
+      } as CustomAxiosRequestConfig);
+
+      if (res.status === 200) {
+        alert("🗑️ تم حذف المنشور بنجاح!");
+        getAllPosts();
+      }
     } catch (error) {
       console.log(error);
       alert("حدث خطأ أثناء الحذف، يرجى المحاولة لاحقاً.");
@@ -88,33 +110,38 @@ const PostsDashboard: React.FC = () => {
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setNewPost((prev) => ({ ...prev, image: file }));
-      setImagePreview(URL.createObjectURL(file));
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setNewPost((prev) => ({ ...prev, images: files }));
+      const previews = Array.from(files).map((file) => URL.createObjectURL(file));
+      setImagePreviews(previews);
+    } else {
+      setImagePreviews([]);
     }
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!newPost.image) {
-      alert("من فضلك اختر صورة للمنشور");
+    if (!newPost.images || newPost.images.length === 0) {
+      alert("من فضلك اختر صورة واحدة على الأقل للمنشور");
       return;
     }
     try {
       setSubmitLoading(true);
       const formData = new FormData();
+      formData.append("SlideName", SLIDE_NAME);
       formData.append("Title", newPost.title);
       formData.append("Description", newPost.description);
-      formData.append("image", newPost.image);
+      Array.from(newPost.images).forEach((img) => formData.append("images", img));
 
-      await instance.post("/api/Donations/AddSlides7", formData, {
+      await instance.post("/api/Donations/AddSlidePlus", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-      });
+        skipAuth: true
+      } as CustomAxiosRequestConfig);
 
       setToggle(false);
-      setNewPost({ title: "", description: "", image: null });
-      setImagePreview("");
+      setNewPost({ title: "", description: "", images: null });
+      setImagePreviews([]);
       if (fileRef.current) fileRef.current.value = "";
       alert("✅ تمت إضافة المنشور بنجاح!");
       getAllPosts();
@@ -128,8 +155,8 @@ const PostsDashboard: React.FC = () => {
 
   const closeModal = () => {
     setToggle(false);
-    setNewPost({ title: "", description: "", image: null });
-    setImagePreview("");
+    setNewPost({ title: "", description: "", images: null });
+    setImagePreviews([]);
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -181,6 +208,7 @@ const PostsDashboard: React.FC = () => {
           <input
             ref={fileRef}
             type="file"
+            multiple
             accept="image/*"
             name="image"
             onChange={handleFileChange}
@@ -190,14 +218,19 @@ const PostsDashboard: React.FC = () => {
               transition mb-4 w-full text-right"
           />
 
-          {imagePreview && (
-            <Image
-              src={imagePreview}
-              alt="preview"
-              className="w-full h-[125px] object-cover rounded-lg mb-4"
-              width={300}
-              height={125}
-            />
+          {imagePreviews.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {imagePreviews.map((src, index) => (
+                <Image
+                  key={index}
+                  src={src}
+                  alt={`preview-${index}`}
+                  className="w-20 h-20 object-cover rounded-lg border"
+                  width={80}
+                  height={80}
+                />
+              ))}
+            </div>
           )}
 
           <button
@@ -249,21 +282,23 @@ const PostsDashboard: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 mb-8">
             {posts.map((post) => (
               <div
-                key={post.slide4ID}
+                key={post.slideID}
                 className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
               >
-                <Image
-                  src={post.imageUrl}
-                  alt={post.title}
-                  className="w-full h-48 object-cover"
-                  width={400}
-                  height={200}
-                />
+                {post.images && post.images.length > 0 && (
+                  <Image
+                    src={post.images[0]}
+                    alt={post.title}
+                    className="w-full h-48 object-cover"
+                    width={400}
+                    height={200}
+                  />
+                )}
                 <div className="p-4 text-right">
                   <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
                   <p className="text-gray-600 mb-4" dir="rtl">{post.description}</p>
                   <button
-                    onClick={() => deletePost(post.slide4ID)}
+                    onClick={() => deletePost(post.slideID)}
                     className="bg-red-500 py-2 px-4 rounded-lg text-white
                       cursor-pointer transition hover:bg-red-600"
                   >
@@ -289,4 +324,4 @@ const PostsDashboard: React.FC = () => {
   );
 };
 
-export default PostsDashboard;
+export default PostsDashboard;

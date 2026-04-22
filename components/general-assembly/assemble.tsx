@@ -3,38 +3,8 @@ import CustomHeader from "@/components/ui/CustomHeader";
 import Image from "next/image";
 import Link from "next/link";
 import FadeInOnScroll from "@/components/ui/FadeInOnScroll";
-import { AxiosRequestConfig } from "axios";
-import { useEffect, useState } from "react";
-import instance from "@/utils/axios";
-
-interface CustomAxiosRequestConfig extends AxiosRequestConfig {
-  skipAuth?: boolean;
-}
-
-interface ResponseData {
-    serviceID: number;
-    imageUrl: string
-}
 
 const Assembly: React.FC = () => {
-    const [service, setServices] = useState<ResponseData[]>([])
-
-
-
-      const getAllSercices = async () => {
-        try {
-          const res =  await instance.get("/api/Donations/GetAllServices", {
-            skipAuth: true
-          } as CustomAxiosRequestConfig)
-          setServices(res.data)  
-        } catch (error) { 
-           console.log(error);
-        }
-      }
-
-      useEffect(() => {
-        getAllSercices()
-      }, [])
   return (
     <section className="bg-gray-50 py-10 text-gray-800 text-right">
       <div className="mx-auto px-4 max-w-6xl space-y-12">
@@ -47,31 +17,24 @@ const Assembly: React.FC = () => {
           }}
         />
 
-
         <FadeInOnScroll>
           <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition">
             <h2 className="text-2xl font-bold mb-4 text-blue-400">
               أعضاء الجمعية العمومية
             </h2>
-            <div className="">
-              <div className="w-full overflow-hidden rounded-xl">
-                {service.slice(3,4).map((ele) => (
-                  <Image
-                  key={ele.serviceID}
-                  src={ele.imageUrl || "/images/"}
-                  alt="أعضاء الجمعية العمومية"
-                  width={400}
-                  height={300}
-                  className="h-[450px] w-full object-cover object-center shadow-md border border-gray-200
-                  transition-transform duration-300 hover:scale-105"
-                />
-                ))}
-              </div>
+            <div className="w-full overflow-hidden rounded-xl">
+              <Image
+                src="/icon.png"
+                alt="أعضاء الجمعية العمومية"
+                width={1200}
+                height={600}
+                className="h-auto md:h-[500px] w-full object-cover object-center shadow-md border border-gray-200
+                transition-transform duration-300 hover:scale-105"
+              />
             </div>
           </div>
         </FadeInOnScroll>
 
-        {/* محاضر اجتماع الجمعية العمومية */}
         <FadeInOnScroll>
           <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100 hover:shadow-md transition">
             <h2 className="text-2xl font-bold mb-4 text-blue-400">

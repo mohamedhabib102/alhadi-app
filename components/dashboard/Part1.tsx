@@ -11,70 +11,80 @@ export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
 
 interface Slide {
   slideID: number;
+  slideName: string;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[];
 }
 
 const Part1: React.FC = () => {
   const [slides, setSlides] = useState<Slide[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [images, setImages] = useState<FileList | null>(null);
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
-const fetchSlides = async () => {
-  try {
-    const res = await instance.get("/api/Donations/GetAllSlides", {
-      skipAuth: true,
-    } as CustomAxiosRequestConfig);
+  const SLIDE_NAME = "hero";
 
-    if (res.data && Array.isArray(res.data)) {
-      setSlides(res.data);
-    } else {
-      setSlides([]);
+  const fetchSlides = async () => {
+    try {
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: SLIDE_NAME },
+        skipAuth: true,
+      } as CustomAxiosRequestConfig);
+
+      if (res.data && Array.isArray(res.data)) {
+        setSlides(res.data);
+      } else {
+        setSlides([]);
+      }
+    } catch (err: unknown) {
+      console.error("Error fetching slides:", err);
+
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const errorWithResponse = err as { response?: { status?: number } };
+        if (errorWithResponse.response?.status === 404) {
+          setSlides([]);
+        }
+      }
     }
-  } catch (err: unknown) {
-  console.error("Error fetching slides:", err);
-
-  if (typeof err === "object" && err !== null && "response" in err) {
-    const errorWithResponse = err as { response?: { status?: number } };
-    if (errorWithResponse.response?.status === 404) {
-      setSlides([]);
-    }
-  }
-}
-};
-
+  };
 
   useEffect(() => {
     fetchSlides();
   }, []);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setImage(file);
-    if (file) setImagePreview(URL.createObjectURL(file));
-    else setImagePreview(null);
+    const files = e.target.files;
+    setImages(files);
+    if (files && files.length > 0) {
+      const previews = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      setImagePreviews(previews);
+    } else {
+      setImagePreviews([]);
+    }
   };
 
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!image) {
-      alert("الرجاء اختيار صورة!");
+    if (!images || images.length === 0) {
+      alert("الرجاء اختيار صورة واحدة على الأقل!");
       return;
     }
 
     setLoading(true);
     const formData = new FormData();
+    formData.append("SlideName", SLIDE_NAME);
     formData.append("Title", title);
     formData.append("Description", description);
-    formData.append("image", image);
+    Array.from(images).forEach((img) => formData.append("images", img));
 
     try {
-      const res = await instance.post("/api/Donations/AddSlides", formData, {
+      const res = await instance.post("/api/Donations/AddSlidePlus", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -83,8 +93,8 @@ const fetchSlides = async () => {
         alert("✅ تمت إضافة السلايد بنجاح!");
         setTitle("");
         setDescription("");
-        setImage(null);
-        setImagePreview(null);
+        setImages(null);
+        setImagePreviews([]);
         if (fileRef.current) fileRef.current.value = "";
         await fetchSlides();
       } else {
@@ -102,14 +112,14 @@ const fetchSlides = async () => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
     try {
-      const res = await instance.delete("/api/Donations/DeleteSlide", {
-        params: { slideID: id },
+      const res = await instance.post("/api/Donations/DeleteSlidePlus", null, {
+        params: { SlideID: id },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
       if (res.status === 200) {
         alert("🗑️ تم حذف السلايد بنجاح!");
-        fetchSlides();
+        await fetchSlides();
       } else {
         alert("⚠️ فشل الحذف!");
       }
@@ -149,20 +159,24 @@ const fetchSlides = async () => {
         <input
           ref={fileRef}
           type="file"
+          multiple
           onChange={handleImageChange}
           className="mb-3"
           required
         />
 
-        {imagePreview && (
-          <div className="mb-3">
-            <Image
-              src={imagePreview}
-              alt="preview"
-              className="w-40 h-40 object-cover rounded-lg border"
-              width={300}
-              height={200}
-            />
+        {imagePreviews.length > 0 && (
+          <div className="flex flex-wrap gap-3 mb-3">
+            {imagePreviews.map((src, index) => (
+              <Image
+                key={index}
+                src={src}
+                alt={`preview-${index}`}
+                className="w-24 h-24 object-cover rounded-lg border"
+                width={300}
+                height={300}
+              />
+            ))}
           </div>
         )}
 
@@ -180,9 +194,9 @@ const fetchSlides = async () => {
         {slides.map((slide) => (
           <FadeInOnScroll key={slide.slideID}>
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
-              {slide.imageUrl && (
+              {slide.images && slide.images.length > 0 && (
                 <img
-                  src={slide.imageUrl}
+                  src={slide.images[0]}
                   alt={slide.title}
                   className="h-48 w-full object-cover"
                 />
@@ -213,3 +227,4 @@ const fetchSlides = async () => {
 };
 
 export default Part1;
+

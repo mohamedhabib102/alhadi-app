@@ -5,16 +5,24 @@ import { motion } from "framer-motion";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import { SliderContent } from "@/types/Slider";
 import { useEffect, useState } from "react";
-import { getAllSlides } from "@/api/getAllSlides";
+import instance from "@/utils/axios";
+import { AxiosRequestConfig } from "axios";
 
+interface HeroSlide {
+  slideID: number;
+  slideName: string;
+  title: string;
+  description: string;
+  images: string[];
+}
 
-
+export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
+  skipAuth?: boolean;
+}
 
 const HeroSlider: React.FC = () => {
-  const [slides, setSlides] = useState<SliderContent[]>([])
-
+  const [slides, setSlides] = useState<HeroSlide[]>([])
 
   useEffect(() => {
     fetchSlides();
@@ -22,14 +30,19 @@ const HeroSlider: React.FC = () => {
 
   const fetchSlides = async () => {
     try {
-      const data = await getAllSlides();
-      if (data) setSlides(data)
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: "hero" },
+        skipAuth: true,
+      } as CustomAxiosRequestConfig);
 
-
+      if (res.data && Array.isArray(res.data)) {
+        setSlides(res.data);
+      }
     } catch (error) {
       console.log(error);
     }
   }
+
   return (
     <div className="w-full relative">
       <Swiper
@@ -45,7 +58,7 @@ const HeroSlider: React.FC = () => {
             <div
               className="relative w-full h-full flex items-center justify-center text-center text-white"
               style={{
-                backgroundImage: `url(${slide.imageUrl})`,
+                backgroundImage: `url(${slide.images && slide.images.length > 0 ? slide.images[0] : ''})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

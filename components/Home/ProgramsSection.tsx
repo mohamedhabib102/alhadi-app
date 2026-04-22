@@ -16,16 +16,17 @@ export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide3 {
-  slide3ID: number;
+interface Slide {
+  slideID: number;
+  slideName: string;
   title: string;
   description: string;
-  imageUrl: string;
+  images: string[];
 }
 
 
 export default function ProgramsSection() {
-    const [slides, setSlides] = useState<Slide3[]>([]);
+    const [slides, setSlides] = useState<Slide[]>([]);
  
 
     useEffect(() => {
@@ -34,7 +35,8 @@ export default function ProgramsSection() {
 
     const fetchSlides = async () => {
       try {
-        const res = await instance.get("/api/Donations/GetAllSlides3", {
+        const res = await instance.get("/api/Donations/GetSlideByName", {
+          params: { SlideName: "programs" },
           skipAuth: true,
         } as CustomAxiosRequestConfig);
   
@@ -102,13 +104,15 @@ export default function ProgramsSection() {
                 <div
                   className="bg-white rounded-2xl select-none shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
                 >
-                  <Image
-                    src={program.imageUrl}
-                    alt={program.title}
-                    className="w-full h-56 object-cover"
-                    width={300}
-                    height={200}
-                  />
+                  {program.images && program.images.length > 0 && (
+                    <Image
+                      src={program.images[0]}
+                      alt={program.title}
+                      className="w-full h-56 object-cover"
+                      width={300}
+                      height={200}
+                    />
+                  )}
                   <div className="p-6">
                     <h3 className="text-xl font-semibold text-gray-800 mb-3">
                       {program.title}

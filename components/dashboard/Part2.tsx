@@ -9,15 +9,16 @@ export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   skipAuth?: boolean;
 }
 
-interface Slide2 {
-  slide2ID: number;
+interface Slide {
+  slideID: number;
+  slideName: string;
   title: string;
   description: string;
   images: string[];
 }
 
 const Part2: React.FC = () => {
-  const [slides, setSlides] = useState<Slide2[]>([]);
+  const [slides, setSlides] = useState<Slide[]>([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<FileList | null>(null);
@@ -25,9 +26,12 @@ const Part2: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const fileRef = useRef<HTMLInputElement | null>(null);
 
+  const SLIDE_NAME = "about";
+
   const fetchSlides = async () => {
     try {
-      const res = await instance.get("/api/Donations/GetSlide2", {
+      const res = await instance.get("/api/Donations/GetSlideByName", {
+        params: { SlideName: SLIDE_NAME },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
@@ -37,21 +41,20 @@ const Part2: React.FC = () => {
         setSlides([]);
       }
     } catch (err: unknown) {
-  console.error("Error fetching slides:", err);
+      console.error("Error fetching slides:", err);
 
-  if (typeof err === "object" && err !== null && "response" in err) {
-    const errorWithResponse = err as { response?: { status?: number } };
-    if (errorWithResponse.response?.status === 404) {
-      setSlides([]);
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const errorWithResponse = err as { response?: { status?: number } };
+        if (errorWithResponse.response?.status === 404) {
+          setSlides([]);
+        }
+      }
     }
-  }
-}
   };
 
   useEffect(() => {
     fetchSlides();
   }, []);
-
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -66,7 +69,6 @@ const Part2: React.FC = () => {
     }
   };
 
-
   const handleAddSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!images || images.length === 0) {
@@ -76,12 +78,13 @@ const Part2: React.FC = () => {
 
     setLoading(true);
     const formData = new FormData();
+    formData.append("SlideName", SLIDE_NAME);
     formData.append("Title", title);
     formData.append("Description", description);
     Array.from(images).forEach((img) => formData.append("images", img));
 
     try {
-      const res = await instance.post("/api/Donations/AddSlide2", formData, {
+      const res = await instance.post("/api/Donations/AddSlidePlus", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
@@ -105,13 +108,12 @@ const Part2: React.FC = () => {
     }
   };
 
-
   const handleDelete = async (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذا السلايد؟")) return;
 
     try {
-      const res = await instance.delete("/api/Donations/DeleteSlide2", {
-        params: { Slide2ID: id },
+      const res = await instance.post("/api/Donations/DeleteSlidePlus", null, {
+        params: { SlideID: id },
         skipAuth: true,
       } as CustomAxiosRequestConfig);
 
@@ -190,7 +192,7 @@ const Part2: React.FC = () => {
       {/* عرض السلايدات */}
       <div className="grid md:grid-cols-3 gap-6">
         {slides.map((slide) => (
-          <FadeInOnScroll key={slide.slide2ID}>
+          <FadeInOnScroll key={slide.slideID}>
             <div className="bg-white rounded-xl shadow-md overflow-hidden">
               {slide.images && slide.images.length > 0 && (
                 <img
@@ -206,7 +208,7 @@ const Part2: React.FC = () => {
                 <p className="text-gray-600 mb-3">{slide.description}</p>
 
                 <button
-                  onClick={() => handleDelete(slide.slide2ID)}
+                  onClick={() => handleDelete(slide.slideID)}
                   className="bg-red-400 text-white cursor-pointer px-3 py-1 rounded-lg hover:bg-red-500"
                 >
                   حذف
@@ -227,3 +229,4 @@ const Part2: React.FC = () => {
 };
 
 export default Part2;
+
